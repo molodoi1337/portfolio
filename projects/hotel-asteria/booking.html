@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование и контакты — Asteria Bay Bodrum</title>
+  <meta name="description" content="Забронируйте номер напрямую по лучшей цене. Трансфер, контакты и как добраться до отеля.">
+  <meta property="og:title" content="Бронирование и контакты — Asteria Bay Bodrum">
+  <meta property="og:description" content="Забронируйте номер напрямую по лучшей цене. Трансфер, контакты и как добраться до отеля.">
+  <meta property="og:image" content="img/photo-1782113326471-f7db73d27b61-1200.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0F0E0C">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F0E0C'/%3E%3Cpath d='M16 5l2.6 8.4H27l-6.8 5 2.6 8.4L16 21.6l-6.8 5.2 2.6-8.4-6.8-5h8.4z' fill='%23B89A5E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="">
+
+<div class="curtain" aria-hidden="true"><span class="curtain__logo">A</span></div>
+<a class="skip" href="#main">Перейти к содержимому</a>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+      <em>Меню</em>
+    </button>
+    <a href="index.html" class="logo" aria-label="Asteria Bay — на главную">
+      <span class="logo__name">ASTERIA</span>
+      <span class="logo__sub">BAY · BODRUM</span>
+    </a>
+    <a href="booking.html" class="header__book">Забронировать</a>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-label="Основная навигация" hidden>
+  <div class="menu__inner">
+    <ul class="menu__list">
+      <li><a href="index.html"><span>01</span>Главная</a></li>
+      <li><a href="rooms.html"><span>02</span>Номера</a></li>
+      <li><a href="dining.html"><span>03</span>Ресторан</a></li>
+      <li><a href="spa.html"><span>04</span>Спа</a></li>
+      <li><a href="gallery.html"><span>05</span>Галерея</a></li>
+      <li><a href="booking.html" aria-current="page"><span>06</span>Контакты</a></li>
+    </ul>
+    <div class="menu__aside">
+      <img src="img/photo-1766214573274-f31f935eda13-900.jpg" alt="" loading="lazy">
+      <p>Бухта Гюндоган, Бодрум, Турция</p>
+      <a href="tel:+902520000000">+90 252 000 00 00</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="page-hero__media"><img src="img/photo-1596746698204-d69844da956d-2000.jpg" alt="" data-parallax="0.25"></div>
+    <div class="page-hero__content">
+      <p class="eyebrow">Бронирование</p>
+      <h1 class="split">Ваше море<br><em>ждёт вас</em></h1>
+      <p class="page-hero__text">Бронируйте напрямую — это лучшая цена, бесплатная отмена за 14 дней и бутылка эгейского вина в номере.</p>
+    </div>
+  </section>
+  <section class="section booking">
+    <form class="booking__form reveal" id="bookingForm" novalidate>
+      <fieldset>
+        <legend>Даты и гости</legend>
+        <div class="grid-3">
+          <div class="field"><label for="in">Заезд</label><input type="date" id="in" name="in" required><small class="error"></small></div>
+          <div class="field"><label for="out">Выезд</label><input type="date" id="out" name="out" required><small class="error"></small></div>
+          <div class="field"><label for="guests">Гости</label>
+            <select id="guests" name="guests"><option value="1">1 взрослый</option><option value="2" selected>2 взрослых</option><option value="3">3 взрослых</option><option value="4">4 взрослых</option></select><small class="error"></small></div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Номер</legend>
+        <div class="room-pick">
+          <label class="room-pick__item">
+            <input type="radio" name="room" value="deluxe" data-price="320" data-guests="2" data-name="Deluxe Sea View" checked>
+            <span class="room-pick__card"><img src="img/photo-1758448755969-8791367cf5c5-500.jpg" alt="" loading="lazy"><b>Deluxe Sea View</b><small>38 м² · до 2 гостей · €320</small></span>
+          </label>
+          <label class="room-pick__item">
+            <input type="radio" name="room" value="junior" data-price="480" data-guests="3" data-name="Junior Suite">
+            <span class="room-pick__card"><img src="img/photo-1776763018972-588e27bf6511-500.jpg" alt="" loading="lazy"><b>Junior Suite</b><small>56 м² · до 3 гостей · €480</small></span>
+          </label>
+          <label class="room-pick__item">
+            <input type="radio" name="room" value="villa" data-price="890" data-guests="4" data-name="Pool Villa">
+            <span class="room-pick__card"><img src="img/photo-1788217023349-ad7763845844-500.jpg" alt="" loading="lazy"><b>Pool Villa</b><small>92 м² · до 4 гостей · €890</small></span>
+          </label>
+          <label class="room-pick__item">
+            <input type="radio" name="room" value="asteria-suite" data-price="1650" data-guests="4" data-name="Asteria Suite">
+            <span class="room-pick__card"><img src="img/photo-1744000311635-0280df5cc00e-500.jpg" alt="" loading="lazy"><b>Asteria Suite</b><small>160 м² · до 4 гостей · €1 650</small></span>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Дополнительно</legend>
+        <div class="extras">
+          <label><input type="checkbox" name="transfer" value="90"><span>Трансфер из аэропорта <em>€90</em></span></label>
+          <label><input type="checkbox" name="dinner" value="65" data-per-night-guest="1"><span>Ужин в ресторане каждый вечер <em>€65 / гость</em></span></label>
+          <label><input type="checkbox" name="yacht" value="450"><span>Прогулка на яхте на закате <em>€450</em></span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Контактные данные</legend>
+        <div class="grid-2">
+          <div class="field"><label for="name">Имя и фамилия</label><input id="name" name="name" autocomplete="name" required><small class="error"></small></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required><small class="error"></small></div>
+          <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00" required><small class="error"></small></div>
+          <div class="field"><label for="wish">Пожелания</label><input id="wish" name="wish" placeholder="Годовщина, поздний заезд…"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <aside class="summary reveal" aria-live="polite">
+      <p class="eyebrow">Ваше бронирование</p>
+      <h3 id="sumRoom">—</h3>
+      <dl>
+        <div><dt>Даты</dt><dd id="sumDates">—</dd></div>
+        <div><dt>Ночей</dt><dd id="sumNights">—</dd></div>
+        <div><dt>Проживание</dt><dd id="sumStay">—</dd></div>
+        <div><dt>Дополнительно</dt><dd id="sumExtras">—</dd></div>
+      </dl>
+      <p class="summary__total"><span>Итого</span><strong id="sumTotal">—</strong></p>
+      <button class="btn btn--gold btn--full" type="submit" form="bookingForm">Отправить запрос</button>
+      <p class="summary__note">Оплата не списывается. Мы подтвердим наличие в течение часа.</p>
+    </aside>
+  </section>
+
+  <section class="section section--dark contact" id="contact">
+    <div class="contact__grid">
+      <div class="reveal">
+        <p class="eyebrow">Контакты</p>
+        <h2>Как <em>добраться</em></h2>
+        <dl class="contact__list">
+          <dt>Адрес</dt><dd>Бухта Гюндоган, полуостров Бодрум, Мугла, Турция</dd>
+          <dt>Ресепшн 24/7</dt><dd><a href="tel:+902520000000">+90 252 000 00 00</a></dd>
+          <dt>Email</dt><dd><a href="mailto:stay@asteria.example">stay@asteria.example</a></dd>
+          <dt>Аэропорт</dt><dd>Бодрум (BJV) — 35 минут, трансфер по запросу</dd>
+        </dl>
+        <p class="demo-note ">Название отеля, адрес, телефон и email демонстрационные</p>
+      </div>
+      <div class="map reveal">
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=27.3720%2C37.1240&z=12&pt=27.3720,37.1240,pm2dgm" title="Бухта Гюндоган на карте" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal__box">
+      <span class="modal__star" aria-hidden="true">✦</span>
+      <h2 id="modalTitle">Запрос отправлен</h2>
+      <p id="modalText"></p>
+      <button class="btn btn--gold" id="modalClose">Прекрасно</button>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <p class="footer__claim">Место, где Эгейское море <em>замедляет время</em></p>
+    <a href="booking.html" class="btn btn--gold">Забронировать</a>
+  </div>
+  <div class="footer__grid">
+    <div>
+      <h3>Отель</h3>
+      <ul><li><a href="rooms.html">Номера и виллы</a></li><li><a href="dining.html">Ресторан</a></li><li><a href="spa.html">Спа</a></li><li><a href="gallery.html">Галерея</a></li></ul>
+    </div>
+    <div>
+      <h3>Контакты</h3>
+      <ul><li>Бухта Гюндоган, Бодрум, Турция</li><li><a href="tel:+902520000000">+90 252 000 00 00</a></li><li><a href="mailto:stay@asteria.example">stay@asteria.example</a></li></ul>
+    </div>
+    <div>
+      <h3>Сезон</h3>
+      <ul><li>Апрель — ноябрь</li><li>Заезд с 14:00</li><li>Выезд до 12:00</li><li>Только для взрослых 16+</li></ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 Asteria Bay Bodrum</span>
+    <span>Концепт-проект для портфолио. Название, контакты, цены и фото заменены на демонстрационные</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Галерея — Asteria Bay Bodrum</title>
+  <meta name="description" content="Фотографии отеля, номеров, ресторана, спа и побережья Бодрума.">
+  <meta property="og:title" content="Галерея — Asteria Bay Bodrum">
+  <meta property="og:description" content="Фотографии отеля, номеров, ресторана, спа и побережья Бодрума.">
+  <meta property="og:image" content="img/photo-1783936952983-9b80ff0604e9-1200.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0F0E0C">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F0E0C'/%3E%3Cpath d='M16 5l2.6 8.4H27l-6.8 5 2.6 8.4L16 21.6l-6.8 5.2 2.6-8.4-6.8-5h8.4z' fill='%23B89A5E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="">
+
+<div class="curtain" aria-hidden="true"><span class="curtain__logo">A</span></div>
+<a class="skip" href="#main">Перейти к содержимому</a>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+      <em>Меню</em>
+    </button>
+    <a href="index.html" class="logo" aria-label="Asteria Bay — на главную">
+      <span class="logo__name">ASTERIA</span>
+      <span class="logo__sub">BAY · BODRUM</span>
+    </a>
+    <a href="booking.html" class="header__book">Забронировать</a>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-label="Основная навигация" hidden>
+  <div class="menu__inner">
+    <ul class="menu__list">
+      <li><a href="index.html"><span>01</span>Главная</a></li>
+      <li><a href="rooms.html"><span>02</span>Номера</a></li>
+      <li><a href="dining.html"><span>03</span>Ресторан</a></li>
+      <li><a href="spa.html"><span>04</span>Спа</a></li>
+      <li><a href="gallery.html" aria-current="page"><span>05</span>Галерея</a></li>
+      <li><a href="booking.html"><span>06</span>Контакты</a></li>
+    </ul>
+    <div class="menu__aside">
+      <img src="img/photo-1766214573274-f31f935eda13-900.jpg" alt="" loading="lazy">
+      <p>Бухта Гюндоган, Бодрум, Турция</p>
+      <a href="tel:+902520000000">+90 252 000 00 00</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="page-hero__media"><img src="img/photo-1770387200416-d499c2af0080-2000.jpg" alt="" data-parallax="0.25"></div>
+    <div class="page-hero__content">
+      <p class="eyebrow">Галерея</p>
+      <h1 class="split">Asteria Bay<br><em>в фотографиях</em></h1>
+      
+    </div>
+  </section>
+  <section class="section">
+    <div class="filters reveal" role="group" aria-label="Фильтр галереи">
+      <button class="filter is-active" data-filter="all" aria-pressed="true">Все</button>
+      <button class="filter" data-filter="hotel" aria-pressed="false">Отель</button>
+      <button class="filter" data-filter="rooms" aria-pressed="false">Номера</button>
+      <button class="filter" data-filter="dining" aria-pressed="false">Ресторан</button>
+      <button class="filter" data-filter="spa" aria-pressed="false">Спа</button>
+      <button class="filter" data-filter="sea" aria-pressed="false">Побережье</button>
+    </div>
+    <div class="masonry" data-lightbox>
+      <button class="masonry__item reveal-img" data-cat="hotel" data-full="img/photo-1783442619815-943376e2ac6c-2000.jpg" aria-label="Открыть: Терраса и бассейн на закате"><img src="img/photo-1783442619815-943376e2ac6c-900.jpg" alt="Терраса и бассейн на закате" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="rooms" data-full="img/photo-1758448755969-8791367cf5c5-2000.jpg" aria-label="Открыть: Номер Deluxe Sea View"><img src="img/photo-1758448755969-8791367cf5c5-900.jpg" alt="Номер Deluxe Sea View" loading="lazy" class="tall"></button>
+      <button class="masonry__item reveal-img" data-cat="sea" data-full="img/photo-1638718358942-ea45a721867b-2000.jpg" aria-label="Открыть: Яхта у маяка"><img src="img/photo-1638718358942-ea45a721867b-900.jpg" alt="Яхта у маяка" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="hotel" data-full="img/photo-1783936952983-9b80ff0604e9-2000.jpg" aria-label="Открыть: Бассейны над морем"><img src="img/photo-1783936952983-9b80ff0604e9-900.jpg" alt="Бассейны над морем" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="dining" data-full="img/photo-1773932479972-81d143066ba2-2000.jpg" aria-label="Открыть: Арка у ресторана"><img src="img/photo-1773932479972-81d143066ba2-900.jpg" alt="Арка у ресторана" loading="lazy" class="tall"></button>
+      <button class="masonry__item reveal-img" data-cat="spa" data-full="img/photo-1600334089648-b0d9d3028eb2-2000.jpg" aria-label="Открыть: Массаж камнями"><img src="img/photo-1600334089648-b0d9d3028eb2-900.jpg" alt="Массаж камнями" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="rooms" data-full="img/photo-1744000311635-0280df5cc00e-2000.jpg" aria-label="Открыть: Гостиная Asteria Suite"><img src="img/photo-1744000311635-0280df5cc00e-900.jpg" alt="Гостиная Asteria Suite" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="sea" data-full="img/photo-1580492327426-62eaa87cdda4-2000.jpg" aria-label="Открыть: Скалы полуострова"><img src="img/photo-1580492327426-62eaa87cdda4-900.jpg" alt="Скалы полуострова" loading="lazy" class="tall"></button>
+      <button class="masonry__item reveal-img" data-cat="hotel" data-full="img/photo-1782113314438-efd07d85d09f-2000.jpg" aria-label="Открыть: Лаунж у бассейна"><img src="img/photo-1782113314438-efd07d85d09f-900.jpg" alt="Лаунж у бассейна" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="dining" data-full="img/photo-1787314005688-b3280505a298-2000.jpg" aria-label="Открыть: Ужин с видом на марину"><img src="img/photo-1787314005688-b3280505a298-900.jpg" alt="Ужин с видом на марину" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="rooms" data-full="img/photo-1776763018972-588e27bf6511-2000.jpg" aria-label="Открыть: Junior Suite"><img src="img/photo-1776763018972-588e27bf6511-900.jpg" alt="Junior Suite" loading="lazy" class="tall"></button>
+      <button class="masonry__item reveal-img" data-cat="sea" data-full="img/photo-1790276319819-124404931132-2000.jpg" aria-label="Открыть: Причал над бирюзовой водой"><img src="img/photo-1790276319819-124404931132-900.jpg" alt="Причал над бирюзовой водой" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="spa" data-full="img/photo-1706795033855-eee02f726868-2000.jpg" aria-label="Открыть: Зона отдыха спа"><img src="img/photo-1706795033855-eee02f726868-900.jpg" alt="Зона отдыха спа" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="hotel" data-full="img/photo-1781455495352-f810d0901497-2000.jpg" aria-label="Открыть: Белые корпуса отеля"><img src="img/photo-1781455495352-f810d0901497-900.jpg" alt="Белые корпуса отеля" loading="lazy" class="tall"></button>
+      <button class="masonry__item reveal-img" data-cat="sea" data-full="img/photo-1638718247677-2bfa82d74fd1-2000.jpg" aria-label="Открыть: Маяк Бодрума"><img src="img/photo-1638718247677-2bfa82d74fd1-900.jpg" alt="Маяк Бодрума" loading="lazy"></button>
+      <button class="masonry__item reveal-img" data-cat="dining" data-full="img/photo-1761910990269-3963ec34827a-2000.jpg" aria-label="Открыть: Столик на берегу"><img src="img/photo-1761910990269-3963ec34827a-900.jpg" alt="Столик на берегу" loading="lazy"></button>
+    </div>
+    <p class="demo-note center">Фото иллюстративные, из фотобанка Unsplash</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <p class="footer__claim">Место, где Эгейское море <em>замедляет время</em></p>
+    <a href="booking.html" class="btn btn--gold">Забронировать</a>
+  </div>
+  <div class="footer__grid">
+    <div>
+      <h3>Отель</h3>
+      <ul><li><a href="rooms.html">Номера и виллы</a></li><li><a href="dining.html">Ресторан</a></li><li><a href="spa.html">Спа</a></li><li><a href="gallery.html">Галерея</a></li></ul>
+    </div>
+    <div>
+      <h3>Контакты</h3>
+      <ul><li>Бухта Гюндоган, Бодрум, Турция</li><li><a href="tel:+902520000000">+90 252 000 00 00</a></li><li><a href="mailto:stay@asteria.example">stay@asteria.example</a></li></ul>
+    </div>
+    <div>
+      <h3>Сезон</h3>
+      <ul><li>Апрель — ноябрь</li><li>Заезд с 14:00</li><li>Выезд до 12:00</li><li>Только для взрослых 16+</li></ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 Asteria Bay Bodrum</span>
+    <span>Концепт-проект для портфолио. Название, контакты, цены и фото заменены на демонстрационные</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

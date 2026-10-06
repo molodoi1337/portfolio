@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>molodoiSite — разработка сайтов</title>
+<meta name="description" content="Делаю сайты для бизнеса: лендинги, многостраничные сайты, онлайн-бронирование. Посмотрите живые проекты.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a href="#top" class="logo">molodoi<span>Site</span></a>
+  <nav>
+    <a href="#work">Работы</a>
+    <a href="#services">Услуги</a>
+    <a href="#contact" class="nav-cta">Обсудить проект</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <p class="eyebrow"><span class="dot"></span> Беру новые проекты</p>
+    <h1>Делаю сайты, которые <em>продают</em>, а не просто висят в интернете</h1>
+    <p class="lead">Лендинги и многостраничные сайты для кафе, отелей, сервисов и онлайн-школ. Адаптив, скорость, формы заявок и бронирования — под ключ.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn btn-primary">Смотреть работы ↓</a>
+      <a href="#contact" class="btn btn-ghost">Написать мне</a>
+    </div>
+    <ul class="stats">
+      <li><b>6</b><span>живых проектов<br>в портфолио</span></li>
+      <li><b>30+</b><span>страниц<br>свёрстано</span></li>
+      <li><b>100%</b><span>адаптив под<br>телефоны</span></li>
+    </ul>
+  </section>
+
+  <section id="work" class="wrap">
+    <div class="section-head">
+      <h2>Работы</h2>
+      <p>Каждый сайт рабочий — открывайте, листайте, жмите кнопки. Можно посмотреть, как он выглядит на телефоне.</p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="services" class="wrap">
+    <div class="section-head"><h2>Что я делаю</h2></div>
+    <div class="services">
+      <article><h3>Лендинг</h3><p>Одна страница под рекламу или запуск: оффер, преимущества, отзывы, форма заявки.</p><b>от 15 000 ₽</b></article>
+      <article><h3>Сайт компании</h3><p>Несколько страниц: услуги, кейсы, цены, контакты, калькулятор или бронь.</p><b>от 35 000 ₽</b></article>
+      <article><h3>Доработка</h3><p>Перевёрстка под мобильные, ускорение, новые блоки на существующем сайте.</p><b>от 5 000 ₽</b></article>
+    </div>
+    <ol class="steps">
+      <li><b>Созвон</b>Разбираемся в задаче и сроках</li>
+      <li><b>Макет</b>Показываю структуру и дизайн</li>
+      <li><b>Вёрстка</b>Собираю сайт, вы смотрите по ссылке</li>
+      <li><b>Запуск</b>Домен, хостинг, правки после старта</li>
+    </ol>
+  </section>
+
+  <section id="contact" class="wrap contact">
+    <h2>Есть задача? Давайте обсудим</h2>
+    <p>Отвечу в течение дня и скажу честно — сколько стоит и сколько займёт.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="https://t.me/molodoiProg" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn btn-ghost" href="https://github.com/molodoi1337" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">© 2026 · molodoiSite</footer>
+
+<dialog id="viewer">
+  <div class="viewer-bar">
+    <b id="viewer-title"></b>
+    <div class="devices" role="group" aria-label="Размер экрана">
+      <button data-w="100%" class="active">Компьютер</button>
+      <button data-w="768px">Планшет</button>
+      <button data-w="390px">Телефон</button>
+    </div>
+    <a id="viewer-open" target="_blank" rel="noopener">В новой вкладке ↗</a>
+    <button class="close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="viewer-stage"><iframe id="viewer-frame" title="Просмотр проекта"></iframe></div>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>

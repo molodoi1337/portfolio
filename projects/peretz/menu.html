@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Меню — Бистро «Перец»</title>
+  <meta name="description" content="Бистро «Перец» — авторская кухня с характером. Москва, ул. Пряная, 12.">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌶</text></svg>">
+</head>
+<body>
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Осень 2026</span>
+      <h1>Меню</h1>
+      <p class="lead">Меняем часть позиций каждый сезон. Цены указаны в рублях, вес — у официанта.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="menu-tabs">
+        <button class="chip active" data-cat="all">Всё</button>
+        <button class="chip" data-cat="starters">Закуски</button>
+        <button class="chip" data-cat="mains">Основные</button>
+        <button class="chip" data-cat="desserts">Десерты</button>
+        <button class="chip" data-cat="drinks">Напитки</button>
+      </div>
+      <div class="menu-tools">
+        <div class="toggles">
+          <label class="check"><input type="checkbox" id="f-veg"> Вегетарианское</label>
+          <label class="check"><input type="checkbox" id="f-hot"> Только острое 🌶</label>
+        </div>
+        <input class="search" id="search" type="search" placeholder="Поиск блюда…">
+      </div>
+      <div class="grid-3" id="menu-grid"></div>
+      <p class="empty" id="empty">Ничего не нашлось. Попробуйте изменить фильтры 🌶</p>
+    </div>
+  </section>
+</main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

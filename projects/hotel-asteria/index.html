@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asteria Bay Bodrum — бутик-отель 5* на берегу Эгейского моря</title>
+  <meta name="description" content="Бутик-отель 5* для взрослых в бухте Гюндоган, Бодрум. 42 номера и виллы с видом на море, ресторан эгейской кухни, спа.">
+  <meta property="og:title" content="Asteria Bay Bodrum — бутик-отель 5* на берегу Эгейского моря">
+  <meta property="og:description" content="Бутик-отель 5* для взрослых в бухте Гюндоган, Бодрум. 42 номера и виллы с видом на море, ресторан эгейской кухни, спа.">
+  <meta property="og:image" content="img/photo-1783442619815-943376e2ac6c-1200.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0F0E0C">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F0E0C'/%3E%3Cpath d='M16 5l2.6 8.4H27l-6.8 5 2.6 8.4L16 21.6l-6.8 5.2 2.6-8.4-6.8-5h8.4z' fill='%23B89A5E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-home">
+
+<div class="curtain" aria-hidden="true"><span class="curtain__logo">A</span></div>
+<a class="skip" href="#main">Перейти к содержимому</a>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+      <em>Меню</em>
+    </button>
+    <a href="index.html" class="logo" aria-label="Asteria Bay — на главную">
+      <span class="logo__name">ASTERIA</span>
+      <span class="logo__sub">BAY · BODRUM</span>
+    </a>
+    <a href="booking.html" class="header__book">Забронировать</a>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-label="Основная навигация" hidden>
+  <div class="menu__inner">
+    <ul class="menu__list">
+      <li><a href="index.html" aria-current="page"><span>01</span>Главная</a></li>
+      <li><a href="rooms.html"><span>02</span>Номера</a></li>
+      <li><a href="dining.html"><span>03</span>Ресторан</a></li>
+      <li><a href="spa.html"><span>04</span>Спа</a></li>
+      <li><a href="gallery.html"><span>05</span>Галерея</a></li>
+      <li><a href="booking.html"><span>06</span>Контакты</a></li>
+    </ul>
+    <div class="menu__aside">
+      <img src="img/photo-1766214573274-f31f935eda13-900.jpg" alt="" loading="lazy">
+      <p>Бухта Гюндоган, Бодрум, Турция</p>
+      <a href="tel:+902520000000">+90 252 000 00 00</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="hero__slides" aria-hidden="true">
+      <img src="img/photo-1783442619815-943376e2ac6c-2200.jpg" alt="" class="is-active">
+      <img src="img/photo-1783936952983-9b80ff0604e9-2200.jpg" alt="">
+      <img src="img/photo-1782113326471-f7db73d27b61-2200.jpg" alt="">
+    </div>
+    <div class="hero__content">
+      <p class="eyebrow">Бутик-отель 5* · Бодрум, Турция</p>
+      <h1 class="split">Там, где море<br><em>становится тишиной</em></h1>
+    </div>
+    
+    <form class="book-bar" action="booking.html" method="get" id="bookBar">
+      <label><span>Заезд</span><input type="date" name="in" required></label>
+      <label><span>Выезд</span><input type="date" name="out" required></label>
+      <label><span>Гости</span>
+        <select name="guests"><option value="1">1 взрослый</option><option value="2" selected>2 взрослых</option><option value="3">3 взрослых</option><option value="4">4 взрослых</option></select>
+      </label>
+      <button class="btn btn--gold" type="submit">Проверить даты</button>
+    </form>
+    <div class="hero__scroll" aria-hidden="true"><span></span>Листайте</div>
+  </section>
+
+  <section class="intro section">
+    <div class="intro__grid">
+      <div class="intro__text reveal">
+        <p class="eyebrow">Добро пожаловать</p>
+        <h2>Сорок два номера на скале<br>над <em>бухтой Гюндоган</em></h2>
+        <p>Asteria Bay — это отель, в котором не бывает очередей у бассейна и громкой музыки. Белый камень, оливковые деревья и Эгейское море, которое видно из каждого номера.</p>
+        <p>Мы принимаем только взрослых гостей старше 16 лет и держим не больше сорока двух номеров — чтобы персонал знал каждого гостя по имени.</p>
+        <a href="rooms.html" class="link-line">Смотреть номера</a>
+      </div>
+      <div class="intro__media">
+        <div class="intro__img intro__img--a reveal-img"><img src="img/photo-1781455495352-f810d0901497-1000.jpg" alt="Белые корпуса отеля на скале над морем" loading="lazy" data-parallax="0.08"></div>
+        <div class="intro__img intro__img--b reveal-img"><img src="img/photo-1790276319819-124404931132-800.jpg" alt="Деревянный причал над бирюзовым морем" loading="lazy" data-parallax="-0.06"></div>
+      </div>
+    </div>
+    <ul class="numbers reveal">
+      <li><strong>42</strong><span>номера и виллы</span></li>
+      <li><strong>3</strong><span>бассейна с морской водой</span></li>
+      <li><strong>120 м</strong><span>до частного пляжа</span></li>
+      <li><strong>35 мин</strong><span>от аэропорта Бодрума</span></li>
+    </ul>
+    <p class="demo-note ">Цифры демонстрационные</p>
+  </section>
+
+  <section class="section section--dark">
+    <div class="section__head reveal">
+      <p class="eyebrow">Номера и виллы</p>
+      <h2>Четыре способа <em>остаться</em></h2>
+    </div>
+    <div class="rooms-scroll" tabindex="0" aria-label="Номера, прокрутка по горизонтали">
+      <a class="room-card reveal" href="room-deluxe.html">
+        <div class="room-card__img"><img src="img/photo-1758448755969-8791367cf5c5-1000.jpg" alt="Deluxe Sea View" loading="lazy"></div>
+        <div class="room-card__body">
+          <span class="room-card__num">01</span>
+          <h3>Deluxe Sea View</h3>
+          <p>Светлый номер с панорамным окном и балконом над бухтой.</p>
+          <ul class="room-card__meta"><li>38 м²</li><li>до 2 гостей</li><li>от €320 / ночь</li></ul>
+        </div>
+      </a>
+      <a class="room-card reveal" href="room-junior.html">
+        <div class="room-card__img"><img src="img/photo-1776763018972-588e27bf6511-1000.jpg" alt="Junior Suite" loading="lazy"></div>
+        <div class="room-card__body">
+          <span class="room-card__num">02</span>
+          <h3>Junior Suite</h3>
+          <p>Спальня и гостиная зона, отдельная гардеробная, терраса.</p>
+          <ul class="room-card__meta"><li>56 м²</li><li>до 3 гостей</li><li>от €480 / ночь</li></ul>
+        </div>
+      </a>
+      <a class="room-card reveal" href="room-villa.html">
+        <div class="room-card__img"><img src="img/photo-1788217023349-ad7763845844-1000.jpg" alt="Pool Villa" loading="lazy"></div>
+        <div class="room-card__body">
+          <span class="room-card__num">03</span>
+          <h3>Pool Villa</h3>
+          <p>Вилла с приватным бассейном с подогревом и выходом к саду.</p>
+          <ul class="room-card__meta"><li>92 м²</li><li>до 4 гостей</li><li>от €890 / ночь</li></ul>
+        </div>
+      </a>
+      <a class="room-card reveal" href="room-asteria-suite.html">
+        <div class="room-card__img"><img src="img/photo-1744000311635-0280df5cc00e-1000.jpg" alt="Asteria Suite" loading="lazy"></div>
+        <div class="room-card__body">
+          <span class="room-card__num">04</span>
+          <h3>Asteria Suite</h3>
+          <p>Двухуровневый сьют на верхнем этаже с террасой на крыше.</p>
+          <ul class="room-card__meta"><li>160 м²</li><li>до 4 гостей</li><li>от €1 650 / ночь</li></ul>
+        </div>
+      </a>
+    </div>
+    <div class="center reveal"><a href="rooms.html" class="link-line link-line--light">Все номера</a></div>
+  </section>
+
+  <section class="parallax-band">
+    <img src="img/photo-1766214573274-f31f935eda13-2200.jpg" alt="" data-parallax="0.3">
+    <blockquote class="reveal">
+      <p>«Самое ценное, что мы предлагаем гостям, — это время, которое никуда не спешит»</p>
+      <cite>Элиф Демир, управляющая отелем</cite>
+    </blockquote>
+  </section>
+
+  <section class="section experiences">
+    <div class="section__head reveal">
+      <p class="eyebrow">Впечатления</p>
+      <h2>День в Asteria Bay</h2>
+    </div>
+    <div class="exp-grid">
+      <a class="exp reveal" href="dining.html">
+        <div class="exp__img"><img src="img/photo-1773932479972-81d143066ba2-900.jpg" alt="Арка, ведущая к ресторану над морем" loading="lazy"></div>
+        <span>08:00 — 23:00</span><h3>Ресторан «Lykia»</h3><p>Эгейская кухня из продуктов фермеров полуострова и утреннего улова.</p>
+      </a>
+      <a class="exp reveal" href="spa.html">
+        <div class="exp__img"><img src="img/photo-1600334089648-b0d9d3028eb2-900.jpg" alt="Массаж горячими камнями" loading="lazy"></div>
+        <span>09:00 — 21:00</span><h3>Спа и хаммам</h3><p>Традиционный турецкий хаммам из мрамора и ритуалы с оливковым маслом.</p>
+      </a>
+      <a class="exp reveal" href="gallery.html">
+        <div class="exp__img"><img src="img/photo-1638718358942-ea45a721867b-900.jpg" alt="Парусная лодка у маяка на закате" loading="lazy"></div>
+        <span>По запросу</span><h3>Яхта на закате</h3><p>Частная прогулка на гулете вдоль бухт полуострова с ужином на борту.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section section--sand reviews">
+    <div class="section__head reveal"><p class="eyebrow">Гости о нас</p></div>
+    <div class="quotes reveal" id="quotes">
+      <figure class="is-active"><blockquote>«Лучший отпуск за последние десять лет. Персонал запомнил, какой кофе я пью, уже на второе утро.»</blockquote><figcaption>Анна и Михаил, Москва</figcaption></figure>
+      <figure><blockquote>«Вилла с бассейном — это отдельный мир. Мы почти не выходили за её пределы, кроме ужинов в ресторане.»</blockquote><figcaption>Ольга, Санкт-Петербург</figcaption></figure>
+      <figure><blockquote>«Тишина, море и хаммам. Ровно то, что нужно после тяжёлого года.»</blockquote><figcaption>Дмитрий, Екатеринбург</figcaption></figure>
+      <div class="quotes__dots" role="tablist" aria-label="Отзывы"></div>
+    </div>
+    <p class="demo-note ">Имена и тексты отзывов изменены</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <p class="footer__claim">Место, где Эгейское море <em>замедляет время</em></p>
+    <a href="booking.html" class="btn btn--gold">Забронировать</a>
+  </div>
+  <div class="footer__grid">
+    <div>
+      <h3>Отель</h3>
+      <ul><li><a href="rooms.html">Номера и виллы</a></li><li><a href="dining.html">Ресторан</a></li><li><a href="spa.html">Спа</a></li><li><a href="gallery.html">Галерея</a></li></ul>
+    </div>
+    <div>
+      <h3>Контакты</h3>
+      <ul><li>Бухта Гюндоган, Бодрум, Турция</li><li><a href="tel:+902520000000">+90 252 000 00 00</a></li><li><a href="mailto:stay@asteria.example">stay@asteria.example</a></li></ul>
+    </div>
+    <div>
+      <h3>Сезон</h3>
+      <ul><li>Апрель — ноябрь</li><li>Заезд с 14:00</li><li>Выезд до 12:00</li><li>Только для взрослых 16+</li></ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 Asteria Bay Bodrum</span>
+    <span>Концепт-проект для портфолио. Название, контакты, цены и фото заменены на демонстрационные</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
