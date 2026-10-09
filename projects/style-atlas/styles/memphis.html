@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru" data-style="memphis">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Диско-1986 · Мемфис</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Rubik:wght@400;500;700;800&display=swap">
+<style>
+/* Мемфис: белый фон в точку, фигуры без логики — треугольники, загогулины, зигзаги, терраццо. Цветные тени вместо серых. */
+:root {
+  --white: #FFFFFF;
+  --black: #111111;
+  --pink: #FF6FB5;
+  --yellow: #FFE45E;
+  --teal: #2EC4B6;
+  --purple: #8E7DFF;
+  --red: #FF4F3B;
+  --display: "Rubik Mono One", "Arial Black", sans-serif;
+  --body: "Rubik", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--black); font: 500 17px/1.55 var(--body); overflow-x: hidden; background: radial-gradient(var(--black) 1.3px, transparent 1.7px) 0 0 / 22px 22px, var(--white); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px dashed var(--purple); outline-offset: 3px; }
+.wrap { position: relative; max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+.shape { position: absolute; pointer-events: none; z-index: 0; }
+.float { animation: fl 7s ease-in-out infinite alternate; }
+@keyframes fl { to { transform: translateY(-14px) rotate(8deg); } }
+.tri { width: 0; height: 0; border-left: 46px solid transparent; border-right: 46px solid transparent; border-bottom: 80px solid var(--teal); }
+.circ { border-radius: 50%; }
+.terr { background: radial-gradient(circle at 20% 30%, var(--pink) 0 6%, transparent 7%), radial-gradient(circle at 70% 20%, var(--black) 0 4%, transparent 5%), radial-gradient(circle at 60% 70%, var(--teal) 0 7%, transparent 8%), radial-gradient(circle at 30% 80%, var(--purple) 0 5%, transparent 6%), radial-gradient(circle at 85% 60%, var(--red) 0 4%, transparent 5%), var(--yellow); }
+.stripes { background: repeating-linear-gradient(45deg, var(--black) 0 4px, transparent 4px 12px); }
+
+header .wrap { display: flex; align-items: center; gap: 18px; padding-block: 22px; flex-wrap: wrap; z-index: 2; }
+.logo { font: 22px/1 var(--display); padding: 12px 16px; background: var(--pink); border: 3px solid var(--black); box-shadow: 6px 6px 0 var(--teal); transform: rotate(-2deg); margin-right: auto; text-decoration: none; }
+header nav { display: flex; gap: 22px; font-weight: 800; }
+header nav a { color: inherit; text-decoration: none; padding-bottom: 6px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='6'%3E%3Cpath d='M0 3 Q5 0 10 3 T20 3' stroke='%23FF6FB5' stroke-width='2' fill='none'/%3E%3C/svg%3E") 0 100% / 0 6px repeat-x; transition: background-size .3s; }
+header nav a:hover { background-size: 20px 6px; }
+
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 40px 90px; }
+.hero > * { position: relative; z-index: 1; }
+.hero h1 { margin: 0; font: clamp(44px, 7.6vw, 104px)/.95 var(--display); letter-spacing: -.02em; }
+.hero h1 .a { color: var(--white); -webkit-text-stroke: 3px var(--black); text-shadow: 6px 6px 0 var(--pink); display: block; }
+.hero h1 .b { display: inline-block; background: var(--yellow); padding: 0 .12em; border: 3px solid var(--black); box-shadow: 6px 6px 0 var(--purple); transform: rotate(-3deg); margin-top: 10px; }
+.hero p { margin: 26px 0 0; max-width: 28em; font-size: 19px; }
+.air { display: inline-flex; gap: 10px; align-items: center; margin-top: 22px; padding: 10px 18px; background: var(--teal); border: 3px solid var(--black); border-radius: 999px; font-weight: 800; box-shadow: 4px 4px 0 var(--black); }
+.air i { width: 12px; height: 12px; border-radius: 50%; background: var(--red); border: 2px solid var(--black); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { background: var(--white); } }
+
+/* кассета */
+.tape { position: relative; aspect-ratio: 1.6; max-width: 100%; background: var(--purple); border: 4px solid var(--black); border-radius: 18px; box-shadow: 12px 12px 0 var(--pink); transform: rotate(4deg); }
+.tape .label { position: absolute; left: 8%; right: 8%; top: 10%; height: 54%; background: var(--white); border: 3px solid var(--black); border-radius: 8px; overflow: hidden; }
+.tape .label::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 26%; background: repeating-linear-gradient(90deg, var(--pink) 0 20px, var(--yellow) 20px 40px, var(--teal) 40px 60px); border-bottom: 3px solid var(--black); }
+.tape .label span { position: absolute; left: 6%; top: 34%; font: clamp(13px, 1.6vw, 20px)/1.1 var(--display); }
+.tape .bottom small { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: clamp(9px, 1.2vw, 13px); letter-spacing: .08em; }
+.reels { position: absolute; left: 22%; right: 22%; top: 40%; height: 18%; display: flex; justify-content: space-between; align-items: center; background: var(--black); border-radius: 30px; padding: 0 6%; }
+.reels i { width: 18%; aspect-ratio: 1; border-radius: 50%; background: repeating-conic-gradient(var(--white) 0 30deg, var(--black) 30deg 60deg); border: 3px solid var(--white); animation: spin 2.4s linear infinite; }
+@keyframes spin { to { transform: rotate(1turn); } }
+.tape .bottom { position: absolute; left: 22%; right: 22%; bottom: -4px; height: 22%; background: var(--yellow); border: 4px solid var(--black); border-bottom: 0; clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%); }
+
+section.block { position: relative; padding-block: 40px; }
+.title2 { font: clamp(26px, 3.6vw, 42px)/1 var(--display); margin: 0 0 26px; display: inline-block; padding: 8px 14px; background: var(--white); border: 3px solid var(--black); box-shadow: 6px 6px 0 var(--yellow); }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+.slot { position: relative; padding: 22px; border: 3px solid var(--black); background: var(--white); box-shadow: 8px 8px 0 var(--c); transition: transform .2s; }
+.slot:hover { transform: rotate(-1.5deg) translateY(-4px); }
+.slot:nth-child(3n+1) { --c: var(--pink); } .slot:nth-child(3n+2) { --c: var(--teal); } .slot:nth-child(3n) { --c: var(--purple); }
+.slot time { font: 26px/1 var(--display); }
+.slot h3 { margin: 10px 0 6px; font-size: 21px; font-weight: 800; }
+.slot p { margin: 0; font-size: 15px; }
+.slot .corner { position: absolute; right: -14px; top: -14px; width: 36px; height: 36px; border: 3px solid var(--black); background: var(--yellow); border-radius: 50%; }
+.slot:nth-child(2n) .corner { border-radius: 0; transform: rotate(20deg); background: var(--red); }
+
+.req { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+form { padding: 26px; border: 3px solid var(--black); background: var(--yellow); box-shadow: 10px 10px 0 var(--black); display: grid; gap: 14px; position: relative; }
+form label { display: grid; gap: 6px; font-weight: 800; }
+form input, form select { border: 3px solid var(--black); padding: 12px 14px; background: var(--white); border-radius: 0; min-width: 0; }
+form input:focus, form select:focus { outline: none; box-shadow: 4px 4px 0 var(--pink); }
+.go { appearance: none; border: 3px solid var(--black); cursor: pointer; padding: 14px 20px; background: var(--pink); font: 16px var(--display); box-shadow: 4px 4px 0 var(--black); justify-self: start; }
+.go:active { transform: translate(4px, 4px); box-shadow: none; }
+.queue { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.queue li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px; border: 3px solid var(--black); background: var(--white); }
+.queue li b { display: block; }
+.queue li small { color: #444; }
+.queue .n { width: 44px; height: 44px; display: grid; place-items: center; font: 16px var(--display); background: var(--teal); border: 3px solid var(--black); border-radius: 50%; }
+.queue li:nth-child(2n) .n { background: var(--pink); border-radius: 0; }
+.queue li:nth-child(3n) .n { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); border: 0; }
+
+footer { position: relative; margin-top: 60px; padding: 40px 0 120px; background: var(--black); color: var(--white); }
+footer::before { content: ""; position: absolute; left: 0; right: 0; top: -20px; height: 20px; background: linear-gradient(135deg, transparent 50%, var(--black) 50%) 0 0 / 20px 20px repeat-x, linear-gradient(225deg, transparent 50%, var(--black) 50%) 0 0 / 20px 20px repeat-x; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; }
+footer b { font: 20px var(--display); color: var(--yellow); }
+
+@media (max-width: 880px) { .hero, .req { grid-template-columns: minmax(0, 1fr); } .grid { grid-template-columns: minmax(0, 1fr); } .tape { max-width: 440px; } header nav { display: none; } .hide-sm { display: none; } }
+@media (prefers-reduced-motion: reduce) { .float, .reels i, .air i { animation: none; } }
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="#top">ДИСКО-1986</a><nav aria-label="Разделы"><a href="#program">Программа</a><a href="#request">Заявки</a></nav></div></header>
+
+<main class="wrap" id="top">
+  <svg class="shape float" style="left:-20px;top:20px;width:150px" viewBox="0 0 150 40" aria-hidden="true"><path d="M5 20 Q 22 0 40 20 T 75 20 T 110 20 T 145 20" stroke="#FF6FB5" stroke-width="9" fill="none" stroke-linecap="round"/></svg>
+  <i class="shape tri float" style="right:42%;top:8px;animation-delay:-2s" aria-hidden="true"></i>
+  <i class="shape circ terr hide-sm" style="right:-30px;top:330px;width:110px;height:110px;border:3px solid #111" aria-hidden="true"></i>
+  <i class="shape stripes hide-sm" style="left:40%;bottom:40px;width:120px;height:60px" aria-hidden="true"></i>
+  <svg class="shape float hide-sm" style="left:46%;bottom:10px;width:110px;animation-delay:-4s" viewBox="0 0 110 30" aria-hidden="true"><path d="M2 26 L 20 4 L 38 26 L 56 4 L 74 26 L 92 4 L 108 26" stroke="#111" stroke-width="6" fill="none" stroke-linejoin="round"/></svg>
+
+  <section class="hero">
+    <div>
+      <h1><span class="a">ДИСКО</span><span class="b">1986</span></h1>
+      <p>Пятничная радиопередача про синтипоп, итало-диско и аэробику. Два часа хитов с кассет, которые кто-то хранил на антресолях.</p>
+      <span class="air"><i></i>Эфир: пятница, 21:00</span>
+    </div>
+    <div class="tape" role="img" aria-label="Кассета с надписью «Диско-1986, сторона А»">
+      <div class="label"><span>ДИСКО-1986</span></div>
+      <div class="reels"><i></i><i></i></div>
+      <div class="bottom"><small>СТОРОНА А · 60 МИН</small></div>
+    </div>
+  </section>
+
+  <section class="block" id="program">
+    <h2 class="title2">Сегодня в эфире</h2>
+    <div class="grid">
+      <article class="slot"><i class="corner"></i><time>21:00</time><h3>Разминка с гантелями</h3><p>Хиты для аэробики: темп 120, гетры обязательны.</p></article>
+      <article class="slot"><i class="corner"></i><time>21:40</time><h3>Итальянский час</h3><p>Синтезаторы, вокодеры и песни про любовь на ломаном английском.</p></article>
+      <article class="slot"><i class="corner"></i><time>22:20</time><h3>Заявки слушателей</h3><p>Ставим всё, что пришло в форму ниже. Даже это.</p></article>
+    </div>
+  </section>
+
+  <section class="block req" id="request">
+    <form id="form">
+      <h2 class="title2" style="margin:0 0 6px;box-shadow:6px 6px 0 var(--pink)">Заказать песню</h2>
+      <label for="song">Песня и исполнитель<input id="song" type="text" placeholder="например, «Ночное такси» — Пломбир" autocomplete="off"></label>
+      <label for="for">Для кого<input id="for" type="text" placeholder="для тёти Оли из Химок" autocomplete="off"></label>
+      <label for="mood">Настроение<select id="mood"><option>Танцевать!</option><option>Грустить красиво</option><option>Бегать в гетрах</option></select></label>
+      <button class="go" type="submit">В эфир!</button>
+    </form>
+    <div>
+      <h2 class="title2" style="box-shadow:6px 6px 0 var(--teal)">Очередь заявок</h2>
+      <ol class="queue" id="queue">
+        <li><span class="n">1</span><span><b>«Неоновый пляж» — Сёстры Ветер</b><small>для класса 9 «Б» · Танцевать!</small></span></li>
+        <li><span class="n">2</span><span><b>«Видеосалон» — Квартал</b><small>для дяди Вити · Грустить красиво</small></span></li>
+        <li><span class="n">3</span><span><b>«Аэробика в 7:00» — Пломбир</b><small>для всех, кто проспал · Бегать в гетрах</small></span></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><b>ДИСКО-1986</b><span>Выдуманная радиопередача. Гетры настоящие.</span></div></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var q = document.getElementById('queue');
+  document.getElementById('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var song = document.getElementById('song').value.trim(), who = document.getElementById('for').value.trim() || 'для всех', mood = document.getElementById('mood').value;
+    if (!song) { document.getElementById('song').focus(); document.getElementById('song').placeholder = 'Сначала впишите песню!'; return; }
+    var li = document.createElement('li'), n = q.children.length + 1;
+    li.innerHTML = '<span class="n">' + n + '</span><span><b></b><small></small></span>';
+    li.querySelector('b').textContent = song;
+    li.querySelector('small').textContent = (who.indexOf('для') === 0 ? who : 'для ' + who) + ' · ' + mood;
+    q.appendChild(li);
+    li.animate([{ transform: 'scale(.6) rotate(-6deg)', opacity: 0 }, { transform: 'scale(1.06) rotate(2deg)', opacity: 1 }, { transform: 'none' }], { duration: 450, easing: 'ease-out' });
+    this.reset();
+  });
+})();
+</script>
+</body>
+</html>

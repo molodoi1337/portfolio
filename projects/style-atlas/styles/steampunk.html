@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru" data-style="steampunk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Латунь и пар · Стимпанк</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ruslan+Display&display=swap">
+<style>
+/* Стимпанк: тёмная мастерская, латунные таблички на заклёпках, шестерни в зацеплении, манометр и рычаг подачи пара. */
+:root {
+  --soot: #1A0F08;
+  --leather: #2A1A10;
+  --brass: #B5893A;
+  --brass-hi: #E8C47A;
+  --copper: #B87333;
+  --parchment: #E8D9B5;
+  --ink: #2A1A10;
+  --verdigris: #4A8C7A;
+  --serif: "Old Standard TT", Georgia, serif;
+  --deco: "Ruslan Display", "Old Standard TT", serif;
+  --brass-grad: linear-gradient(180deg, #F0D08A 0%, #C99A45 30%, #8C6420 70%, #B5893A 100%);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--parchment); font: 18px/1.6 var(--serif); overflow-x: hidden;
+  background: radial-gradient(ellipse at 50% 20%, rgba(181,137,58,.18), transparent 60%), radial-gradient(ellipse at 50% 50%, #3A2414, var(--soot) 75%); background-attachment: fixed; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .06 0 0 0 0 .02 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+button { font: inherit; }
+:focus-visible { outline: 2px dashed var(--brass-hi); outline-offset: 4px; }
+.wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+.plate { position: relative; background: var(--brass-grad); color: var(--ink); border-radius: 6px; box-shadow: inset 0 2px 0 rgba(255,240,200,.7), inset 0 -3px 0 rgba(60,35,5,.5), 0 10px 24px rgba(0,0,0,.6); }
+.rivets::before, .rivets::after { content: ""; position: absolute; top: 10px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF0C8, #B5893A 45%, #4E3410); box-shadow: 0 1px 2px rgba(0,0,0,.6), 0 calc(100% - 0px) 0 transparent; }
+.rivets::before { left: 10px; } .rivets::after { right: 10px; }
+.rivets > .rb { position: absolute; bottom: 10px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF0C8, #B5893A 45%, #4E3410); box-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.rb.l { left: 10px; } .rb.r { right: 10px; }
+
+header.wrap { padding-block: 28px 8px; }
+.head-plate { text-align: center; padding: 22px 48px 18px; }
+.head-plate .logo { font: 400 clamp(26px, 4.6vw, 52px)/1 var(--deco); letter-spacing: .06em; text-shadow: 0 1px 0 rgba(255,240,200,.6), 0 -1px 0 rgba(60,35,5,.5); }
+.head-plate p { margin: 6px 0 0; font-style: italic; font-size: 16px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 40px; align-items: center; padding-block: 40px 56px; }
+.hero h1 { margin: 0; font: 700 clamp(34px, 4.6vw, 58px)/1.08 var(--serif); color: var(--brass-hi); text-shadow: 0 2px 0 #4E3410, 0 0 30px rgba(232,196,122,.25); }
+.orn { display: block; margin: 18px 0; color: var(--brass); letter-spacing: .5em; font-size: 20px; }
+.hero p { margin: 0; font-size: 19px; color: #E9DCC0; max-width: 32em; }
+.hero p::first-letter { font: 400 3.2em/0.8 var(--deco); float: left; margin: 6px 10px 0 0; color: var(--brass-hi); }
+
+.machine { position: relative; aspect-ratio: 1.05; max-width: 100%; border-radius: 18px; background: radial-gradient(circle at 50% 40%, #3C2516, #1C110A 80%); box-shadow: inset 0 0 0 3px #5C3B1C, inset 0 0 60px rgba(0,0,0,.8), 0 20px 40px rgba(0,0,0,.6); overflow: hidden; }
+.machine svg.gears { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pipe { position: absolute; background: linear-gradient(90deg, #6B3A12, #D98E4A 40%, #F2B27A 50%, #B5651D 70%, #5A2E0C); }
+.pipe.v { width: 5%; top: 0; bottom: 0; right: 10%; }
+.pipe.h { height: 5%; left: 0; right: 10%; bottom: 14%; background: linear-gradient(180deg, #6B3A12, #D98E4A 40%, #F2B27A 50%, #B5651D 70%, #5A2E0C); }
+.flange { position: absolute; width: 8%; height: 3%; right: 8.5%; background: var(--brass-grad); border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.6); }
+.gauge { position: absolute; right: 3%; top: 6%; width: 34%; aspect-ratio: 1; }
+.steam { position: absolute; right: 11%; top: -2%; width: 60px; height: 60px; pointer-events: none; }
+.puff { position: absolute; left: 0; top: 30px; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.85), rgba(255,255,255,0) 70%); filter: blur(2px); animation: puff 1.6s ease-out forwards; }
+@keyframes puff { to { transform: translate(-30px, -90px) scale(3.2); opacity: 0; } }
+.lever-box { position: absolute; left: 5%; bottom: 24%; display: grid; justify-items: center; gap: 6px; }
+.lever { appearance: none; border: 0; padding: 0; cursor: pointer; position: relative; width: 70px; height: 110px; background: none; }
+.lever .base { position: absolute; left: 10px; right: 10px; bottom: 0; height: 26px; border-radius: 6px; background: var(--brass-grad); box-shadow: 0 4px 8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,240,200,.7); }
+.lever .arm { position: absolute; left: 50%; bottom: 14px; width: 10px; height: 84px; margin-left: -5px; border-radius: 5px; transform-origin: 50% 100%; transform: rotate(-38deg); transition: transform .5s cubic-bezier(.4,1.6,.5,1); background: linear-gradient(90deg, #4A4A4A, #BDBDBD 45%, #6A6A6A); }
+.lever .arm::after { content: ""; position: absolute; left: 50%; top: -14px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F27058, #A3200B 60%, #4E0D03); box-shadow: 0 3px 6px rgba(0,0,0,.6); }
+.lever[aria-pressed="true"] .arm { transform: rotate(38deg); }
+.tag { font: 700 12px/1.2 var(--serif); letter-spacing: .14em; text-transform: uppercase; padding: 5px 10px; border-radius: 3px; background: var(--parchment); color: var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,.5); }
+.readout { position: absolute; left: 5%; top: 6%; padding: 10px 14px; font-size: 14px; line-height: 1.4; }
+.readout b { font-size: 22px; font-variant-numeric: tabular-nums; }
+
+.parchment { position: relative; color: var(--ink); padding: clamp(24px, 4vw, 44px); border-radius: 4px; background: radial-gradient(ellipse at 30% 20%, #F4E8C8, #E4CF9E 60%, #CDB27A); box-shadow: inset 0 0 60px rgba(120,80,20,.45), 0 16px 36px rgba(0,0,0,.6); }
+.parchment::after { content: ""; position: absolute; inset: 12px; border: 1px solid rgba(42,26,16,.4); outline: 1px solid rgba(42,26,16,.25); outline-offset: 4px; pointer-events: none; }
+.parchment h2 { margin: 0; text-align: center; font: 400 clamp(24px, 3vw, 36px)/1.1 var(--deco); letter-spacing: .04em; }
+.parchment .lead { text-align: center; font-style: italic; margin: 8px auto 28px; max-width: 34em; }
+.cat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.item { display: grid; gap: 8px; justify-items: center; text-align: center; }
+.item svg { width: 120px; height: 120px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.item h3 { margin: 0; font-size: 22px; }
+.item p { margin: 0; font-size: 16px; }
+.price { font-style: italic; font-size: 17px; }
+.bbtn { appearance: none; border: 0; cursor: pointer; padding: 10px 20px 10px; font: 700 14px var(--serif); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: var(--brass-grad); border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,240,200,.8), 0 4px 0 #5C3B12, 0 6px 10px rgba(0,0,0,.4); transition: transform .08s, box-shadow .08s; }
+.bbtn:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,240,200,.8), 0 1px 0 #5C3B12, 0 2px 4px rgba(0,0,0,.4); }
+.note { min-height: 1.4em; font-style: italic; font-size: 15px; color: #6B3A12; }
+footer.wrap { padding-block: 40px 120px; text-align: center; color: #C9B68E; font-style: italic; }
+footer .orn { margin: 0 0 10px; }
+
+@media (max-width: 860px) { .hero, .cat { grid-template-columns: minmax(0, 1fr); } .machine { max-width: 520px; width: 100%; justify-self: center; } }
+@media (prefers-reduced-motion: reduce) { .puff { animation: none; display: none; } }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="plate rivets head-plate"><i class="rb l"></i><i class="rb r"></i>
+    <div class="logo">Латунь и пар</div>
+    <p>Механические музыкальные машины · Мануфактура основана в 1887 году</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Оркестр, который работает на пару</h1>
+      <span class="orn" aria-hidden="true">✠ ✠ ✠</span>
+      <p>Наши машины играют вальсы и марши без единого музыканта. Котёл, сорок шестерён и перфорированный барабан заменяют целый духовой оркестр. Потяните рычаг подачи пара и посмотрите, как машина оживает.</p>
+    </div>
+    <div class="machine" id="machine">
+      <svg class="gears" id="gears" viewBox="0 0 500 476" aria-hidden="true"></svg>
+      <i class="pipe v" aria-hidden="true"></i><i class="pipe h" aria-hidden="true"></i>
+      <i class="flange" style="top:40%" aria-hidden="true"></i><i class="flange" style="top:70%" aria-hidden="true"></i>
+      <div class="steam" id="steam" aria-hidden="true"></div>
+      <svg class="gauge" viewBox="0 0 200 200" aria-label="Манометр давления пара">
+        <defs>
+          <radialGradient id="bz" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#FFF0C8"/><stop offset=".45" stop-color="#C99A45"/><stop offset="1" stop-color="#4E3410"/></radialGradient>
+          <radialGradient id="fc" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#FBF3DC"/><stop offset="1" stop-color="#D9C38E"/></radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="96" fill="url(#bz)"/><circle cx="100" cy="100" r="80" fill="url(#fc)" stroke="#4E3410" stroke-width="3"/>
+        <g id="gticks"></g>
+        <text x="100" y="138" text-anchor="middle" font-family="Old Standard TT, serif" font-size="14" font-style="italic" fill="#2A1A10">атм.</text>
+        <line id="needle" x1="100" y1="100" x2="100" y2="34" stroke="#8C1A0A" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="9" fill="url(#bz)"/>
+        <ellipse cx="80" cy="66" rx="46" ry="26" fill="rgba(255,255,255,.28)" transform="rotate(-20 80 66)"/>
+      </svg>
+      <div class="readout plate"><span>Давление</span><br><b id="pv">0,0</b> атм. · <span id="rpm">0</span> об/мин</div>
+      <div class="lever-box">
+        <button class="lever" type="button" id="lever" aria-pressed="false" aria-label="Рычаг подачи пара"><i class="base"></i><i class="arm"></i></button>
+        <span class="tag" id="ltag">Пар перекрыт</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="parchment">
+    <h2>Каталогъ машинъ</h2>
+    <p class="lead">Каждая машина собирается вручную и проверяется на трёх вальсах Штрауса. Доставка гужевым транспортом по всей губернии.</p>
+    <div class="cat">
+      <article class="item">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 64 L 18 22 C 30 12 44 10 54 14 C 60 30 62 46 60 64 Z"/><path d="M60 64 L 30 30"/><rect x="34" y="70" width="52" height="30" rx="2"/><path d="M40 70v-6h40v6M60 64v6"/><circle cx="76" cy="85" r="4"/><path d="M34 100l-4 10M86 100l4 10"/></svg>
+        <h3>Граммофонъ «Соловей»</h3><p>Латунный рупор, пружинный завод на 6 минут.</p><span class="price">380 руб. серебром</span>
+        <button class="bbtn" type="button">Заказать</button><span class="note" aria-live="polite"></span>
+      </article>
+      <article class="item">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><rect x="22" y="40" width="70" height="52" rx="3"/><path d="M22 52h70M30 62h54M30 72h54M30 82h54"/><circle cx="92" cy="66" r="6"/><path d="M98 66h10v-18"/><circle cx="108" cy="44" r="4"/><path d="M28 92l-4 16M86 92l4 16M56 92v16"/></svg>
+        <h3>Шарманка «Вальсъ»</h3><p>Восемь мелодий на сменных валах, ремень из кожи.</p><span class="price">220 руб. серебром</span>
+        <button class="bbtn" type="button">Заказать</button><span class="note" aria-live="polite"></span>
+      </article>
+      <article class="item">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="30" width="80" height="70" rx="4"/><path d="M34 30v-12h52v12"/><path d="M30 44h60v24H30z"/><path d="M38 44v24M46 44v24M54 44v24M62 44v24M70 44v24M78 44v24"/><circle cx="44" cy="84" r="8"/><circle cx="76" cy="84" r="8"/><path d="M60 18v-8M54 10h12"/></svg>
+        <h3>Оркестрионъ «Громъ»</h3><p>Котёл, 46 труб, барабан и тарелки. Заменяет полковой оркестр.</p><span class="price">2 400 руб. серебром</span>
+        <button class="bbtn" type="button">Заказать</button><span class="note" aria-live="polite"></span>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap"><span class="orn" aria-hidden="true">✠ ✠ ✠</span><br>Мануфактура «Латунь и пар» · Петербургъ, Обводный канал · Вымышлено с 1887 года</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* шестерни: зубья трапецией, отверстия по кругу; зацепление по передаточному отношению */
+  function polar(r, a) { return [(r * Math.cos(a)).toFixed(2), (r * Math.sin(a)).toFixed(2)]; }
+  function gearPath(teeth, R, depth, holes, hub) {
+    var step = Math.PI * 2 / teeth, p = [];
+    for (var i = 0; i < teeth; i++) { var a = i * step; p.push(polar(R - depth, a), polar(R + depth, a + step * .18), polar(R + depth, a + step * .42), polar(R - depth, a + step * .6)); }
+    var d = 'M' + p.map(function (q) { return q.join(','); }).join('L') + 'Z';
+    var circ = function (cx, cy, r) { return 'M' + (cx + r) + ',' + cy + 'a' + r + ',' + r + ' 0 1,0 ' + (-2 * r) + ',0a' + r + ',' + r + ' 0 1,0 ' + (2 * r) + ',0Z'; };
+    d += circ(0, 0, hub);
+    for (var h = 0; h < holes; h++) { var ha = h * Math.PI * 2 / holes, hr = (R - depth) * .58; d += circ(+(hr * Math.cos(ha)).toFixed(2), +(hr * Math.sin(ha)).toFixed(2), (R - depth) * .2); }
+    return d;
+  }
+  var k = 3.4, G = [
+    { t: 30, cx: 190, cy: 230, holes: 6, fill: 'url(#gb)' },
+    { t: 14, holes: 0, fill: 'url(#gc)', ang: 0 },
+    { t: 18, holes: 4, fill: 'url(#gb)', ang: 96 },
+    { t: 10, holes: 0, fill: 'url(#gc)', ang: 300 }
+  ];
+  G.forEach(function (g) { g.R = g.t * k; g.step = 360 / g.t; });
+  var A = G[0];
+  // ведомые шестерни ставим на окружности контакта и разворачиваем впадиной к зубу ведущей
+  for (var i = 1; i < G.length; i++) {
+    var g = G[i], rad = g.ang * Math.PI / 180, dist = A.R + g.R;
+    g.cx = A.cx + Math.cos(rad) * dist; g.cy = A.cy + Math.sin(rad) * dist;
+    g.ratio = -A.t / g.t;
+    g.phase0 = (g.ang + 180) - .8 * g.step;
+  }
+  A.phase0 = -.3 * A.step;
+  var svg = document.getElementById('gears');
+  var html = '<defs><radialGradient id="gb" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#F0D08A"/><stop offset=".55" stop-color="#B5893A"/><stop offset="1" stop-color="#5C3B12"/></radialGradient>' +
+    '<radialGradient id="gc" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#F2B27A"/><stop offset=".55" stop-color="#B87333"/><stop offset="1" stop-color="#5A2E0C"/></radialGradient></defs>';
+  G.forEach(function (g, i) {
+    html += '<g transform="translate(' + g.cx.toFixed(1) + ' ' + g.cy.toFixed(1) + ')"><g id="g' + i + '"><path d="' + gearPath(g.t, g.R, 7, g.holes, g.t > 12 ? 10 : 6) + '" fill="' + g.fill + '" fill-rule="evenodd" stroke="#3A230B" stroke-width="2"/>' +
+      '<circle r="' + (g.t > 12 ? 16 : 9) + '" fill="none" stroke="rgba(255,240,200,.35)" stroke-width="2"/></g></g>';
+  });
+  svg.innerHTML = html;
+  var nodes = G.map(function (_, i) { return document.getElementById('g' + i); });
+
+  /* манометр */
+  var ticks = '';
+  for (var v = 0; v <= 10; v++) {
+    var a = (-130 + v * 26) * Math.PI / 180, r1 = 66, r2 = v % 5 ? 72 : 76;
+    var x1 = 100 + Math.sin(a) * r1, y1 = 100 - Math.cos(a) * r1, x2 = 100 + Math.sin(a) * r2, y2 = 100 - Math.cos(a) * r2;
+    ticks += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + (v >= 8 ? '#8C1A0A' : '#2A1A10') + '" stroke-width="' + (v % 5 ? 2 : 3) + '"/>';
+    ticks += '<text x="' + (100 + Math.sin(a) * 54) + '" y="' + (100 - Math.cos(a) * 54 + 5) + '" text-anchor="middle" font-family="Old Standard TT, serif" font-size="14" fill="' + (v >= 8 ? '#8C1A0A' : '#2A1A10') + '">' + v + '</text>';
+  }
+  document.getElementById('gticks').innerHTML = ticks;
+
+  var lever = document.getElementById('lever'), on = false, pressure = 0, angle = 0, lastPuff = 0, whistled = false, ctx;
+  lever.addEventListener('click', function () {
+    on = !on; lever.setAttribute('aria-pressed', String(on));
+    document.getElementById('ltag').textContent = on ? 'Пар подан' : 'Пар перекрыт';
+    if (on && !ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ctx = new AC(); }
+    if (!on) whistled = false;
+  });
+  function whistle() {
+    if (!ctx) return;
+    var t = ctx.currentTime, g = ctx.createGain(); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.08, t + .15); g.gain.setValueAtTime(.08, t + .9); g.gain.linearRampToValueAtTime(0, t + 1.3);
+    [880, 1108, 1320].forEach(function (f) { var o = ctx.createOscillator(); o.frequency.value = f; o.connect(g); o.start(t); o.stop(t + 1.35); });
+  }
+  var last = performance.now();
+  function frame(now) {
+    var dt = Math.min(.05, (now - last) / 1000); last = now;
+    pressure += ((on ? 8.6 : 0) - pressure) * dt * (on ? .55 : .35);
+    var rpm = pressure * 7;
+    angle += rpm * 6 * dt * (reduce ? .3 : 1);
+    nodes.forEach(function (n, i) { var g = G[i]; n.setAttribute('transform', 'rotate(' + (g.phase0 + (i === 0 ? angle : angle * g.ratio)).toFixed(2) + ')'); });
+    document.getElementById('needle').setAttribute('transform', 'rotate(' + (-130 + pressure * 26 + (on ? Math.sin(now / 90) * .8 : 0)).toFixed(2) + ' 100 100)');
+    document.getElementById('pv').textContent = pressure.toFixed(1).replace('.', ',');
+    document.getElementById('rpm').textContent = Math.round(rpm);
+    if (pressure > 7.6 && now - lastPuff > 900 && !reduce) {
+      lastPuff = now; var p = document.createElement('i'); p.className = 'puff'; document.getElementById('steam').appendChild(p); setTimeout(function () { p.remove(); }, 1700);
+      if (!whistled) { whistled = true; whistle(); }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  document.querySelectorAll('.item .bbtn').forEach(function (b, i) {
+    b.addEventListener('click', function () { b.nextElementSibling.textContent = 'Записано в книгу заказов под № ' + (1887 + i * 13) + '.'; });
+  });
+})();
+</script>
+</body>
+</html>

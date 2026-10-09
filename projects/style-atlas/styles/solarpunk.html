@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru" data-style="solarpunk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Фотосинтез · Соларпанк</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Соларпанк: светлое будущее, где техника обросла садом. Арки и витражи модерна, ветряки, лианы, солнечные тона. */
+:root {
+  --cream: #FFF8E7;
+  --sun: #FFC93C;
+  --leaf: #3E8E41;
+  --sky: #8FD3FE;
+  --clay: #E07A5F;
+  --forest: #1B4D3E;
+  --mint: #A8E6CF;
+  --display: "Philosopher", Georgia, serif;
+  --body: "Commissioner", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at 85% -10%, rgba(255,201,60,.35), transparent 40%), var(--cream); color: var(--forest); font: 400 17px/1.6 var(--body); overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--clay); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+header .wrap { display: flex; align-items: center; gap: 22px; padding-block: 22px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 10px; font: 700 24px/1 var(--display); margin-right: auto; }
+.logo svg { width: 36px; height: 36px; }
+header nav { display: flex; gap: 20px; font-weight: 500; }
+header nav a { text-decoration: none; background: linear-gradient(var(--leaf), var(--leaf)) 0 100% / 0 2px no-repeat; transition: background-size .3s; padding-bottom: 2px; }
+header nav a:hover { background-size: 100% 2px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 56px); align-items: center; padding-block: 24px 56px; }
+.kicker { font-weight: 600; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--clay); }
+h1 { margin: 12px 0 0; font: 700 clamp(40px, 5.6vw, 74px)/1.02 var(--display); letter-spacing: -.01em; text-wrap: balance; }
+h1 em { font-style: italic; font-weight: 400; color: var(--leaf); }
+.hero p { margin: 18px 0 0; max-width: 30em; font-size: 18px; color: #2E5E4E; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { appearance: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; border-radius: 999px 999px 999px 999px; font: 600 16px var(--body); text-decoration: none; transition: transform .2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn.sun { background: var(--sun); color: var(--forest); box-shadow: 0 10px 24px -10px rgba(224,150,20,.8); }
+.btn.line { background: transparent; box-shadow: inset 0 0 0 2px var(--forest); }
+
+.window { position: relative; aspect-ratio: .86; max-width: 100%; }
+.window svg { width: 100%; height: 100%; display: block; }
+.blade { transform-box: fill-box; transform-origin: 50% 50%; animation: spin var(--s, 6s) linear infinite; }
+@keyframes spin { to { transform: rotate(1turn); } }
+.rays { transform-box: fill-box; transform-origin: 50% 50%; animation: spin 60s linear infinite; }
+.vine { fill: none; stroke: var(--leaf); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: grow 3.4s ease-out .3s forwards; }
+@keyframes grow { to { stroke-dashoffset: 0; } }
+.lf { fill: #4FA34F; transform-box: fill-box; transform-origin: 0 100%; transform: scale(0); animation: bud .6s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: var(--d); }
+@keyframes bud { to { transform: scale(1) rotate(var(--r, 0deg)); } }
+
+.energy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 24px; border-radius: 28px; background: var(--forest); color: var(--cream); }
+.en { display: grid; gap: 6px; }
+.en small { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--mint); }
+.en b { font: 700 38px/1 var(--display); font-variant-numeric: tabular-nums; }
+.en b span { font-size: 18px; font-weight: 400; }
+.bar { height: 10px; border-radius: 99px; background: rgba(255,248,231,.15); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--sun), #FFE48A); transition: width .8s; }
+.bar.w i { background: linear-gradient(90deg, var(--sky), #D5F0FF); }
+.bar.b i { background: linear-gradient(90deg, var(--mint), #E3FFF2); }
+
+section.block { padding-block: 64px 0; }
+.sec-h { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+.sec-h h2 { margin: 0; font: 700 clamp(30px, 3.8vw, 46px)/1.05 var(--display); }
+.sec-h p { margin: 0; max-width: 28em; color: #2E5E4E; }
+
+.stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.stage { border-radius: 999px 999px 24px 24px; background: #fff; box-shadow: 0 0 0 3px var(--forest), 0 18px 34px -20px rgba(27,77,62,.55); overflow: hidden; display: grid; }
+.glass { aspect-ratio: 1.15; max-width: 100%; position: relative; background: var(--g); }
+.glass::after { content: ""; position: absolute; inset: 0; background: repeating-conic-gradient(from 0deg at 50% 100%, transparent 0 14deg, rgba(27,77,62,.9) 14deg 15deg), linear-gradient(transparent calc(100% - 3px), rgba(27,77,62,.9) 0); }
+.glass::before { content: ""; position: absolute; left: 50%; bottom: -16%; width: 46%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 10px rgba(255,201,60,.35); z-index: 0; }
+.stage .txt { padding: 20px 22px 24px; display: grid; gap: 6px; }
+.stage h3 { margin: 0; font: 700 24px/1.1 var(--display); }
+.stage p { margin: 0; font-size: 15px; color: #2E5E4E; }
+.stage .head { font-size: 14px; font-weight: 600; color: var(--clay); }
+
+.days { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.day { appearance: none; border: 0; cursor: pointer; padding: 10px 18px; border-radius: 999px; font-weight: 600; background: #F1E6C8; }
+.day[aria-pressed="true"] { background: var(--leaf); color: var(--cream); }
+.sched { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--forest); }
+.sched li { display: grid; grid-template-columns: 90px minmax(0, 1fr) auto; gap: 16px; padding: 14px 4px; border-bottom: 1px solid rgba(27,77,62,.25); align-items: baseline; }
+.sched time { font: 700 20px var(--display); color: var(--clay); font-variant-numeric: tabular-nums; }
+.sched b { font-weight: 600; }
+.sched span { font-size: 14px; color: #2E5E4E; }
+
+.values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.val { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: start; }
+.val svg { width: 56px; height: 56px; }
+.val b { display: block; font: 700 20px var(--display); }
+.val p { margin: 4px 0 0; font-size: 15px; color: #2E5E4E; }
+
+footer { margin-top: 72px; background: var(--forest); color: var(--cream); }
+footer .wrap { padding-block: 34px 120px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; }
+footer b { font: 700 22px var(--display); color: var(--sun); }
+
+@media (max-width: 900px) { .hero, .stages, .values { grid-template-columns: minmax(0, 1fr); } .window { max-width: 460px; width: 100%; justify-self: center; } .energy { grid-template-columns: minmax(0, 1fr); } header nav { display: none; } }
+@media (prefers-reduced-motion: reduce) { .blade, .rays { animation: none; } .vine { animation: none; stroke-dashoffset: 0; } .lf { animation: none; transform: scale(1) rotate(var(--r, 0deg)); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="logo"><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="9" fill="#FFC93C"/><path d="M18 4v4M18 28v4M4 18h4M28 18h4M8 8l3 3M25 25l3 3M8 28l3-3M25 11l3-3" stroke="#FFC93C" stroke-width="2.5" stroke-linecap="round"/><path d="M18 27c0-6 3-10 9-11-1 6-4 10-9 11z" fill="#3E8E41"/></svg>Фотосинтез</span>
+    <nav aria-label="Разделы"><a href="#energy">Энергия</a><a href="#stages">Сцены</a><a href="#program">Программа</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <span class="kicker">21–23 июня · остров Зелёный</span>
+      <h1>Фестиваль, который <em>работает на солнце</em></h1>
+      <p>Три сцены питаются от солнечных панелей и ветряков, звук усиливают батареи, заряженные днём. Еда с соседних ферм, вместо парковки — велостоянка на две тысячи мест.</p>
+      <div class="cta"><a class="btn sun" href="#program">Взять билет ☀</a><a class="btn line" href="#energy">Как мы считаем энергию</a></div>
+    </div>
+    <div class="window">
+      <svg viewBox="0 0 430 500" aria-label="Иллюстрация: арка с видом на поле с ветряками, солнечными панелями и садом на башне">
+        <defs>
+          <clipPath id="arch"><path d="M30 500 V200 C30 90 120 22 215 22 C310 22 400 90 400 200 V500 Z"/></clipPath>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FE"/><stop offset=".55" stop-color="#D9F1FF"/><stop offset="1" stop-color="#FFF3CF"/></linearGradient>
+          <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8CCB6A"/><stop offset="1" stop-color="#3E8E41"/></linearGradient>
+        </defs>
+        <g clip-path="url(#arch)">
+          <rect width="430" height="500" fill="url(#sky)"/>
+          <g class="rays"><path d="M300 40 L306 0 L294 0Z M300 160 L306 200 L294 200Z M240 100 L200 106 L200 94Z M360 100 L400 106 L400 94Z M258 58 L230 30 L238 22Z M342 142 L370 170 L362 178Z M342 58 L370 30 L362 22Z M258 142 L230 170 L238 178Z" fill="#FFC93C" opacity=".7"/></g>
+          <circle cx="300" cy="100" r="38" fill="#FFC93C"/>
+          <path d="M0 340 C 90 300 170 310 240 330 S 380 360 430 320 V500 H0Z" fill="url(#hill)"/>
+          <g transform="translate(110 250)"><rect x="-3" y="0" width="6" height="110" fill="#F4F4EF"/><g class="blade" style="--s:5s"><path d="M0 0 L-4 -46 L0 -50 L4 -46Z M0 0 L42 20 L44 25 L38 26Z M0 0 L-38 26 L-44 25 L-42 20Z" fill="#FFFFFF" stroke="#C9D6D0"/><circle r="5" fill="#E07A5F"/></g></g>
+          <g transform="translate(185 228) scale(.8)"><rect x="-3" y="0" width="6" height="140" fill="#F4F4EF"/><g class="blade" style="--s:7s"><path d="M0 0 L-4 -46 L0 -50 L4 -46Z M0 0 L42 20 L44 25 L38 26Z M0 0 L-38 26 L-44 25 L-42 20Z" fill="#FFFFFF" stroke="#C9D6D0"/><circle r="5" fill="#E07A5F"/></g></g>
+          <g transform="translate(300 200)">
+            <rect x="-34" y="20" width="68" height="200" rx="6" fill="#F7EBD0" stroke="#1B4D3E" stroke-width="3"/>
+            <path d="M-34 70h68M-34 120h68M-34 170h68" stroke="#1B4D3E" stroke-width="2"/>
+            <rect x="-22" y="34" width="14" height="24" rx="7" fill="#8FD3FE"/><rect x="8" y="34" width="14" height="24" rx="7" fill="#8FD3FE"/>
+            <rect x="-22" y="84" width="14" height="24" rx="7" fill="#8FD3FE"/><rect x="8" y="84" width="14" height="24" rx="7" fill="#8FD3FE"/>
+            <ellipse cx="-30" cy="68" rx="18" ry="10" fill="#4FA34F"/><ellipse cx="34" cy="118" rx="18" ry="10" fill="#4FA34F"/><ellipse cx="-28" cy="168" rx="16" ry="9" fill="#6BBF59"/>
+            <path d="M-44 20 L0 -10 L44 20Z" fill="#3E8E41"/><rect x="-30" y="2" width="60" height="10" fill="#2F4F7A" transform="skewX(-20)"/>
+          </g>
+          <g transform="translate(30 380)"><g fill="#2F4F7A" stroke="#D9F1FF" stroke-width="1.5"><path d="M0 0 L60 -16 L76 6 L16 22Z"/><path d="M80 -6 L140 -22 L156 0 L96 16Z"/></g><path d="M20 -2l40-11M100 -8l40-11" stroke="#D9F1FF" stroke-width="1"/></g>
+          <g fill="#2E7D32"><circle cx="40" cy="330" r="22"/><circle cx="66" cy="318" r="18"/><circle cx="214" cy="336" r="16"/></g>
+          <g fill="#E07A5F"><circle cx="150" cy="420" r="5"/><circle cx="168" cy="426" r="5"/><circle cx="186" cy="420" r="5"/><circle cx="204" cy="428" r="5"/><circle cx="222" cy="420" r="5"/></g>
+          <rect x="130" y="436" width="110" height="16" rx="4" fill="#1B4D3E"/>
+        </g>
+        <path d="M30 500 V200 C30 90 120 22 215 22 C310 22 400 90 400 200 V500" fill="none" stroke="#1B4D3E" stroke-width="10"/>
+        <path d="M18 500 V200 C18 82 112 10 215 10 C318 10 412 82 412 200 V500" fill="none" stroke="#1B4D3E" stroke-width="3"/>
+        <path class="vine" d="M24 500 C 40 440 6 400 26 350 C 44 300 8 260 30 210 C 50 160 70 120 110 80 C 140 52 170 30 215 16"/>
+        <path class="vine" style="animation-delay:.9s" d="M406 500 C 390 450 424 410 404 360 C 386 310 422 280 400 230 C 380 180 360 130 320 86"/>
+        <g>
+          <path class="lf" style="--d:.8s;--r:-20deg" d="M26 440 c -18 -6 -26 -20 -24 -34 c 14 2 26 14 24 34z"/>
+          <path class="lf" style="--d:1.2s;--r:10deg" d="M30 350 c 18 -8 32 -4 40 8 c -14 8 -30 6 -40 -8z"/>
+          <path class="lf" style="--d:1.6s;--r:-10deg" d="M28 250 c -16 -10 -18 -26 -10 -38 c 12 8 16 24 10 38z"/>
+          <path class="lf" style="--d:2.2s;--r:0deg" d="M100 88 c 4 -18 18 -26 32 -24 c -4 14 -16 24 -32 24z"/>
+          <path class="lf" style="--d:2s;--r:0deg" d="M404 400 c 18 -6 30 0 34 14 c -14 4 -28 0 -34 -14z"/>
+          <path class="lf" style="--d:2.6s;--r:0deg" d="M398 290 c -18 -4 -28 -18 -26 -32 c 14 4 26 16 26 32z"/>
+          <path class="lf" style="--d:3s;--r:0deg" d="M350 110 c 4 -18 18 -26 32 -24 c -4 14 -16 24 -32 24z"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="energy" id="energy" aria-live="polite">
+    <div class="en"><small>Солнце сейчас</small><b><span id="e-sun">128</span> <span>кВт</span></b><div class="bar"><i id="b-sun" style="width:72%"></i></div></div>
+    <div class="en"><small>Ветер сейчас</small><b><span id="e-wind">46</span> <span>кВт</span></b><div class="bar w"><i id="b-wind" style="width:38%"></i></div></div>
+    <div class="en"><small>Батареи на ночь</small><b><span id="e-bat">82</span> <span>%</span></b><div class="bar b"><i id="b-bat" style="width:82%"></i></div></div>
+  </section>
+
+  <section class="block" id="stages">
+    <div class="sec-h"><h2>Три сцены</h2><p>Каждая сцена получает энергию от своего источника, поэтому днём громче всего «Подсолнух», а ночью — «Пруд» на батареях.</p></div>
+    <div class="stages">
+      <article class="stage"><div class="glass" style="--g:linear-gradient(180deg,#FFE48A,#FFC93C 60%,#E07A5F)"></div><div class="txt"><span class="head">Солнечные панели · 600 м²</span><h3>«Подсолнух»</h3><p>Главная сцена под крышей из панелей. Хедлайнеры и закатные сеты.</p></div></article>
+      <article class="stage"><div class="glass" style="--g:linear-gradient(180deg,#D5F0FF,#8FD3FE 60%,#4FA34F)"></div><div class="txt"><span class="head">Три ветряка · 90 кВт</span><h3>«Ветер»</h3><p>Электроника на холме. Чем сильнее ветер, тем дольше сет.</p></div></article>
+      <article class="stage"><div class="glass" style="--g:linear-gradient(180deg,#E3FFF2,#A8E6CF 60%,#1B4D3E)"></div><div class="txt"><span class="head">Батареи · 1,2 МВт·ч</span><h3>«Пруд»</h3><p>Плавучая сцена для акустики и ночного джаза до трёх утра.</p></div></article>
+    </div>
+  </section>
+
+  <section class="block" id="program">
+    <div class="sec-h"><h2>Программа</h2></div>
+    <div class="days" role="group" aria-label="День фестиваля">
+      <button class="day" type="button" data-d="0" aria-pressed="true">Пятница, 21</button>
+      <button class="day" type="button" data-d="1" aria-pressed="false">Суббота, 22</button>
+      <button class="day" type="button" data-d="2" aria-pressed="false">Воскресенье, 23</button>
+    </div>
+    <ul class="sched" id="sched"></ul>
+  </section>
+
+  <section class="block">
+    <div class="values">
+      <div class="val"><svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="#A8E6CF"/><path d="M18 36c0-12 8-20 22-20 0 14-8 22-22 20zM18 36l12-12" stroke="#1B4D3E" stroke-width="3" fill="none" stroke-linecap="round"/></svg><div><b>Без пластика</b><p>Многоразовые кружки за залог 200 ₽, вода из фонтанчиков бесплатно.</p></div></div>
+      <div class="val"><svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="#FFE48A"/><circle cx="18" cy="34" r="7" stroke="#1B4D3E" stroke-width="3" fill="none"/><circle cx="38" cy="34" r="7" stroke="#1B4D3E" stroke-width="3" fill="none"/><path d="M18 34l8-12h8l4 12M26 22l-3-4" stroke="#1B4D3E" stroke-width="3" fill="none" stroke-linecap="round"/></svg><div><b>2 000 велопарковок</b><p>Велопоезд от станции каждые 20 минут, ремонт колёс на месте.</p></div></div>
+      <div class="val"><svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="#F7C5B5"/><path d="M16 30h24a12 12 0 0 1-24 0zM22 22c0-4 4-4 4-8M30 22c0-4 4-4 4-8" stroke="#1B4D3E" stroke-width="3" fill="none" stroke-linecap="round"/></svg><div><b>Еда с соседних ферм</b><p>Всё меню собрано в радиусе 50 км. Остатки уходят в компост острова.</p></div></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><b>Фотосинтез</b><span>Выдуманный фестиваль из будущего, в котором хочется жить.</span></div></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var program = [
+    [['14:00', 'Хор острова Зелёный', 'открытие, сцена «Подсолнух»'], ['17:30', 'Сёстры Ветер', 'фолк-электроника, «Ветер»'], ['20:40', 'Мира', 'закатный сет, «Подсолнух»'], ['23:00', 'Тёплый шум', 'эмбиент на воде, «Пруд»']],
+    [['12:00', 'Лекция «Как зарядить сцену облаком»', 'шатёр у оранжереи'], ['16:00', 'Медный Кит', 'брасс-бэнд, «Подсолнух»'], ['19:15', 'Квартал', 'инди, «Ветер»'], ['22:30', 'Квартет «Сквозняк»', 'джаз до утра, «Пруд»']],
+    [['11:00', 'Завтрак на поле', 'гречишные блины и мёд'], ['15:00', 'Перрон', 'акустика, «Пруд»'], ['18:00', 'Северный хор', 'закрытие, «Подсолнух»']]
+  ];
+  var sched = document.getElementById('sched');
+  function show(d) {
+    sched.innerHTML = program[d].map(function (p) { return '<li><time>' + p[0] + '</time><b>' + p[1] + '</b><span>' + p[2] + '</span></li>'; }).join('');
+    document.querySelectorAll('.day').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.d === d)); });
+  }
+  document.querySelectorAll('.day').forEach(function (b) { b.addEventListener('click', function () { show(+b.dataset.d); }); });
+  show(0);
+
+  var sun = 128, wind = 46, bat = 82;
+  setInterval(function () {
+    sun = Math.max(90, Math.min(176, sun + (Math.random() - .5) * 8));
+    wind = Math.max(10, Math.min(90, wind + (Math.random() - .5) * 10));
+    bat = Math.min(100, bat + .2);
+    document.getElementById('e-sun').textContent = Math.round(sun); document.getElementById('b-sun').style.width = (sun / 176 * 100) + '%';
+    document.getElementById('e-wind').textContent = Math.round(wind); document.getElementById('b-wind').style.width = (wind / 120 * 100) + '%';
+    document.getElementById('e-bat').textContent = Math.round(bat); document.getElementById('b-bat').style.width = bat + '%';
+  }, 1600);
+})();
+</script>
+</body>
+</html>

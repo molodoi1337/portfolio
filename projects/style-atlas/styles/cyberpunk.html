@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru" data-style="cyberpunk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>НЕОН//ПУЛЬС · Киберпанк</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Russo+One&display=swap">
+<style>
+/* Киберпанк: неон на почти чёрном, HUD-панели со скошенными углами, глитч и сканлайны. Тюнер реально ловит станции. */
+:root {
+  --void: #07070C;
+  --panel: #0E0E18;
+  --yellow: #FCEE0A;
+  --cyan: #00F0FF;
+  --red: #FF003C;
+  --violet: #1A1A2E;
+  --text: #D8F9FF;
+  --dim: #6C8A94;
+  --display: "Russo One", "Arial Black", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --cut: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--void); color: var(--text); font: 400 15px/1.6 var(--mono); overflow-x: hidden;
+  background-image: linear-gradient(rgba(0,240,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,.05) 1px, transparent 1px); background-size: 40px 40px; }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40; background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+.hud { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 24px; padding-block: 18px; border-bottom: 1px solid rgba(0,240,255,.25); font-size: 12px; letter-spacing: .12em; }
+.hud .brand { font: 18px/1 var(--display); color: var(--yellow); letter-spacing: .06em; }
+.hud .meta { color: var(--dim); }
+.hud .meta b { color: var(--cyan); font-weight: 500; }
+.sig { color: var(--yellow); }
+
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.glitch::before { color: var(--cyan); animation: g1 3.2s infinite steps(1); }
+.glitch::after { color: var(--red); animation: g2 2.7s infinite steps(1); }
+@keyframes g1 { 0%, 100% { clip-path: inset(0 0 100% 0); transform: none; } 6% { clip-path: inset(12% 0 70% 0); transform: translate(-6px, 0); } 9% { clip-path: inset(58% 0 22% 0); transform: translate(5px, 0); } 12% { clip-path: inset(0 0 100% 0); } 52% { clip-path: inset(80% 0 4% 0); transform: translate(-4px, 0); } 55% { clip-path: inset(0 0 100% 0); } }
+@keyframes g2 { 0%, 100% { clip-path: inset(0 0 100% 0); transform: none; } 31% { clip-path: inset(40% 0 44% 0); transform: translate(6px, 0); } 34% { clip-path: inset(4% 0 82% 0); transform: translate(-5px, 0); } 37% { clip-path: inset(0 0 100% 0); } 78% { clip-path: inset(66% 0 10% 0); transform: translate(3px, 0); } 81% { clip-path: inset(0 0 100% 0); } }
+
+.hero { padding-block: clamp(48px, 8vw, 96px) 40px; position: relative; }
+.tag { margin: 0 0 18px; color: var(--red); font-size: 13px; letter-spacing: .18em; }
+.hero h1 { margin: 0; font: clamp(48px, 10.5vw, 150px)/.92 var(--display); color: var(--yellow); letter-spacing: .01em; text-shadow: 0 0 30px rgba(252,238,10,.35); }
+.lead { margin: 24px 0 0; max-width: 36em; font-size: 16px; color: #B8D9E0; }
+.lead b { color: var(--cyan); font-weight: 500; }
+.cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.cbtn { appearance: none; border: 0; cursor: pointer; padding: 16px 28px; font: 15px/1 var(--display); letter-spacing: .08em; clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); transition: transform .1s, filter .2s; }
+.cbtn:hover { filter: brightness(1.15); transform: translateX(2px); }
+.cbtn.y { background: var(--yellow); color: var(--void); box-shadow: inset -6px 0 0 var(--red); }
+.cbtn.c { background: transparent; color: var(--cyan); box-shadow: inset 0 0 0 2px var(--cyan); }
+.cbtn[aria-pressed="true"] { background: var(--red); color: #fff; box-shadow: none; }
+
+.panel { position: relative; background: linear-gradient(160deg, rgba(26,26,46,.92), rgba(10,10,18,.92)); clip-path: var(--cut); padding: 22px; }
+.panel::before { content: ""; position: absolute; inset: 0; clip-path: var(--cut); pointer-events: none; background: linear-gradient(var(--cyan), var(--cyan)) 0 0 / 22px 2px no-repeat, linear-gradient(var(--cyan), var(--cyan)) 0 0 / 2px 22px no-repeat, linear-gradient(var(--yellow), var(--yellow)) 100% 100% / 22px 2px no-repeat, linear-gradient(var(--yellow), var(--yellow)) 100% 100% / 2px 22px no-repeat; }
+.panel h2 { margin: 0 0 14px; font: 15px/1 var(--display); letter-spacing: .14em; color: var(--cyan); display: flex; justify-content: space-between; gap: 10px; }
+.panel h2 span { color: var(--dim); font: 400 12px var(--mono); }
+.two { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 22px; }
+.term { min-height: 300px; font-size: 14px; line-height: 1.75; }
+.term .l { white-space: pre-wrap; }
+.term .ok { color: #39FF88; } .term .warn { color: var(--yellow); } .term .err { color: var(--red); } .term .dim { color: var(--dim); }
+.cursor { display: inline-block; width: .6em; height: 1.1em; background: var(--cyan); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.freq { display: flex; align-items: baseline; gap: 10px; font: 700 clamp(44px, 6vw, 68px)/1 var(--mono); color: var(--yellow); text-shadow: 0 0 18px rgba(252,238,10,.5); font-variant-numeric: tabular-nums; }
+.freq small { font-size: 16px; color: var(--dim); }
+.screen { position: relative; height: 92px; margin: 14px 0; background: #04040A; border: 1px solid rgba(0,240,255,.3); overflow: hidden; }
+#noise { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+.station { position: absolute; inset: 0; padding: 12px 14px; display: grid; align-content: center; gap: 4px; }
+.station b { font: 20px/1.1 var(--display); color: var(--cyan); letter-spacing: .04em; }
+.station span { color: var(--text); font-size: 13px; }
+.meter { display: flex; gap: 4px; align-items: flex-end; height: 22px; }
+.meter i { width: 10px; background: #1F2638; }
+.meter i.on { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.meter i:nth-child(1) { height: 30%; } .meter i:nth-child(2) { height: 45%; } .meter i:nth-child(3) { height: 60%; } .meter i:nth-child(4) { height: 75%; } .meter i:nth-child(5) { height: 90%; } .meter i:nth-child(6) { height: 100%; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 34px; background: transparent; cursor: ew-resize; }
+input[type=range]::-webkit-slider-runnable-track { height: 34px; background: repeating-linear-gradient(90deg, rgba(0,240,255,.55) 0 1px, transparent 1px 12px), linear-gradient(transparent 40%, rgba(0,240,255,.12) 40% 60%, transparent 60%); }
+input[type=range]::-moz-range-track { height: 34px; background: repeating-linear-gradient(90deg, rgba(0,240,255,.55) 0 1px, transparent 1px 12px); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 34px; background: var(--red); box-shadow: 0 0 12px var(--red); }
+input[type=range]::-moz-range-thumb { width: 6px; height: 34px; border: 0; border-radius: 0; background: var(--red); }
+.scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+
+.stations { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; padding-block: 28px; }
+.st { appearance: none; border: 0; text-align: left; cursor: pointer; color: var(--text); padding: 18px; }
+.st .f { font: 700 26px/1 var(--mono); color: var(--yellow); }
+.st b { display: block; margin-top: 10px; font: 16px/1.2 var(--display); letter-spacing: .04em; color: var(--cyan); }
+.st small { color: var(--dim); }
+.st:hover { filter: brightness(1.25); }
+.st.live b::after { content: " ● В ЭФИРЕ"; color: var(--red); font: 500 11px var(--mono); }
+
+.hazard { margin-block: 20px 0; padding: 14px 18px; background: repeating-linear-gradient(-45deg, var(--yellow) 0 18px, var(--void) 18px 36px); }
+.hazard p { margin: 0; display: inline-block; padding: 8px 14px; background: var(--void); color: var(--yellow); font: 14px/1.3 var(--display); letter-spacing: .1em; }
+footer { padding-block: 26px 120px; color: var(--dim); font-size: 12px; letter-spacing: .08em; }
+
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } .stations { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .stations { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .glitch::before, .glitch::after, .cursor { animation: none; } }
+</style>
+</head>
+<body>
+<header class="wrap hud">
+  <span class="brand">НЕОН//ПУЛЬС</span>
+  <span class="meta">СЕКТОР <b>7-Б</b> · <b id="clock">23:47:12</b> · СИГНАЛ <span class="sig" id="sig">▮▮▮▮▯</span> · ШИФР <b>AES-512</b></span>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="tag">// ПИРАТСКОЕ РАДИО НИЖНЕГО ГОРОДА</p>
+    <h1 class="glitch" data-text="НЕОН//ПУЛЬС">НЕОН//ПУЛЬС</h1>
+    <p class="lead">Вещаем с крыши жилого блока 7-Б, пока корпорация «Аркон» не нашла передатчик. <b>Без лицензии, без цензуры, без рекламы имплантов.</b> Поймайте нас на тюнере ниже.</p>
+    <div class="cta">
+      <button class="cbtn y" type="button" id="sound" aria-pressed="false">ВКЛЮЧИТЬ ЗВУК</button>
+      <button class="cbtn c" type="button" onclick="document.getElementById('tuner').scrollIntoView({behavior:'smooth'})">К ТЮНЕРУ</button>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="panel term" aria-live="polite"><h2>ТЕРМИНАЛ <span>/dev/tty7</span></h2><div id="term"></div></div>
+    <div class="panel" id="tuner">
+      <h2>ТЮНЕР <span>87,5 — 108,0 МГц</span></h2>
+      <div class="freq"><span id="fq">96,3</span><small>МГц</small></div>
+      <div class="screen"><canvas id="noise" width="160" height="46" aria-hidden="true"></canvas><div class="station" id="station"></div></div>
+      <label for="dial" class="scale"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span></label>
+      <input id="dial" type="range" min="875" max="1080" step="1" value="963" aria-label="Частота">
+      <div class="row"><div class="meter" id="meter" aria-label="Уровень сигнала"><i></i><i></i><i></i><i></i><i></i><i></i></div><span id="hint" style="color:var(--dim);font-size:12px">ищите сигнал: тяните ползунок</span></div>
+    </div>
+  </section>
+
+  <section class="stations" id="list"></section>
+
+  <div class="hazard"><p>ВНИМАНИЕ: ПЕРЕДАЧА НЕ ЛИЦЕНЗИРОВАНА · ПРОСЛУШИВАНИЕ НА ВАШ РИСК</p></div>
+</main>
+<footer class="wrap">© 2077 НЕОН//ПУЛЬС · ВЫМЫШЛЕННОЕ РАДИО · СЕРВЕРЫ НЕ НАЙДЕНЫ</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stations = [
+    { f: 893, n: 'ТРУБА', g: 'индастриал · удары по металлу', root: 45, bpm: 100 },
+    { f: 951, n: 'ДОЖДЬ', g: 'синтвейв для поездок под ливнем', root: 50, bpm: 92 },
+    { f: 1017, n: 'НЕОН//ПУЛЬС', g: 'основной поток · сейчас: «Хром на зубах»', root: 52, bpm: 118 },
+    { f: 1044, n: 'ПОДВАЛ', g: 'драм-н-бэйс из котельной', root: 47, bpm: 170 }
+  ];
+  var fmt = function (f) { return (f / 10).toFixed(1).replace('.', ','); };
+
+  /* часы */
+  function clock() { var d = new Date(); document.getElementById('clock').textContent = [d.getHours(), d.getMinutes(), d.getSeconds()].map(function (x) { return String(x).padStart(2, '0'); }).join(':'); }
+  clock(); setInterval(clock, 1000);
+
+  /* терминал */
+  var lines = [['dim', '> загрузка ядра v7.7.1 ...'], ['', '> подключение к ретранслятору на крыше 7-Б'], ['ok', '[OK] антенна поднята, азимут 214°'], ['warn', '[!] обнаружен сканер «Аркон», меняю частоту'],
+    ['', '> обход фильтра [##########] 100%'], ['ok', '[OK] частота 101,7 МГц свободна'], ['err', '[x] имплант слушателя #4471 заблокировал поток'], ['ok', '[OK] поток открыт. нас слушают: 2 318']];
+  var term = document.getElementById('term'), li = 0, ci = 0, cur;
+  function type() {
+    if (li >= lines.length) { var c = document.createElement('span'); c.className = 'cursor'; term.appendChild(c); return; }
+    if (ci === 0) { cur = document.createElement('div'); cur.className = 'l ' + lines[li][0]; term.appendChild(cur); }
+    cur.textContent = lines[li][1].slice(0, ++ci);
+    if (ci >= lines[li][1].length) { li++; ci = 0; setTimeout(type, reduce ? 0 : 380); } else setTimeout(type, reduce ? 0 : 22);
+  }
+  type();
+
+  /* список станций */
+  document.getElementById('list').innerHTML = stations.map(function (s, i) { return '<button class="panel st" type="button" data-f="' + s.f + '"><span class="f">' + fmt(s.f) + '</span><b>' + s.n + '</b><small>' + s.g + '</small></button>'; }).join('');
+  document.getElementById('list').addEventListener('click', function (e) { var b = e.target.closest('.st'); if (!b) return; dial.value = b.dataset.f; tune(); document.getElementById('tuner').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+
+  /* тюнер */
+  var dial = document.getElementById('dial'), strength = 0, near = null;
+  function tune() {
+    var f = +dial.value; document.getElementById('fq').textContent = fmt(f);
+    near = null; strength = 0;
+    stations.forEach(function (s) { var k = Math.max(0, 1 - Math.abs(f - s.f) / 7); if (k > strength) { strength = k; near = s; } });
+    var bars = Math.round(strength * 6);
+    document.querySelectorAll('#meter i').forEach(function (b, i) { b.classList.toggle('on', i < bars); });
+    document.getElementById('sig').textContent = '▮'.repeat(Math.max(1, Math.round(strength * 5))) + '▯'.repeat(5 - Math.max(1, Math.round(strength * 5)));
+    var st = document.getElementById('station');
+    st.innerHTML = strength > .55 ? '<b>' + near.n + '</b><span>' + near.g + '</span>' : (strength > .15 ? '<span>…' + near.n.slice(0, 2) + '▒▒▒ нестабильно ▒▒</span>' : '<span>…помехи…</span>');
+    document.getElementById('hint').textContent = strength > .85 ? 'сигнал пойман' : 'ищите сигнал: тяните ползунок';
+    document.querySelectorAll('.st').forEach(function (b) { b.classList.toggle('live', strength > .85 && near && +b.dataset.f === near.f); });
+    mix();
+  }
+  dial.addEventListener('input', tune);
+  dial.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') e.stopPropagation(); });
+
+  /* шум на экране */
+  var nc = document.getElementById('noise'), nx = nc.getContext('2d'), img = nx.createImageData(160, 46);
+  (function noise() {
+    var amp = 1 - strength;
+    for (var i = 0; i < img.data.length; i += 4) { var v = Math.random() * 255 * amp; img.data[i] = v * .3; img.data[i + 1] = v; img.data[i + 2] = v; img.data[i + 3] = 255; }
+    nx.putImageData(img, 0, 0);
+    if (!reduce) requestAnimationFrame(noise);
+  })();
+
+  /* звук: помехи и музыка смешиваются по силе сигнала */
+  var ctx, nG, mG, lp, timer, step = 0, nextT = 0, soundOn = false;
+  function midi(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+  function mix() {
+    if (!ctx) return;
+    var s = soundOn ? strength : 0;
+    nG.gain.setTargetAtTime(soundOn ? (1 - s) * .09 + .005 : 0, ctx.currentTime, .05);
+    mG.gain.setTargetAtTime(s * s * .5, ctx.currentTime, .05);
+    lp.frequency.setTargetAtTime(400 + s * 3600, ctx.currentTime, .05);
+  }
+  function sched() {
+    var s = near || stations[2], dur = 60 / s.bpm / 4, arp = [0, 7, 12, 15, 12, 7, 3, 10];
+    while (nextT < ctx.currentTime + .15) {
+      var o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sawtooth'; o.frequency.value = midi(s.root + 12 + arp[step % 8]);
+      g.gain.setValueAtTime(.12, nextT); g.gain.exponentialRampToValueAtTime(.001, nextT + dur * .9); o.connect(g); g.connect(mG); o.start(nextT); o.stop(nextT + dur);
+      if (step % 4 === 0) { var b = ctx.createOscillator(), bg = ctx.createGain(); b.type = 'square'; b.frequency.value = midi(s.root - 12); bg.gain.setValueAtTime(.16, nextT); bg.gain.exponentialRampToValueAtTime(.001, nextT + dur * 3); b.connect(bg); bg.connect(mG); b.start(nextT); b.stop(nextT + dur * 3); }
+      nextT += dur; step++;
+    }
+  }
+  document.getElementById('sound').addEventListener('click', function () {
+    if (!ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; ctx = new AC();
+      var len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0); for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      var src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; nG = ctx.createGain(); nG.gain.value = 0; src.connect(nG); nG.connect(ctx.destination); src.start();
+      lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; mG = ctx.createGain(); mG.gain.value = 0; mG.connect(lp); lp.connect(ctx.destination);
+    }
+    ctx.resume();
+    soundOn = !soundOn;
+    this.setAttribute('aria-pressed', String(soundOn)); this.textContent = soundOn ? 'ВЫКЛЮЧИТЬ ЗВУК' : 'ВКЛЮЧИТЬ ЗВУК';
+    clearInterval(timer);
+    if (soundOn) { nextT = ctx.currentTime + .05; timer = setInterval(sched, 30); }
+    mix();
+  });
+  tune();
+})();
+</script>
+</body>
+</html>

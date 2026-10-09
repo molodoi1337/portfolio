@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru" data-style="web-brutalism">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ШУМ.РАДИО · Веб-брутализм</title>
+<style>
+/* Веб-брутализм: почти HTML без стилей. Системные шрифты, стандартные ссылки, рамки таблиц, резкие цвета.
+   Специально нет ни одного веб-шрифта и ни одного скругления. */
+:root {
+  --white: #FFFFFF;
+  --black: #000000;
+  --link: #0000EE;
+  --visited: #551A8B;
+  --yellow: #FFFF00;
+  --red: #FF0000;
+  color-scheme: light;
+}
+html.inv { filter: invert(1); }
+body { margin: 0; padding: 12px 16px 120px; background: var(--white); color: var(--black); font: 18px/1.35 "Times New Roman", Times, serif; cursor: crosshair; overflow-x: hidden; }
+a { color: var(--link); } a:visited { color: var(--visited); }
+a:hover { background: var(--yellow); }
+h1 { margin: 0; font-size: clamp(56px, 16.5vw, 260px); line-height: .8; letter-spacing: -.06em; font-weight: bold; word-break: break-all; }
+h2 { font-size: 34px; margin: 0 0 6px; text-transform: uppercase; }
+hr { border: 0; border-top: 4px solid var(--black); margin: 18px 0; }
+pre, code, .mono { font-family: "Courier New", Courier, monospace; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border: 1px solid var(--black); padding: 4px 8px; text-align: left; vertical-align: top; }
+th { background: var(--black); color: var(--white); font-family: "Courier New", Courier, monospace; font-weight: normal; }
+tr.now td { background: var(--yellow); font-weight: bold; }
+
+.topline { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 14px "Courier New", Courier, monospace; border-bottom: 1px solid var(--black); padding-bottom: 6px; margin-bottom: 8px; }
+.topline .r { margin-left: auto; }
+.marq { background: var(--black); color: var(--yellow); overflow: hidden; white-space: nowrap; font: bold 20px "Courier New", Courier, monospace; padding: 6px 0; margin: 10px -16px; }
+.marq span { display: inline-block; padding-left: 100%; animation: m 18s linear infinite; }
+@keyframes m { to { transform: translateX(-100%); } }
+
+.cols { display: grid; grid-template-columns: minmax(0, 61fr) minmax(0, 39fr); border: 1px solid var(--black); }
+.cols > div { padding: 10px; min-width: 0; }
+.cols > div + div { border-left: 1px solid var(--black); }
+.onair { position: relative; border: 6px double var(--black); padding: 12px; margin-bottom: 14px; }
+.onair b.big { display: block; font-size: 44px; line-height: 1; }
+.new { position: absolute; right: -6px; top: -22px; color: var(--red); font: bold 28px "Times New Roman", serif; transform: rotate(9deg); text-shadow: 2px 2px 0 var(--yellow); }
+button { font: 16px "Courier New", Courier, monospace; padding: 4px 10px; cursor: pointer; }
+.big-btn { font-size: 22px; padding: 10px 16px; }
+.blink { animation: b 1s steps(1) infinite; }
+@keyframes b { 50% { visibility: hidden; } }
+.hl { background: var(--yellow); outline: 3px solid var(--black); padding: 0 4px; }
+.red { color: var(--red); }
+.counter { display: inline-flex; gap: 2px; vertical-align: middle; }
+.counter i { font: bold 20px "Courier New", Courier, monospace; font-style: normal; background: var(--black); color: #00FF00; padding: 0 4px; }
+pre.ascii { font-size: 12px; line-height: 1.1; margin: 0; overflow-x: auto; }
+.gb { border: 1px solid var(--black); padding: 8px; }
+.gb textarea { width: 100%; font: 16px "Courier New", Courier, monospace; }
+.gb input { font: 16px "Courier New", Courier, monospace; max-width: 100%; }
+.entries { list-style: square; padding-left: 22px; }
+.entries li { margin: 6px 0; }
+.entries small { font-family: "Courier New", Courier, monospace; color: #555; }
+.skew { display: inline-block; transform: rotate(-2deg); }
+.box-y { background: var(--yellow); border: 3px solid var(--black); padding: 10px; margin: 14px 0 14px 8%; width: 82%; }
+.dashed { border: 2px dashed var(--black); padding: 8px; }
+footer { margin-top: 24px; font: 13px "Courier New", Courier, monospace; }
+@media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } .cols > div + div { border-left: 0; border-top: 1px solid var(--black); } .box-y { margin-left: 0; width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .marq span, .blink { animation: none; } .marq span { padding-left: 0; } }
+</style>
+</head>
+<body>
+<div class="topline"><span>ШУМ.РАДИО / index.html</span><span>кодировка: utf-8</span><span>лучше всего в любом браузере</span><span class="r"><a href="#" id="inv">[ИНВЕРСИЯ]</a> <a href="#gb">[ГОСТЕВАЯ]</a> <a href="#sched">[СЕТКА]</a></span></div>
+
+<h1>ШУМ.<br>РАДИО</h1>
+
+<div class="marq" aria-hidden="true"><span>*** ЭФИР 24/7 *** СЕЙЧАС: «ГУДРОН» — СЛУШАЙ ГРОМЧЕ *** НИКАКОЙ РЕКЛАМЫ *** НИКАКИХ АЛГОРИТМОВ *** ТОЛЬКО ШУМ *** ПИШИТЕ В ГОСТЕВУЮ ***</span></div>
+
+<div class="cols">
+  <div>
+    <div class="onair">
+      <span class="new">NEW!!</span>
+      <span class="mono">[В ЭФИРЕ] <span class="blink red">●</span> REC</span>
+      <b class="big">«Гудрон» — Плавление асфальта (live, 2026)</b>
+      <p>Двадцать минут обратной связи, записанной в бетонном переходе под вокзалом. Громкость не выравнивалась. <a href="#sched">Что дальше?</a></p>
+      <button class="big-btn" type="button" id="play">[ ▶ СЛУШАТЬ ]</button> <span class="mono" id="status">поток остановлен</span>
+    </div>
+
+    <h2 id="sched">Сетка вещания</h2>
+    <table>
+      <tr><th>ВРЕМЯ</th><th>ПЕРЕДАЧА</th><th>ВЕДУЩИЙ</th></tr>
+      <tr><td>00:00</td><td>Ночной гул</td><td>никто</td></tr>
+      <tr><td>03:00</td><td>Шум города (полевые записи)</td><td>Лёха с диктофоном</td></tr>
+      <tr><td>09:00</td><td>Утренний скрип</td><td>Марина Т.</td></tr>
+      <tr class="now"><td>14:00</td><td>Гудрон: плавление асфальта</td><td>группа «Гудрон»</td></tr>
+      <tr><td>18:00</td><td>Модульный синтез без правил</td><td>Петров-Водкин-2</td></tr>
+      <tr><td>22:00</td><td>Тишина (8 минут), потом шум</td><td>редакция</td></tr>
+    </table>
+
+    <div class="box-y"><b>ПРАВИЛА:</b> 1. Нет рекламы. 2. Нет плейлистов «для фокуса». 3. Любой может прислать запись на кассете. 4. Мы не отвечаем на письма, но читаем их.</div>
+
+    <h2>Архив</h2>
+    <ul>
+      <li><a href="#sched">2026-09 — Трансформаторная будка (47 мин)</a></li>
+      <li><a href="#sched">2026-08 — Дождь по жести, 4 часа без монтажа</a></li>
+      <li><a href="#sched">2026-07 — Концерт для дрели с оркестром</a> <span class="red">(удалено по жалобе соседей)</span></li>
+      <li><a href="#sched">2026-06 — Электричка Москва — Петушки, только звук</a></li>
+    </ul>
+  </div>
+
+  <div>
+    <p>Вы посетитель № <span class="counter" id="counter"></span></p>
+    <hr>
+    <pre class="ascii" aria-label="Рисунок из символов: радиовышка">
+        |
+       /|\
+      / | \      ((( ШУМ )))
+     /  |  \
+    /___|___\
+   /    |    \
+  /_____|_____\
+       / \
+      /   \
+</pre>
+    <hr>
+    <p class="skew"><span class="hl">ЧАСТОТА:</span> 66,6 УКВ (только в нашем районе)</p>
+    <p class="dashed mono">Сайт не адаптирован. Сайт не оптимизирован. Сайт работает.</p>
+    <hr>
+    <div class="gb" id="gb">
+      <h2>Гостевая книга</h2>
+      <form id="gbf">
+        <p><label for="nick">Имя:</label><br><input id="nick" type="text" size="24" value="аноним"></p>
+        <p><label for="msg">Сообщение:</label><br><textarea id="msg" rows="3">ставлю рекорд громкости</textarea></p>
+        <p><button type="submit">Отправить</button> <button type="reset">Очистить</button></p>
+      </form>
+      <ul class="entries" id="entries">
+        <li><b>dimon_99</b>: включил на работе, уволили. спасибо <small>08.10.2026 23:11</small></li>
+        <li><b>тётя Галя</b>: что это за звук?? <small>07.10.2026 09:40</small></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>Последнее обновление: 09.10.2026, 03:14. Сделано в Блокноте. Валидатор не проверял. <a href="#" id="top">[НАВЕРХ]</a></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var n = 1337;
+  try { n = (parseInt(localStorage.getItem('shum.visits'), 10) || 1336) + 1; localStorage.setItem('shum.visits', n); } catch (e) {}
+  document.getElementById('counter').innerHTML = String(n).padStart(6, '0').split('').map(function (d) { return '<i>' + d + '</i>'; }).join('');
+
+  document.getElementById('inv').addEventListener('click', function (e) { e.preventDefault(); document.documentElement.classList.toggle('inv'); });
+  document.getElementById('top').addEventListener('click', function (e) { e.preventDefault(); scrollTo(0, 0); });
+
+  var ctx, src, on = false;
+  document.getElementById('play').addEventListener('click', function () {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!on) {
+      if (!ctx && AC) ctx = new AC();
+      if (ctx) {
+        var len = ctx.sampleRate * 2, b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+        for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (.5 + .5 * Math.sin(i / 900));
+        src = ctx.createBufferSource(); src.buffer = b; src.loop = true;
+        var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 900; f.Q.value = .7;
+        var g = ctx.createGain(); g.gain.value = .12;
+        src.connect(f); f.connect(g); g.connect(ctx.destination); src.start(); ctx.resume();
+      }
+      on = true; this.textContent = '[ ■ СТОП ]'; document.getElementById('status').textContent = 'поток идёт. громче нельзя.';
+    } else {
+      if (src) src.stop();
+      on = false; this.textContent = '[ ▶ СЛУШАТЬ ]'; document.getElementById('status').textContent = 'поток остановлен';
+    }
+  });
+
+  document.getElementById('gbf').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nick = document.getElementById('nick').value.trim() || 'аноним', msg = document.getElementById('msg').value.trim();
+    if (!msg) { document.getElementById('msg').value = 'ПУСТОЕ СООБЩЕНИЕ НЕЛЬЗЯ'; return; }
+    var d = new Date(), stamp = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    var li = document.createElement('li');
+    li.innerHTML = '<b></b>: <span></span> <small>' + stamp + '</small>';
+    li.querySelector('b').textContent = nick; li.querySelector('span').textContent = msg;
+    document.getElementById('entries').prepend(li);
+    document.getElementById('msg').value = '';
+  });
+})();
+</script>
+</body>
+</html>

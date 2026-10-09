@@ -1,5 +1,19 @@
 const projects = [
   {
+    id: 'senpai-parts',
+    title: 'SENPAI.PARTS',
+    kind: 'Интернет-магазин · 17 страниц',
+    text: 'Магазин запчастей для японских авто в стиле glassmorphism × аниме: каталог, подбор по авто и VIN, корзина, гараж, избранное и оформление заказа.',
+    tags: ['React', 'TypeScript', 'Tailwind', 'Каталог', 'Корзина'],
+  },
+  {
+    id: 'style-atlas',
+    title: 'Атлас веб-стилей',
+    kind: 'Коллекция · 32 мини-сайта',
+    text: '32 стиля веб-дизайна — от ар-деко и баухауса до авроры, — каждый как отдельный мини-сайт на музыкальную тему.',
+    tags: ['Дизайн', 'Анимации', 'Адаптив'],
+  },
+  {
     id: "torque",
     url: "https://frabjous-trifle-5e67a8.netlify.app/",
     newTab: true, // login cookies may be blocked inside an iframe

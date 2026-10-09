@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru" data-style="maximalism">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Карнавал звука · Максимализм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@1,900&family=Rubik+Mono+One&family=Unbounded:wght@500;800;900&family=Yeseva+One&display=swap">
+<style>
+/* Максимализм: каждый слой со своим узором, пять гарнитур, наклейки поверх всего. */
+:root {
+  --pink: #FF2E88; --sun: #FFC700; --plum: #3B0A57; --green: #00A86B; --cobalt: #1F3BFF; --cream: #FFF1D6; --orange: #FF7A00;
+  --f-mono: "Rubik Mono One", "Arial Black", sans-serif;
+  --f-serif: "Playfair Display", Georgia, serif;
+  --f-script: "Pacifico", "Brush Script MT", cursive;
+  --f-wide: "Unbounded", "Arial Black", sans-serif;
+  --f-deco: "Yeseva One", Georgia, serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--plum); font: 500 16px/1.5 var(--f-wide); overflow-x: hidden; }
+a { color: inherit; }
+:focus-visible { outline: 4px dashed var(--cobalt); outline-offset: 3px; }
+
+.marquee { background: var(--plum); color: var(--sun); overflow: hidden; border-block: 4px solid var(--sun); white-space: nowrap; }
+.marquee .track { display: inline-flex; gap: 40px; padding: 10px 0; font: 16px/1 var(--f-mono); animation: run 26s linear infinite; }
+.marquee.rev { background: var(--pink); color: var(--cream); border-color: var(--plum); }
+.marquee.rev .track { animation-direction: reverse; font-family: var(--f-deco); font-size: 26px; }
+.marquee span:nth-child(3n+2) { color: var(--pink); } .marquee.rev span:nth-child(3n+2) { color: var(--sun); }
+@keyframes run { to { transform: translateX(-50%); } }
+
+/* герой */
+.hero { position: relative; overflow: hidden; padding: clamp(48px, 7vw, 96px) clamp(16px, 5vw, 64px) clamp(64px, 8vw, 110px);
+  background:
+    radial-gradient(circle at 18% 22%, var(--sun) 0 70px, transparent 71px),
+    radial-gradient(var(--plum) 18%, transparent 20%) 0 0 / 26px 26px,
+    repeating-linear-gradient(-45deg, var(--pink) 0 22px, #FF4FA0 22px 44px);
+}
+.hero::before { content: ""; position: absolute; right: -120px; top: -140px; width: 520px; height: 520px; border-radius: 50%;
+  background: repeating-conic-gradient(var(--green) 0 15deg, var(--cream) 15deg 30deg); border: 14px solid var(--plum); }
+.hero::after { content: ""; position: absolute; left: -60px; bottom: -80px; width: 340px; height: 340px; border-radius: 50%;
+  background: radial-gradient(circle, var(--orange) 0 30%, var(--sun) 30% 45%, var(--cobalt) 45% 60%, var(--cream) 60% 75%, var(--plum) 75%); }
+.inner { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; }
+.poster { background: var(--cream); border: 6px solid var(--plum); box-shadow: 14px 14px 0 var(--plum), 14px 14px 0 10px var(--sun); padding: clamp(20px, 4vw, 48px); position: relative; transform: rotate(-1.2deg); }
+.poster::before { content: ""; position: absolute; inset: 10px; border: 3px dotted var(--pink); pointer-events: none; }
+.kicker { font: 14px/1.2 var(--f-mono); color: var(--cobalt); letter-spacing: .04em; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.kicker b { background: var(--sun); color: var(--plum); padding: 4px 8px; font-weight: 400; transform: rotate(-2deg); }
+h1 { margin: 14px 0 0; line-height: .82; }
+h1 .a { display: block; font: italic 900 clamp(64px, 13vw, 190px)/.85 var(--f-serif); color: var(--pink); text-shadow: 4px 4px 0 var(--plum), 9px 9px 0 var(--sun); letter-spacing: -.02em; }
+h1 .b { display: inline-block; margin-top: 10px; font: clamp(40px, 8.4vw, 124px)/.9 var(--f-mono); color: transparent; -webkit-text-stroke: 3px var(--plum);
+  background: repeating-linear-gradient(90deg, var(--green) 0 14px, var(--sun) 14px 28px); -webkit-background-clip: text; background-clip: text; }
+h1 .c { display: inline-block; font: clamp(60px, 10vw, 150px)/.8 var(--f-script); color: var(--cobalt); transform: rotate(12deg) translateY(-8px); text-shadow: 4px 4px 0 var(--sun); }
+.lede { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; align-items: end; margin-top: 24px; }
+.lede p { margin: 0; font-size: clamp(16px, 1.6vw, 20px); font-weight: 500; color: var(--plum); }
+.lede p em { font: 400 1.3em/1 var(--f-script); color: var(--pink); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+.btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; padding: 16px 22px; font: 15px/1 var(--f-mono); border: 4px solid var(--plum); cursor: pointer; transition: transform .15s; }
+.btn:hover { transform: rotate(-3deg) scale(1.05); }
+.btn.one { background: var(--sun); box-shadow: 6px 6px 0 var(--pink); }
+.btn.two { background: var(--cobalt); color: var(--cream); box-shadow: 6px 6px 0 var(--green); }
+
+.sticker { position: absolute; z-index: 3; }
+.spin { right: clamp(-10px, 2vw, 30px); top: -50px; width: clamp(120px, 15vw, 190px); aspect-ratio: 1; animation: rot 16s linear infinite; }
+.spin svg { width: 100%; height: 100%; }
+@keyframes rot { to { transform: rotate(1turn); } }
+.burst { right: 30%; bottom: -84px; width: clamp(130px, 14vw, 170px); aspect-ratio: 1; display: grid; place-items: center; text-align: center; font: 15px/1.05 var(--f-mono); color: var(--cream); background: var(--green); transform: rotate(-12deg);
+  clip-path: polygon(50% 0, 59% 13%, 75% 6%, 76% 23%, 93% 25%, 86% 40%, 100% 50%, 86% 60%, 93% 75%, 76% 77%, 75% 94%, 59% 87%, 50% 100%, 41% 87%, 25% 94%, 24% 77%, 7% 75%, 14% 60%, 0 50%, 14% 40%, 7% 25%, 24% 23%, 25% 6%, 41% 13%); }
+.burst span { padding: 0 22px; }
+.burst big { display: block; font-size: 22px; color: var(--sun); }
+
+/* лайнап */
+.lineup { position: relative; padding: clamp(56px, 7vw, 96px) clamp(16px, 5vw, 64px); color: var(--cream);
+  background: radial-gradient(circle, rgba(255,199,0,.55) 0 2px, transparent 3px) 0 0 / 34px 34px, radial-gradient(circle, rgba(255,46,136,.5) 0 2px, transparent 3px) 17px 17px / 34px 34px, var(--plum); }
+.lineup h2 { margin: 0 auto 28px; max-width: 1180px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font: clamp(30px, 4vw, 52px)/1 var(--f-deco); color: var(--sun); }
+.lineup h2 small { font: 14px/1.2 var(--f-mono); background: var(--pink); color: var(--cream); padding: 8px 10px; transform: rotate(3deg); }
+.names { max-width: 1180px; margin: 0 auto; text-align: center; line-height: 1.12; text-wrap: balance; }
+.names span { display: inline-block; margin: 4px 6px; }
+.names .s { font-size: 22px; color: var(--sun); }
+.n1 { font: clamp(34px, 5vw, 64px)/1 var(--f-mono); color: var(--pink); }
+.n2 { font: italic 900 clamp(36px, 5.4vw, 70px)/1 var(--f-serif); color: var(--cream); }
+.n3 { font: clamp(30px, 4.6vw, 58px)/1.1 var(--f-script); color: var(--sun); }
+.n4 { font: 900 clamp(28px, 4vw, 52px)/1 var(--f-wide); color: #7CF2C2; letter-spacing: -.02em; }
+.n5 { font: clamp(34px, 5vw, 62px)/1 var(--f-deco); color: #FF9B5C; }
+.n6 { font: clamp(22px, 3vw, 38px)/1 var(--f-mono); color: var(--cream); background: var(--cobalt); padding: 6px 12px; transform: rotate(-3deg); }
+.names span:hover { animation: wig .4s ease-in-out infinite alternate; }
+@keyframes wig { from { transform: rotate(-4deg) scale(1.04); } to { transform: rotate(4deg) scale(1.04); } }
+
+/* билеты */
+.tickets { padding: clamp(56px, 7vw, 96px) clamp(16px, 5vw, 64px); background:
+  linear-gradient(45deg, rgba(0,168,107,.16) 25%, transparent 25% 75%, rgba(0,168,107,.16) 75%) 0 0 / 60px 60px,
+  linear-gradient(45deg, rgba(0,168,107,.16) 25%, transparent 25% 75%, rgba(0,168,107,.16) 75%) 30px 30px / 60px 60px, var(--cream); }
+.tickets h2 { max-width: 1180px; margin: 0 auto 32px; font: clamp(32px, 5vw, 64px)/.95 var(--f-mono); color: var(--plum); }
+.tickets h2 em { font: 400 1em/1 var(--f-script); color: var(--pink); }
+.row { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.ticket { position: relative; padding: 26px 26px 22px; border: 5px solid var(--plum); color: var(--plum); display: grid; gap: 10px;
+  -webkit-mask: radial-gradient(circle at 0 62%, transparent 16px, #000 17px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 62%, transparent 16px, #000 17px) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 62%, transparent 16px, #000 17px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 62%, transparent 16px, #000 17px) right / 51% 100% no-repeat; transition: transform .2s; }
+.ticket:hover { transform: rotate(-2deg) translateY(-6px); }
+.ticket:nth-child(2):hover { transform: rotate(2deg) translateY(-6px); }
+.t1 { background: repeating-linear-gradient(115deg, var(--sun) 0 18px, #FFD84D 18px 26px, var(--sun) 26px 44px); }
+.t2 { background: radial-gradient(ellipse 14px 10px at 30% 40%, var(--plum) 40%, transparent 42%) 0 0 / 54px 46px, radial-gradient(ellipse 10px 8px at 70% 80%, var(--plum) 40%, transparent 42%) 0 0 / 54px 46px, #FF8CBF; }
+.t3 { background: conic-gradient(var(--cobalt) 25%, #3D57FF 0 50%, var(--cobalt) 0 75%, #3D57FF 0) 0 0 / 40px 40px; color: var(--cream); border-color: var(--cream); outline: 5px solid var(--plum); }
+.ticket .tag { justify-self: start; font: 13px/1 var(--f-mono); padding: 6px 10px; background: var(--plum); color: var(--sun); transform: rotate(-3deg); }
+.t3 .tag { background: var(--sun); color: var(--plum); }
+.ticket h3 { margin: 0; font: italic 900 34px/1 var(--f-serif); }
+.ticket .price { font: 900 46px/1 var(--f-wide); letter-spacing: -.03em; }
+.ticket .price small { font: 400 22px var(--f-script); }
+.ticket ul { margin: 0; padding: 14px 0 0; list-style: none; border-top: 4px dotted currentColor; font-size: 14px; display: grid; gap: 4px; }
+.ticket ul li::before { content: "✺ "; color: var(--pink); }
+.t3 ul li::before { color: var(--sun); }
+.ticket button { justify-self: start; margin-top: 6px; }
+
+footer { position: relative; background: var(--plum); color: var(--cream); padding: 56px clamp(16px, 5vw, 64px) 110px; overflow: hidden; }
+footer .inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: end; }
+footer .big { font: clamp(42px, 7vw, 96px)/.9 var(--f-script); color: var(--sun); text-shadow: 5px 5px 0 var(--pink); }
+footer p { margin: 0; font-size: 14px; max-width: 30em; }
+footer::before { content: ""; position: absolute; right: 8%; top: -40px; width: 180px; height: 180px; background: var(--green);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); opacity: .9; }
+
+@media (max-width: 860px) {
+  .lede, .row { grid-template-columns: minmax(0, 1fr); }
+  .cta { justify-content: flex-start; }
+  .spin { top: -64px; right: -14px; }
+  .hero::before { width: 300px; height: 300px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="marquee" aria-hidden="true"><div class="track" id="mq1"></div></div>
+
+<header class="hero">
+  <div class="inner">
+    <div class="poster">
+      <div class="sticker spin" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><defs><path id="circ" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/></defs>
+          <circle cx="100" cy="100" r="98" fill="#1F3BFF" stroke="#3B0A57" stroke-width="4"/><circle cx="100" cy="100" r="48" fill="#FFC700" stroke="#3B0A57" stroke-width="4"/>
+          <text font-family="Rubik Mono One, sans-serif" font-size="15" fill="#FFF1D6"><textPath href="#circ" textLength="460" lengthAdjust="spacing">ТРИ ДНЯ БЕЗ СНА ✺ ТРИ ДНЯ БЕЗ СНА ✺</textPath></text>
+          <text x="100" y="114" text-anchor="middle" font-family="Pacifico, cursive" font-size="34" fill="#FF2E88">ура!</text></svg>
+      </div>
+      <div class="kicker"><b>18–20 июля 2027</b><span>остров Ржавый</span><span>7 сцен</span><span>120 артистов</span></div>
+      <h1><span class="a">Карнавал</span><span class="b">ЗВУКА</span><span class="c">!</span></h1>
+      <div class="lede">
+        <p>Три дня, семь сцен и ни одной тихой минуты. Духовые оркестры, техно в оранжерее, хор на воде и <em>гигантский</em> парад костюмов в субботу.</p>
+        <div class="cta"><a class="btn one" href="#tickets">Билеты ✺</a><a class="btn two" href="#lineup">Кто играет</a></div>
+      </div>
+      <div class="sticker burst"><span>билеты от<big>4 900 ₽</big></span></div>
+    </div>
+  </div>
+</header>
+
+<section class="lineup" id="lineup">
+  <h2>Лайнап <small>и это только первая волна!</small></h2>
+  <p class="names">
+    <span class="n1">ГРОЗА</span><span class="s">✺</span><span class="n2">Лиза Орлова</span><span class="s">✿</span><span class="n4">ПЕРРОН</span><span class="s">★</span><span class="n3">Оркестр Пыли</span><span class="s">✺</span><span class="n5">Медный Кит</span><span class="s">✿</span><span class="n6">DJ Пломбир</span>
+    <span class="s">★</span><span class="n4">Квартал</span><span class="s">✺</span><span class="n2">Северный хор</span><span class="s">✿</span><span class="n1">МИРА</span><span class="s">★</span><span class="n5">Тёплый шум</span><span class="s">✺</span><span class="n3">Сёстры Ветер</span><span class="s">✿</span><span class="n6">Бас-Бабушки</span>
+    <span class="s">★</span><span class="n2">Фантом 77</span><span class="s">✺</span><span class="n4">ЧАЙКИ</span><span class="s">✿</span><span class="n5">Брасс-бэнд «Каракатица»</span>
+  </p>
+</section>
+
+<div class="marquee rev" aria-hidden="true"><div class="track" id="mq2"></div></div>
+
+<section class="tickets" id="tickets">
+  <h2>Выбери свой <em>билет</em></h2>
+  <div class="row">
+    <article class="ticket t1"><span class="tag">ОДИН ДЕНЬ</span><h3>Суббота</h3><div class="price">4 900 ₽ <small>всего!</small></div><ul><li>Все семь сцен</li><li>Парад костюмов</li><li>Браслет-светлячок</li></ul><button class="btn one" type="button">Хочу!</button></article>
+    <article class="ticket t2"><span class="tag">ВСЕ ТРИ ДНЯ</span><h3>Полный карнавал</h3><div class="price">11 500 ₽ <small>лучше всего</small></div><ul><li>Палаточный городок</li><li>Ночной хор на воде</li><li>Завтраки у оранжереи</li></ul><button class="btn two" type="button">Беру всё</button></article>
+    <article class="ticket t3"><span class="tag">ТРИ ДНЯ + КОСТЮМ</span><h3>Королевский</h3><div class="price">19 000 ₽ <small>с короной</small></div><ul><li>Костюм от мастерской</li><li>Ложа у главной сцены</li><li>Лодка без очереди</li></ul><button class="btn one" type="button">Корону мне</button></article>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div class="big">Увидимся в толпе!</div>
+    <p>«Карнавал звука» — выдуманный фестиваль. Остров, артисты и короны тоже выдуманные, а вот максимализм настоящий.</p>
+  </div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var w1 = ['★ КАРНАВАЛ ЗВУКА', '3 ДНЯ', '7 СЦЕН', '120 АРТИСТОВ', 'ПАРАД КОСТЮМОВ', 'ХОР НА ВОДЕ', 'ТЕХНО В ОРАНЖЕРЕЕ'];
+  var w2 = ['громче!', 'ярче!', 'больше!', 'ещё больше!', 'всё сразу!'];
+  function fill(id, words) {
+    var html = '';
+    for (var k = 0; k < 2; k++) for (var r = 0; r < 3; r++) html += words.map(function (w) { return '<span>' + w + '</span>'; }).join('');
+    document.getElementById(id).innerHTML = html;
+  }
+  fill('mq1', w1); fill('mq2', w2);
+  document.querySelectorAll('.ticket button').forEach(function (b) {
+    b.addEventListener('click', function () { var t = b.textContent; b.textContent = 'В корзине ✓'; setTimeout(function () { b.textContent = t; }, 1600); });
+  });
+})();
+</script>
+</body>
+</html>

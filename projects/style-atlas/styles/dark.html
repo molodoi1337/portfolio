@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru" data-style="dark" data-mode="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Полутон · Тёмная тема</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+/* Тёмная тема по правилам: тёмно-серый фон, слои светлеют с высотой, текст в три уровня яркости, приглушённый акцент.
+   Кнопка ☀ переключает data-mode, чтобы сравнить со светлой версией той же вёрстки. */
+:root {
+  --font: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --guide-offset: 84px;
+}
+[data-mode="dark"] {
+  --bg: #121212; --s1: #181818; --s2: #1F1F1F; --s3: #262626; --s4: #2C2C2C;
+  --hi: rgba(255,255,255,.87); --md: rgba(255,255,255,.60); --lo: rgba(255,255,255,.38);
+  --line: rgba(255,255,255,.08); --accent: #F2B66D; --on-accent: #241606; --shadow: none;
+  color-scheme: dark;
+}
+[data-mode="light"] {
+  --bg: #F4F4F2; --s1: #FFFFFF; --s2: #FFFFFF; --s3: #EDEDEA; --s4: #FFFFFF;
+  --hi: rgba(0,0,0,.87); --md: rgba(0,0,0,.60); --lo: rgba(0,0,0,.42);
+  --line: rgba(0,0,0,.08); --accent: #A35F0E; --on-accent: #FFFFFF; --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px -10px rgba(0,0,0,.18);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--hi); font: 400 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; transition: background .35s, color .35s; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+svg.i { width: 22px; height: 22px; fill: currentColor; flex: none; }
+
+.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); height: calc(100% - 84px); }
+.side { background: var(--s1); border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; overflow: auto; box-shadow: var(--shadow); transition: background .35s; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; padding: 0 10px 18px; }
+.logo i { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(90deg, var(--hi) 50%, transparent 50%); box-shadow: inset 0 0 0 2px var(--hi); }
+.nav { appearance: none; border: 0; background: none; text-align: left; display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 8px; color: var(--md); font-weight: 600; cursor: pointer; }
+.nav:hover { color: var(--hi); background: var(--s3); }
+.nav[aria-current] { color: var(--hi); background: var(--s3); }
+.side h3 { margin: 22px 10px 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--lo); font-weight: 600; }
+.pl { display: flex; align-items: center; gap: 12px; padding: 7px 10px; border-radius: 8px; color: var(--md); cursor: pointer; }
+.pl:hover { background: var(--s3); color: var(--hi); }
+.pl i { width: 36px; height: 36px; border-radius: 6px; background: var(--g); flex: none; }
+.pl small { display: block; color: var(--lo); font-size: 12px; }
+
+.main { overflow: auto; padding: 0 clamp(16px, 3vw, 32px) 40px; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 14%, var(--bg)) 0, var(--bg) 320px); transition: background .35s; }
+.topbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 18px 0; background: linear-gradient(var(--bg), transparent); }
+.topbar h1 { margin: 0 auto 0 0; font-size: clamp(24px, 3vw, 32px); font-weight: 700; letter-spacing: -.01em; }
+.tb { appearance: none; border: 1px solid var(--line); background: var(--s2); color: var(--hi); height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; box-shadow: var(--shadow); }
+.tb[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+
+.quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tile { display: flex; align-items: center; gap: 14px; background: var(--s2); border-radius: 8px; overflow: hidden; cursor: pointer; position: relative; box-shadow: var(--shadow); transition: background .2s; min-width: 0; }
+.tile:hover { background: var(--s3); }
+.tile i { width: 64px; height: 64px; background: var(--g); flex: none; }
+.tile b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .play { position: absolute; right: 12px; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; opacity: 0; transform: translateY(6px); transition: .2s; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.tile:hover .play { opacity: 1; transform: none; }
+
+h2 { margin: 36px 0 14px; font-size: 22px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; }
+h2 small { font-size: 13px; color: var(--md); font-weight: 600; }
+.cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--s2); border-radius: 10px; padding: 12px; cursor: pointer; box-shadow: var(--shadow); transition: background .2s; min-width: 0; }
+.card:hover { background: var(--s3); }
+.card i { display: block; aspect-ratio: 1; max-width: 100%; border-radius: 6px; background: var(--g); margin-bottom: 12px; position: relative; }
+.card b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card span { display: block; color: var(--md); font-size: 13px; line-height: 1.4; }
+.card small { display: block; color: var(--lo); font-size: 12px; margin-top: 4px; }
+
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.rule { background: var(--s2); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); }
+.rule b { display: block; margin-bottom: 6px; }
+.rule p { margin: 0; color: var(--md); font-size: 14px; }
+.levels { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.levels span:nth-child(1) { color: var(--hi); } .levels span:nth-child(2) { color: var(--md); } .levels span:nth-child(3) { color: var(--lo); }
+.steps { display: flex; gap: 6px; margin-top: 12px; }
+.steps i { flex: 1; height: 34px; border-radius: 6px; display: grid; place-items: center; font-style: normal; font-size: 11px; color: var(--md); box-shadow: inset 0 0 0 1px var(--line); }
+
+.player { position: fixed; left: 0; right: 0; bottom: 0; height: calc(84px + env(safe-area-inset-bottom, 0px)); padding: 0 16px env(safe-area-inset-bottom, 0px); background: var(--s4); border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; gap: 16px; box-shadow: var(--shadow); z-index: 10; transition: background .35s; }
+.now { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.now i { width: 54px; height: 54px; border-radius: 6px; background: linear-gradient(135deg, #F2B66D, #8C4A2F); flex: none; }
+.now b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.now small { color: var(--md); }
+.ctrl { display: grid; justify-items: center; gap: 6px; }
+.btns { display: flex; align-items: center; gap: 18px; }
+.ib { appearance: none; border: 0; background: none; color: var(--md); cursor: pointer; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; }
+.ib:hover { color: var(--hi); }
+.ib.big { width: 40px; height: 40px; background: var(--hi); color: var(--bg); }
+.prog { display: flex; align-items: center; gap: 10px; width: 100%; font-size: 12px; color: var(--lo); font-variant-numeric: tabular-nums; }
+.prog .bar { flex: 1; height: 4px; border-radius: 2px; background: var(--s3); overflow: hidden; }
+.prog .bar i { display: block; height: 100%; width: 34%; background: var(--hi); border-radius: inherit; }
+.right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; color: var(--md); }
+.right .bar { width: 110px; height: 4px; border-radius: 2px; background: var(--s3); }
+.right .bar i { display: block; height: 100%; width: 70%; background: var(--md); border-radius: inherit; }
+
+/* режим «Показать слои» */
+.layers [data-layer] { outline: 1px dashed var(--accent); outline-offset: -1px; }
+.layers [data-layer]::after { content: attr(data-layer); position: absolute; top: 6px; left: 6px; z-index: 5; padding: 2px 6px; border-radius: 4px; font: 600 11px/1.4 var(--font); background: var(--accent); color: var(--on-accent); pointer-events: none; white-space: nowrap; }
+.side, .main, .tile, .card, .rule { position: relative; }
+
+@media (max-width: 1100px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } .cards .card:nth-child(n+4) { display: none; } }
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .side { display: none; }
+  .quick, .rules { grid-template-columns: minmax(0, 1fr); }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cards .card:nth-child(n+3) { display: none; }
+  .player { grid-template-columns: minmax(0, 1fr) auto; }
+  .player .right, .prog { display: none; }
+  .tb .lbl { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><path d="M4 4h2v16H4zM9 4h2v16H9zM14 4.5l1.9-.6 4.6 15.2-1.9.6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v3h-2zm0 19h2v3h-2zM3.5 4.9l1.4-1.4 2.1 2.1-1.4 1.4zm13 13 1.4-1.4 2.1 2.1-1.4 1.4zM1 11h3v2H1zm19 0h3v2h-3zM3.5 19.1l2.1-2.1 1.4 1.4-2.1 2.1zm13-13 2.1-2.1 1.4 1.4-2.1 2.1z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8A9 9 0 0 0 12 3z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 16.5 3 11.2 1.5 12 12 18.2 22.5 12 21 11.2zM12 13.5 22.5 7.3 12 1 1.5 7.3z"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.47 4.47 0 0 0 2.5-4z"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <aside class="side" data-layer="+1 · боковая панель">
+    <div class="logo"><i></i>Полутон</div>
+    <button class="nav" type="button" aria-current="page"><svg class="i"><use href="#i-home"/></svg>Главная</button>
+    <button class="nav" type="button"><svg class="i"><use href="#i-search"/></svg>Поиск</button>
+    <button class="nav" type="button"><svg class="i"><use href="#i-lib"/></svg>Медиатека</button>
+    <h3>Плейлисты</h3>
+    <div class="pl"><i style="--g:linear-gradient(135deg,#F2B66D,#8C4A2F)"></i><div>После полуночи<small>62 трека</small></div></div>
+    <div class="pl"><i style="--g:linear-gradient(135deg,#6C8BC7,#1F2A44)"></i><div>Дорога домой<small>38 треков</small></div></div>
+    <div class="pl"><i style="--g:linear-gradient(135deg,#8FBF9F,#24402F)"></i><div>Тихая работа<small>104 трека</small></div></div>
+    <div class="pl"><i style="--g:linear-gradient(135deg,#C48BB8,#3D2340)"></i><div>Дождь за окном<small>27 треков</small></div></div>
+  </aside>
+
+  <main class="main" data-layer="0 · фон #121212">
+    <div class="topbar">
+      <h1>Добрый вечер</h1>
+      <button class="tb" type="button" id="layers" aria-pressed="false"><svg class="i"><use href="#i-layers"/></svg><span class="lbl">Показать слои</span></button>
+      <button class="tb" type="button" id="mode" aria-label="Переключить на светлую тему"><svg class="i"><use href="#i-sun" id="mode-ic"/></svg><span class="lbl" id="mode-lbl">Светлая</span></button>
+    </div>
+
+    <section class="quick" aria-label="Недавнее">
+      <div class="tile" data-layer="+2 · карточка"><i style="--g:linear-gradient(135deg,#F2B66D,#8C4A2F)"></i><b>После полуночи</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+      <div class="tile"><i style="--g:linear-gradient(135deg,#6C8BC7,#1F2A44)"></i><b>Дорога домой</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+      <div class="tile"><i style="--g:linear-gradient(135deg,#8FBF9F,#24402F)"></i><b>Тихая работа</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+      <div class="tile"><i style="--g:linear-gradient(135deg,#C48BB8,#3D2340)"></i><b>Дождь за окном</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+      <div class="tile"><i style="--g:linear-gradient(135deg,#D9D27A,#4F4A1A)"></i><b>Лампа и пластинки</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+      <div class="tile"><i style="--g:linear-gradient(135deg,#7FC4C9,#1B3F44)"></i><b>Ночной трамвай</b><span class="play"><svg class="i"><use href="#i-play"/></svg></span></div>
+    </section>
+
+    <h2>Собрано для вас <small>обновлено сегодня</small></h2>
+    <section class="cards">
+      <article class="card" data-layer="+2 · карточка"><i style="--g:linear-gradient(160deg,#F2B66D,#5C2E1A)"></i><b>Микс полуночи</b><span>Тёплый шум, Мира, Перрон</span><small>2 ч 10 мин</small></article>
+      <article class="card"><i style="--g:linear-gradient(160deg,#6C8BC7,#141B2E)"></i><b>Синий час</b><span>Медленный джаз и электроника</span><small>1 ч 42 мин</small></article>
+      <article class="card"><i style="--g:linear-gradient(160deg,#8FBF9F,#13241A)"></i><b>Фокус</b><span>Без слов, ровный темп</span><small>3 ч 05 мин</small></article>
+      <article class="card"><i style="--g:linear-gradient(160deg,#C48BB8,#21122A)"></i><b>Открытия недели</b><span>30 новых треков</span><small>1 ч 58 мин</small></article>
+      <article class="card"><i style="--g:linear-gradient(160deg,#D9D27A,#26240C)"></i><b>Повтор</b><span>То, что вы слушали чаще всего</span><small>2 ч 31 мин</small></article>
+    </section>
+
+    <h2>Как устроена эта тема</h2>
+    <section class="rules">
+      <div class="rule" data-layer="+2"><b>Не чёрный, а тёмно-серый</b><p>Фон #121212. На чистом чёрном белый текст «дрожит», а тени становятся невидимыми.</p></div>
+      <div class="rule"><b>Высота = светлота</b><p>Тени в темноте не видны, поэтому каждый следующий слой чуть светлее.</p><div class="steps"><i style="background:var(--bg)">0</i><i style="background:var(--s1)">+1</i><i style="background:var(--s2)">+2</i><i style="background:var(--s3)">+3</i><i style="background:var(--s4)">+4</i></div></div>
+      <div class="rule"><b>Три яркости текста</b><p>Вместо разных серых цветов — белый с разной прозрачностью.</p><div class="levels"><span>87% основной</span><span>60% вторичный</span><span>38% подсказки</span></div></div>
+    </section>
+  </main>
+</div>
+
+<footer class="player" data-layer="+4 · плеер">
+  <div class="now"><i></i><div style="min-width:0"><b>Мягкий свет</b><small>Тёплый шум</small></div></div>
+  <div class="ctrl">
+    <div class="btns">
+      <button class="ib" type="button" aria-label="Предыдущий"><svg class="i"><use href="#i-prev"/></svg></button>
+      <button class="ib big" type="button" id="pp" aria-label="Пауза"><svg class="i"><use href="#i-pause" id="pp-ic"/></svg></button>
+      <button class="ib" type="button" aria-label="Следующий"><svg class="i"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="prog"><span id="cur">1:12</span><span class="bar"><i id="fill"></i></span><span>3:34</span></div>
+  </div>
+  <div class="right"><svg class="i"><use href="#i-vol"/></svg><span class="bar"><i></i></span></div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var modeBtn = document.getElementById('mode');
+  modeBtn.addEventListener('click', function () {
+    var dark = root.getAttribute('data-mode') === 'dark';
+    root.setAttribute('data-mode', dark ? 'light' : 'dark');
+    document.getElementById('mode-ic').setAttribute('href', dark ? '#i-moon' : '#i-sun');
+    document.getElementById('mode-lbl').textContent = dark ? 'Тёмная' : 'Светлая';
+    modeBtn.setAttribute('aria-label', dark ? 'Переключить на тёмную тему' : 'Переключить на светлую тему');
+    document.querySelector('.main').setAttribute('data-layer', dark ? '0 · фон #F4F4F2' : '0 · фон #121212');
+  });
+  var layersBtn = document.getElementById('layers');
+  layersBtn.addEventListener('click', function () {
+    var on = layersBtn.getAttribute('aria-pressed') !== 'true';
+    layersBtn.setAttribute('aria-pressed', String(on));
+    document.body.classList.toggle('layers', on);
+  });
+  var playing = true, t = 72, total = 214;
+  document.getElementById('pp').addEventListener('click', function () {
+    playing = !playing;
+    document.getElementById('pp-ic').setAttribute('href', playing ? '#i-pause' : '#i-play');
+    this.setAttribute('aria-label', playing ? 'Пауза' : 'Играть');
+  });
+  setInterval(function () {
+    if (!playing) return;
+    t = (t + 1) % total;
+    document.getElementById('fill').style.width = (t / total * 100) + '%';
+    document.getElementById('cur').textContent = Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+  }, 1000);
+})();
+</script>
+</body>
+</html>

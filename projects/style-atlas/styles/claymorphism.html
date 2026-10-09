@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ru" data-style="claymorphism">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бум-Бум · Клэйморфизм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Клэйморфизм: пухлые пластилиновые формы. Рецепт тени: мягкая цветная внешняя + светлая внутренняя сверху + тёмная внутренняя снизу. */
+:root {
+  --bg: #F2E8FF;
+  --ink: #3D2C7A;
+  --ink-soft: #6F60A8;
+  --coral: #FF8A80; --sky: #7FC8FF; --mint: #7EE0B5; --lemon: #FFD966; --lilac: #B9A2FF; --peach: #FFB38A;
+  --font: "Nunito", "Arial Rounded MT Bold", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font: 700 16px/1.5 var(--font); overflow-x: hidden;
+  background: radial-gradient(circle at 85% 10%, #FFE3F1 0, transparent 30%), radial-gradient(circle at 10% 80%, #DDF4FF 0, transparent 35%), var(--bg); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 4px solid var(--ink); outline-offset: 4px; }
+
+.clay { --c: var(--lilac); --cs: 120, 90, 220;
+  background: var(--c); border-radius: 36px;
+  box-shadow: 0 22px 34px -14px rgba(var(--cs), .55), inset -10px -12px 22px rgba(0,0,0,.12), inset 10px 12px 22px rgba(255,255,255,.6); }
+.c-coral { --c: var(--coral); --cs: 230, 90, 80; }
+.c-sky { --c: var(--sky); --cs: 60, 140, 220; }
+.c-mint { --c: var(--mint); --cs: 40, 170, 120; }
+.c-lemon { --c: var(--lemon); --cs: 220, 170, 40; }
+.c-lilac { --c: var(--lilac); --cs: 120, 90, 220; }
+.c-peach { --c: var(--peach); --cs: 230, 120, 70; }
+.c-white { --c: #FFFFFF; --cs: 140, 110, 210; }
+
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.top { display: flex; align-items: center; gap: 16px; padding: 14px 14px 14px 22px; margin-top: 22px; border-radius: 30px; }
+.logo { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 22px; margin-right: auto; }
+.logo i { width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; }
+.logo i::after { content: "♪"; font-size: 22px; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.15); }
+.top a { text-decoration: none; color: var(--ink-soft); font-weight: 800; padding: 8px 12px; border-radius: 16px; }
+.top a:hover { color: var(--ink); }
+.btn { appearance: none; border: 0; cursor: pointer; padding: 14px 24px; border-radius: 22px; font-weight: 900; font-size: 16px; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.12); transition: transform .25s cubic-bezier(.3,1.8,.5,1); }
+.btn:hover { transform: translateY(-3px) scale(1.03); }
+.btn:active { transform: scale(.94); }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: clamp(40px, 6vw, 72px); }
+.hero h1 { margin: 0; font-weight: 900; font-size: clamp(40px, 5.8vw, 72px); line-height: 1; letter-spacing: -.02em; text-wrap: balance; }
+.hero h1 span { color: #FF6F61; }
+.hero p { margin: 18px 0 28px; font-size: 18px; color: var(--ink-soft); max-width: 30em; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* сцена из пластилина */
+.scene { position: relative; aspect-ratio: 1.1; max-width: 100%; }
+.scene > * { position: absolute; }
+.s-disc { inset: 6% 8%; border-radius: 50%; }
+.s-drum { left: 26%; top: 34%; width: 46%; height: 36%; border-radius: 26px 26px 44px 44px; }
+.s-drum::before { content: ""; position: absolute; left: -6%; right: -6%; top: -22%; height: 46%; border-radius: 50%; background: #FFF6E0; box-shadow: inset -6px -8px 14px rgba(0,0,0,.1), inset 6px 8px 14px rgba(255,255,255,.9), 0 10px 18px -8px rgba(160,120,40,.5); }
+.s-drum::after { content: ""; position: absolute; left: 10%; right: 10%; top: 40%; height: 14px; border-radius: 8px; background: rgba(255,255,255,.45); }
+.s-stick { width: 8%; height: 34%; border-radius: 30px; transform-origin: bottom center; }
+.s-stick.a { left: 30%; top: 6%; transform: rotate(-28deg); animation: tap 1.2s ease-in-out infinite; }
+.s-stick.b { left: 58%; top: 5%; transform: rotate(26deg); animation: tap2 1.2s ease-in-out infinite .6s; }
+@keyframes tap { 50% { transform: rotate(-12deg); } }
+@keyframes tap2 { 50% { transform: rotate(12deg); } }
+.s-note { width: 17%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: clamp(22px, 3vw, 36px); color: #fff; animation: float 3.4s ease-in-out infinite; }
+.s-note.n1 { right: 4%; top: 10%; }
+.s-note.n2 { left: 2%; top: 56%; animation-delay: -1.4s; width: 14%; }
+.s-star { right: 8%; bottom: 8%; width: 20%; aspect-ratio: 1; clip-path: polygon(50% 2%, 63% 34%, 98% 36%, 71% 58%, 80% 94%, 50% 75%, 20% 94%, 29% 58%, 2% 36%, 37% 34%); animation: float 4s ease-in-out infinite -2s; }
+@keyframes float { 50% { translate: 0 -12px; } }
+
+/* ксилофон */
+.section { padding-block: 24px 56px; }
+.section h2 { margin: 0 0 6px; font-size: clamp(28px, 3.6vw, 40px); font-weight: 900; }
+.section > .wrap > p { margin: 0 0 26px; color: var(--ink-soft); }
+.xylo { padding: 28px clamp(16px, 3vw, 36px) 36px; border-radius: 44px; display: flex; gap: clamp(8px, 1.4vw, 16px); align-items: center; justify-content: center; }
+.bar { appearance: none; border: 0; cursor: pointer; flex: 1; max-width: 92px; border-radius: 28px; display: grid; align-content: end; justify-items: center; padding-bottom: 16px; font-weight: 900; font-size: 18px; color: rgba(255,255,255,.95); text-shadow: 0 2px 0 rgba(0,0,0,.12); transition: transform .3s cubic-bezier(.3,2,.5,1); position: relative; }
+.bar::before, .bar::after { content: ""; position: absolute; left: 50%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: rgba(255,255,255,.65); box-shadow: inset -2px -2px 3px rgba(0,0,0,.12); }
+.bar::before { top: 14px; } .bar::after { bottom: 46px; }
+.bar.hit { transform: translateY(8px) scale(.96, .92); transition-duration: .06s; }
+.keys-hint { margin-top: 14px; text-align: center; color: var(--ink-soft); font-size: 14px; }
+kbd { font: 800 13px var(--font); padding: 2px 8px; border-radius: 8px; background: #fff; box-shadow: 0 3px 0 #D8CCF5; }
+
+/* игрушки */
+.toys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+.toy { padding: 26px; display: grid; gap: 12px; justify-items: start; }
+.toy .ic { width: 84px; height: 84px; border-radius: 28px; display: grid; place-items: center; }
+.toy .ic svg { width: 46px; height: 46px; }
+.toy h3 { margin: 0; font-size: 24px; font-weight: 900; }
+.toy p { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.toy .btn { padding: 12px 20px; font-size: 15px; }
+.toy.hit .ic { animation: boing .5s cubic-bezier(.3,2,.5,1); }
+@keyframes boing { 30% { transform: scale(1.25, .8); } 60% { transform: scale(.9, 1.12); } }
+
+footer { padding: 40px 0 120px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; }
+footer .pill { padding: 14px 22px; border-radius: 24px; font-weight: 800; }
+
+@media (max-width: 860px) {
+  .hero, .toys { grid-template-columns: minmax(0, 1fr); }
+  .top a { display: none; }
+  .scene { max-width: 460px; justify-self: center; width: 100%; }
+}
+@media (max-width: 520px) { .bar { font-size: 14px; border-radius: 18px; } .xylo { border-radius: 30px; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top clay c-white">
+    <div class="logo"><i class="clay c-coral"></i>Бум-Бум</div>
+    <a href="#xylo">Ксилофон</a><a href="#toys">Игрушки</a>
+    <button class="btn clay c-lilac" type="button" onclick="document.getElementById('xylo').scrollIntoView({behavior:'smooth'})">Играть</button>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Музыка, которую хочется <span>потрогать</span></h1>
+      <p>Мягкие музыкальные игрушки для малышей от двух лет. Каждая клавиша пружинит и звучит, а ошибиться невозможно: все ноты подходят друг к другу.</p>
+      <div class="cta">
+        <button class="btn clay c-coral" type="button" onclick="document.getElementById('xylo').scrollIntoView({behavior:'smooth'})">Сыграть мелодию</button>
+        <button class="btn clay c-sky" type="button" onclick="document.getElementById('toys').scrollIntoView({behavior:'smooth'})">Все игрушки</button>
+      </div>
+    </div>
+    <div class="scene" aria-hidden="true">
+      <i class="s-disc clay c-white"></i>
+      <i class="s-stick a clay c-peach"></i><i class="s-stick b clay c-peach"></i>
+      <i class="s-drum clay c-coral"></i>
+      <i class="s-note n1 clay c-sky">♪</i>
+      <i class="s-note n2 clay c-mint">♫</i>
+      <i class="s-star clay c-lemon"></i>
+    </div>
+  </section>
+</div>
+
+<section class="section" id="xylo">
+  <div class="wrap">
+    <h2>Пластилиновый ксилофон</h2>
+    <p>Нажмите на бруски или клавиши 1–8. Ноты пентатоники: любая последовательность звучит красиво.</p>
+    <div class="xylo clay c-white" id="bars"></div>
+    <p class="keys-hint">Клавиши <kbd>1</kbd> … <kbd>8</kbd> тоже играют</p>
+  </div>
+</section>
+
+<section class="section" id="toys">
+  <div class="wrap">
+    <h2>Ещё игрушки</h2>
+    <p>У каждой свой звук. Попробуйте все три.</p>
+    <div class="toys">
+      <article class="toy clay c-white" data-toy="drum">
+        <div class="ic clay c-coral"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="18" rx="16" ry="6" fill="#FFF6E0"/><path d="M8 18v14c0 3.3 7.2 6 16 6s16-2.7 16-6V18c0 3.3-7.2 6-16 6S8 21.3 8 18z" fill="#fff" opacity=".9"/></svg></div>
+        <h3>Барабан</h3><p>Глухой круглый «бум», как в мультфильме.</p>
+        <button class="btn clay c-coral" type="button">Бум!</button>
+      </article>
+      <article class="toy clay c-white" data-toy="shaker">
+        <div class="ic clay c-mint"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="20" cy="18" rx="11" ry="13" fill="#fff"/><rect x="26" y="26" width="6" height="18" rx="3" fill="#fff" transform="rotate(-35 29 35)"/><circle cx="17" cy="15" r="2" fill="#7EE0B5"/><circle cx="23" cy="20" r="2" fill="#7EE0B5"/></svg></div>
+        <h3>Маракас</h3><p>Шуршит, как песок в ведёрке.</p>
+        <button class="btn clay c-mint" type="button">Шух-шух</button>
+      </article>
+      <article class="toy clay c-white" data-toy="whistle">
+        <div class="ic clay c-sky"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="20" width="30" height="12" rx="6" fill="#fff"/><circle cx="36" cy="26" r="8" fill="#fff"/><circle cx="14" cy="26" r="2" fill="#7FC8FF"/><circle cx="21" cy="26" r="2" fill="#7FC8FF"/><circle cx="28" cy="26" r="2" fill="#7FC8FF"/></svg></div>
+        <h3>Дудочка</h3><p>Свистит вверх-вниз, как птичка.</p>
+        <button class="btn clay c-sky" type="button">Фьють</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="pill clay c-lemon">Сделано из мягкого пластика без запаха</span>
+    <span style="color:var(--ink-soft)">© 2026 Бум-Бум</span>
+  </div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var notes = [['До', 60, 'coral'], ['Ре', 62, 'peach'], ['Ми', 64, 'lemon'], ['Соль', 67, 'mint'], ['Ля', 69, 'sky'], ['До', 72, 'lilac'], ['Ре', 74, 'coral'], ['Ми', 76, 'peach']];
+  var wrap = document.getElementById('bars');
+  wrap.innerHTML = notes.map(function (n, i) {
+    return '<button class="bar clay c-' + n[2] + '" type="button" data-i="' + i + '" style="height:' + (230 - i * 15) + 'px" aria-label="Нота ' + n[0] + '">' + n[0] + '</button>';
+  }).join('');
+
+  var ctx;
+  function ac() { if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ctx = new AC(); } if (ctx && ctx.state === 'suspended') ctx.resume(); return ctx; }
+  function tone(freq, dur, type, vol, glideTo) {
+    var c = ac(); if (!c) return;
+    var t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur * .8);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .006); g.gain.exponentialRampToValueAtTime(.0008, t + dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05);
+  }
+  function noise(dur, freq, vol) {
+    var c = ac(); if (!c) return;
+    var len = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    var s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = b; f.type = 'highpass'; f.frequency.value = freq; g.gain.value = vol;
+    s.connect(f); f.connect(g); g.connect(c.destination); s.start();
+  }
+  function midi(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+  function hit(i) {
+    var b = wrap.children[i]; if (!b) return;
+    var f = midi(notes[i][1]);
+    tone(f, 1.1, 'sine', .35); tone(f * 4, .25, 'sine', .06); tone(f * 2.76, .4, 'triangle', .05);
+    b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit');
+    setTimeout(function () { b.classList.remove('hit'); }, 90);
+  }
+  wrap.addEventListener('pointerdown', function (e) { var b = e.target.closest('.bar'); if (b) hit(+b.dataset.i); });
+  wrap.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('bar')) { e.preventDefault(); hit(+e.target.dataset.i); } });
+  document.addEventListener('keydown', function (e) {
+    if (e.repeat || e.metaKey || e.ctrlKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 8) { hit(n - 1); }
+  });
+
+  var sounds = {
+    drum: function () { tone(150, .5, 'sine', .6, 50); noise(.08, 600, .2); },
+    shaker: function () { noise(.12, 5000, .35); setTimeout(function () { noise(.1, 5000, .3); }, 140); },
+    whistle: function () { tone(1200, .25, 'sine', .2, 1800); setTimeout(function () { tone(1700, .3, 'sine', .18, 1100); }, 220); }
+  };
+  document.querySelectorAll('.toy').forEach(function (card) {
+    card.querySelector('button').addEventListener('click', function () {
+      sounds[card.dataset.toy]();
+      card.classList.remove('hit'); void card.offsetWidth; card.classList.add('hit');
+    });
+  });
+})();
+</script>
+</body>
+</html>

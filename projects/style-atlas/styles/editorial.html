@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru" data-style="editorial">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Звук № 47 · Эдиториал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap">
+<style>
+/* Эдиториал: страница журнала. Шапка с названием, лид, байлайн, буквица, две колонки текста, выносная цитата и боковая колонка. */
+:root {
+  --paper: #FAF7F2;
+  --ink: #1A1A1A;
+  --red: #C8102E;
+  --grey: #6B6B6B;
+  --rule: #D9D2C5;
+  --display: "Playfair Display", Georgia, serif;
+  --serif: "PT Serif", Georgia, serif;
+  --sans: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 18px/1.65 var(--serif); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 48px); }
+.progress { position: fixed; left: 0; top: 0; height: 3px; width: 0; background: var(--red); z-index: 20; }
+
+.mast { text-align: center; padding-top: 26px; }
+.mast .top { display: flex; justify-content: space-between; gap: 12px; font: 700 12px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--grey); padding-bottom: 14px; border-bottom: 1px solid var(--ink); flex-wrap: wrap; }
+.mast h1 { margin: 10px 0 0; font: 900 clamp(72px, 15vw, 190px)/.9 var(--display); letter-spacing: -.02em; }
+.mast .tag { margin: 22px 0 0; font: italic 400 18px/1.4 var(--serif); color: var(--grey); }
+.mast nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 28px; padding-block: 12px; margin-top: 16px; border-block: 3px double var(--ink); font: 700 13px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+.mast nav a { text-decoration: none; } .mast nav a:hover, .mast nav a[aria-current] { color: var(--red); }
+
+.head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(24px, 4vw, 56px); padding-block: 48px 32px; align-items: end; }
+.kicker { font: 700 13px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--red); }
+.head h2 { margin: 14px 0 0; font: italic 900 clamp(48px, 7.4vw, 104px)/.95 var(--display); letter-spacing: -.02em; text-wrap: balance; }
+.stand { margin: 0; font: 400 clamp(19px, 1.7vw, 23px)/1.5 var(--serif); }
+.byline { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--ink); font: 400 14px/1.5 var(--sans); color: var(--grey); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.byline b { color: var(--ink); }
+
+figure.lead-img { margin: 0; }
+.photo { aspect-ratio: 21 / 9; max-width: 100%; background: #2A0A10; overflow: hidden; }
+.photo svg { width: 100%; height: 100%; display: block; }
+figcaption { display: flex; justify-content: space-between; gap: 16px; padding-top: 10px; font: 400 13px/1.45 var(--sans); color: var(--grey); border-bottom: 1px solid var(--rule); padding-bottom: 12px; flex-wrap: wrap; }
+
+.body { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: clamp(28px, 4vw, 56px); padding-block: 40px 80px; }
+.text { columns: 2; column-gap: 40px; column-rule: 1px solid var(--rule); min-width: 0; }
+.text p { margin: 0 0 1em; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.text p.first::first-letter { float: left; font: 900 5.2em/.78 var(--display); margin: .06em .08em 0 0; color: var(--red); }
+.text .q { font: 700 16px/1.5 var(--sans); margin: 1.4em 0 .5em; break-after: avoid; }
+.text h3 { column-span: all; margin: 1em 0 .6em; font: italic 700 32px/1.1 var(--display); border-top: 1px solid var(--ink); padding-top: 18px; }
+.pull { column-span: all; margin: 1em 0 1.4em; padding: 22px 0; border-block: 4px solid var(--ink); font: italic 700 clamp(28px, 3.4vw, 44px)/1.15 var(--display); text-align: center; text-wrap: balance; }
+.pull span { display: block; margin-top: 10px; font: 700 12px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--red); font-style: normal; }
+
+aside.side { border-top: 4px solid var(--ink); padding-top: 14px; align-self: start; position: sticky; top: 20px; }
+.side h4 { margin: 0 0 14px; font: italic 900 26px/1.15 var(--display); }
+.side ol { list-style: none; margin: 0; padding: 0; counter-reset: a; }
+.side li { counter-increment: a; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; padding-block: 12px; border-bottom: 1px solid var(--rule); font: 400 15px/1.45 var(--sans); }
+.side li::before { content: counter(a); font: 900 28px/1 var(--display); color: var(--red); }
+.side li b { display: block; font-family: var(--serif); font-size: 17px; }
+.side .note { margin-top: 18px; font: italic 400 15px/1.5 var(--serif); color: var(--grey); }
+
+footer { border-top: 3px double var(--ink); }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-block: 20px 110px; font: 400 13px/1.5 var(--sans); color: var(--grey); }
+
+@media (max-width: 900px) { .head, .body { grid-template-columns: minmax(0, 1fr); } aside.side { position: static; } .photo { aspect-ratio: 16 / 10; } }
+@media (max-width: 640px) { .text { columns: 1; } .text p { text-align: left; } .mast .top span:nth-child(2) { display: none; } }
+</style>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="wrap mast">
+  <div class="top"><span>№ 47 · Октябрь 2026</span><span>Журнал о музыке, которую слушают целиком</span><span>480 ₽</span></div>
+  <h1>Звук</h1>
+  <p class="tag">Ежемесячно с 2009 года</p>
+  <nav aria-label="Рубрики"><a href="#feature" aria-current="page">Интервью</a><a href="#feature">Рецензии</a><a href="#feature">Репортажи</a><a href="#feature">Плейлисты</a><a href="#feature">Архив</a></nav>
+</header>
+
+<main class="wrap" id="feature">
+  <section class="head">
+    <div><span class="kicker">Интервью номера</span><h2>Тишина — тоже нота</h2></div>
+    <div>
+      <p class="stand">Композитор Лев Арефьев пятнадцать лет писал музыку для кино, а потом выпустил альбом, в котором пауз больше, чем звуков. Мы поговорили о том, зачем слушателю тишина и почему её так трудно записать.</p>
+      <div class="byline"><span>Текст: <b>Анна Берг</b></span><span>Фото: <b>Илья Дорн</b></span><span>12 минут чтения</span></div>
+    </div>
+  </section>
+
+  <figure class="lead-img">
+    <div class="photo" role="img" aria-label="Иллюстрация: клавиши рояля крупным планом в красно-чёрной гамме">
+      <svg viewBox="0 0 1260 540" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .45 0"/><feComposite in2="SourceGraphic" operator="in"/><feBlend in="SourceGraphic" mode="multiply"/></filter>
+          <linearGradient id="light" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F4D6C9"/><stop offset=".55" stop-color="#C8102E"/><stop offset="1" stop-color="#2A0A10"/></linearGradient>
+          <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A0A10" stop-opacity="0"/><stop offset="1" stop-color="#2A0A10" stop-opacity=".85"/></linearGradient>
+        </defs>
+        <g filter="url(#grain)">
+          <rect width="1260" height="540" fill="#2A0A10"/>
+          <g id="keys" transform="translate(-120 40) skewX(-28)"></g>
+          <rect width="1260" height="540" fill="url(#fade)"/>
+          <circle cx="980" cy="120" r="220" fill="#F4D6C9" opacity=".12"/>
+        </g>
+      </svg>
+    </div>
+    <figcaption><span>Рояль в студии на Малой Никитской, где записан альбом «Комната». Иллюстрация вместо фото — журнал вымышленный.</span><span>Фото: Илья Дорн</span></figcaption>
+  </figure>
+
+  <section class="body">
+    <article class="text">
+      <p class="first">Арефьев встречает нас в пустой студии на Малой Никитской. Рояль закрыт чехлом, на пульте лежит стопка партитур, перехваченная резинкой. «Это всё, что не вошло в альбом, — говорит он. — Примерно девять десятых».</p>
+      <p class="q">— Почему альбом получился таким тихим?</p>
+      <p>— Я устал от музыки, которая боится пустоты. В кино каждая секунда чем-то заполнена: звуком, эффектом, голосом. Мне захотелось оставить слушателю место. Пауза — это время, когда музыка продолжается у вас в голове.</p>
+      <p class="q">— Как вообще записывают тишину?</p>
+      <p>— Это самое сложное. В студии всегда что-то звучит: вентиляция, гул ламп, дыхание музыканта. Мы записывали ночью, выключали кондиционеры и ждали, пока остынут усилители. Первые три ночи ушли только на то, чтобы научиться слышать комнату.</p>
+      <blockquote class="pull">«Пауза — это время, когда музыка продолжается у вас в голове»<span>Лев Арефьев</span></blockquote>
+      <p class="q">— Слушатели готовы к такой музыке?</p>
+      <p>— Не все, и это нормально. Альбом не для фона. Его нужно слушать целиком, в наушниках, лучше вечером. Я специально не выпускал синглы: вырванная из контекста пауза — это просто дыра в плейлисте.</p>
+      <p class="q">— Что для вас значит хорошая запись?</p>
+      <p>— Когда слышно, где стоял микрофон. Современная музыка часто звучит так, будто её записали нигде. Мне важно, чтобы у звука был адрес: вот рояль, вот стена, вот окно, за которым идёт трамвай.</p>
+      <h3>Шесть минут без рояля</h3>
+      <p>Самый обсуждаемый трек альбома — «Комната, 3:14 ночи». Шесть минут в нём не звучит ни одной ноты: только тон помещения, скрип стула и далёкий трамвай. Арефьев называет его портретом студии и признаётся, что на концертах этот номер не исполняет.</p>
+      <p>«Попробуйте сыграть тишину перед тысячей человек, — смеётся он. — Через минуту кто-нибудь обязательно начнёт кашлять. В наушниках у каждого своя комната, и это честнее».</p>
+      <p>Следующую работу композитор собирается записывать не в студии, а в пустом бассейне. Говорит, там самая длинная реверберация в городе: почти девять секунд.</p>
+    </article>
+
+    <aside class="side">
+      <h4>Пять записей, где тишина важнее звука</h4>
+      <ol>
+        <li><span><b>Джон Кейдж — «4′33″»</b>1952 · пьеса, в которой исполнитель не играет ни ноты</span></li>
+        <li><span><b>Брайан Ино — «Music for Airports»</b>1978 · музыка, которую можно не слушать</span></li>
+        <li><span><b>Арво Пярт — «Tabula Rasa»</b>1984 · колокольный стиль и долгие паузы</span></li>
+        <li><span><b>Talk Talk — «Laughing Stock»</b>1991 · рок, собранный из тишины</span></li>
+        <li><span><b>Марк Холлис — «Mark Hollis»</b>1998 · единственный сольный альбом</span></li>
+      </ol>
+      <p class="note">Подборка редакции. Слушайте по порядку и без перемешивания.</p>
+    </aside>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>«Звук» — вымышленный журнал. Следующий номер выйдет 14 ноября.</span><span>Подписка: 12 номеров — 4 900 ₽</span></div></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  /* клавиши для иллюстрации */
+  var g = '', w = 64;
+  for (var i = 0; i < 24; i++) g += '<rect x="' + (i * w) + '" y="0" width="' + (w - 4) + '" height="460" rx="3" fill="url(#light)" opacity="' + (.55 + (i % 7) * .05) + '"/>';
+  [0, 1, 3, 4, 5].forEach(function (k) { for (var o = 0; o < 4; o++) { var x = (o * 7 + k) * w + w * .68; g += '<rect x="' + x + '" y="0" width="' + (w * .62) + '" height="290" rx="2" fill="#140407"/>'; } });
+  document.getElementById('keys').innerHTML = g;
+  var bar = document.getElementById('progress');
+  function prog() { var m = document.documentElement.scrollHeight - innerHeight; bar.style.width = (m > 0 ? scrollY / m * 100 : 0) + '%'; }
+  addEventListener('scroll', prog, { passive: true }); prog();
+})();
+</script>
+</body>
+</html>

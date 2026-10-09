@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru" data-style="collage">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ржавые гвозди · Коллаж</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=PT+Mono&family=Playfair+Display:ital,wght@1,900&family=Rubik+Mono+One&family=Russo+One&family=Yeseva+One&display=swap">
+<style>
+/* Коллаж: зин, собранный ножницами и клеем. Рваная бумага, скотч, буквы из газет, растровые точки и шум ксерокса. */
+:root {
+  --news: #ECE8DF;
+  --ink: #111111;
+  --red: #E10600;
+  --fluo: #F5FF00;
+  --kraft: #C8A27A;
+  --mono: "PT Mono", "Courier New", monospace;
+  --hand: "Caveat", cursive;
+  --torn: polygon(0 3%, 5% 0, 12% 2%, 20% 0, 29% 3%, 38% 0, 48% 2%, 57% 0, 66% 3%, 75% 1%, 84% 3%, 92% 0, 100% 2%, 99% 12%, 100% 24%, 98% 37%, 100% 50%, 98% 63%, 100% 76%, 98% 88%, 100% 99%, 91% 97%, 82% 100%, 73% 97%, 63% 100%, 53% 98%, 43% 100%, 33% 97%, 23% 100%, 13% 98%, 4% 100%, 0 96%, 2% 84%, 0 72%, 2% 60%, 0 47%, 2% 34%, 0 21%, 2% 10%);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font: 400 17px/1.55 var(--mono); overflow-x: hidden;
+  background: radial-gradient(rgba(17,17,17,.22) 28%, transparent 30%) 0 0 / 7px 7px, var(--kraft); }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 30; opacity: .35; mix-blend-mode: multiply;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='x'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.4 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23x)'/%3E%3C/svg%3E"); }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+.paper { position: relative; background: var(--news); clip-path: var(--torn); box-shadow: none; }
+.drop { filter: drop-shadow(3px 5px 0 rgba(0,0,0,.35)); }
+.tape { position: absolute; z-index: 5; width: 110px; height: 30px; background: rgba(245,240,210,.6); box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+.tape.y { background: rgba(245,255,0,.55); }
+.stamp { display: inline-block; padding: 6px 12px; border: 4px solid var(--red); color: var(--red); font: 900 20px/1 "Rubik Mono One", sans-serif; transform: rotate(-12deg); opacity: .88; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2 1.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2 1.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* буквы-анонимка */
+.ransom { display: flex; flex-wrap: wrap; gap: .12em .32em; align-items: center; }
+.ransom .w { display: inline-flex; gap: 2px; white-space: nowrap; }
+.ransom b { display: inline-block; padding: .06em .14em; line-height: 1; font-weight: normal; box-shadow: 2px 2px 0 rgba(0,0,0,.25); }
+
+header .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 18px; flex-wrap: wrap; }
+.mini { font-size: 22px; }
+header nav { display: flex; gap: 10px; flex-wrap: wrap; }
+header nav a { text-decoration: none; color: var(--ink); background: var(--news); padding: 4px 10px; transform: rotate(-2deg); font-weight: 700; box-shadow: 2px 2px 0 rgba(0,0,0,.3); }
+header nav a:nth-child(2) { transform: rotate(3deg); background: var(--fluo); }
+header nav a:hover { background: var(--red); color: var(--news); }
+
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; padding-block: 30px 70px; align-items: start; }
+.poster { padding: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px) 46px; transform: rotate(-1.5deg); }
+.poster .big { font-size: clamp(28px, 4.6vw, 58px); }
+.poster .sub { margin: 18px 0 0; font: italic 900 clamp(28px, 4vw, 46px)/1 "Playfair Display", serif; }
+.poster .sub span { background: var(--ink); color: var(--news); padding: 0 .2em; }
+.poster p { margin: 18px 0 0; max-width: 32em; }
+.poster .stamp { position: absolute; right: 8%; bottom: 10%; }
+
+.photo { position: relative; transform: rotate(3deg); margin-top: 20px; }
+.photo .frame { background: #fff; padding: 12px 12px 54px; box-shadow: 4px 6px 0 rgba(0,0,0,.35); }
+.photo .frame svg { display: block; width: 100%; height: auto; background: #222; }
+.photo .cap { position: absolute; left: 18px; bottom: 12px; font: 700 28px/1 var(--hand); }
+.pin { position: absolute; z-index: 6; width: 90px; top: -26px; left: 40%; transform: rotate(18deg); }
+
+.strip { margin: 10px 0 40px; background: var(--ink); color: var(--fluo); padding: 10px 18px; transform: rotate(-1deg); font-size: clamp(18px, 2.2vw, 26px); }
+
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 34px; align-items: start; padding-bottom: 60px; }
+.note { padding: 34px 28px 30px 64px; transform: rotate(1.5deg); background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(60,110,190,.35) 31px 32px), var(--news); background-position: 0 14px; }
+.note::before { content: ""; position: absolute; left: 44px; top: 0; bottom: 0; width: 2px; background: rgba(225,6,0,.5); }
+.note h2 { margin: 0 0 6px; font: 700 40px/1 var(--hand); }
+.dates { list-style: none; margin: 0; padding: 0; font: 700 26px/32px var(--hand); }
+.dates li { display: flex; justify-content: space-between; gap: 12px; }
+.dates li s { color: #555; }
+.dates .so { color: var(--red); font-size: 18px; transform: rotate(-6deg); display: inline-block; border: 2px solid var(--red); padding: 0 6px; line-height: 24px; align-self: center; }
+
+.zine { display: grid; gap: 22px; }
+.clip { padding: 26px 24px; background: #fff; transform: rotate(-2deg); }
+.clip h3 { margin: 0 0 10px; font: italic 900 30px/1 "Playfair Display", serif; }
+.clip p { margin: 0 0 10px; }
+.merch { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 18px; align-items: center; padding: 22px; transform: rotate(2deg); background: var(--fluo); }
+.merch svg { width: 110px; height: auto; }
+.merch b { font: 22px/1.1 "Russo One", sans-serif; display: block; }
+.merch button { appearance: none; border: 3px solid var(--ink); background: var(--news); cursor: pointer; margin-top: 10px; padding: 6px 12px; font-weight: 700; transform: rotate(-2deg); }
+.merch button:hover { background: var(--ink); color: var(--fluo); }
+.sticker { justify-self: start; padding: 10px 16px; background: var(--red); color: var(--news); font: 18px/1 "Rubik Mono One", sans-serif; border-radius: 50%; transform: rotate(-8deg); aspect-ratio: 1.6; display: grid; place-items: center; text-align: center; }
+
+footer { padding: 20px 0 120px; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font: 700 26px var(--hand); }
+
+@media (max-width: 860px) { .hero, .row2 { grid-template-columns: minmax(0, 1fr); } .photo { max-width: 420px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="ransom mini" id="logo" aria-label="Ржавые гвозди"></div>
+    <nav aria-label="Разделы"><a href="#tour">тур</a><a href="#zine">зин</a><a href="#merch">мерч</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="paper drop poster">
+      <i class="tape" style="left:-14px;top:18px;transform:rotate(-30deg)"></i>
+      <i class="tape y" style="right:-10px;top:40%;transform:rotate(70deg)"></i>
+      <div class="ransom big" id="title" aria-label="Тур по подвалам"></div>
+      <p class="sub">осень <span>2026</span></p>
+      <p>Семь городов, ни одного стадиона. Играем в подвалах, гаражах и одной прачечной. Вход по донату, с собой беруши и хорошее настроение.</p>
+      <span class="stamp">НЕ ДЛЯ РАДИО</span>
+    </div>
+    <figure class="photo">
+      <svg class="pin" viewBox="0 0 90 30" aria-hidden="true"><path d="M6 15 h62 a8 8 0 1 0 0 -1" stroke="#9AA0A6" stroke-width="3" fill="none"/><path d="M6 15 C 20 22 50 22 70 16" stroke="#9AA0A6" stroke-width="3" fill="none"/><circle cx="76" cy="15" r="9" fill="none" stroke="#9AA0A6" stroke-width="3"/></svg>
+      <div class="frame">
+        <svg viewBox="0 0 400 300" role="img" aria-label="Ксерокопия фотографии: гитара на фоне кирпичной стены">
+          <defs>
+            <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2.1" fill="#111"/></pattern>
+            <pattern id="bricks" width="60" height="30" patternUnits="userSpaceOnUse"><rect width="60" height="30" fill="#3A3A3A"/><path d="M0 0h60M0 15h60M15 0v15M45 15v15" stroke="#1A1A1A" stroke-width="3"/></pattern>
+            <filter id="xer"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="9"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.3"/><feComposite in="SourceGraphic" operator="in"/></filter>
+          </defs>
+          <rect width="400" height="300" fill="url(#bricks)"/>
+          <ellipse cx="210" cy="160" rx="170" ry="120" fill="#BDBDBD" opacity=".35"/>
+          <g filter="url(#xer)">
+            <g transform="rotate(-24 200 160)">
+              <rect x="190" y="10" width="22" height="150" fill="#E8E8E8"/>
+              <rect x="184" y="0" width="34" height="30" rx="4" fill="#E8E8E8"/>
+              <path d="M150 150 C 120 150 112 190 130 210 C 112 236 130 290 200 290 C 270 290 288 236 270 210 C 288 190 280 150 250 150 Z" fill="#E8E8E8"/>
+              <circle cx="200" cy="215" r="20" fill="#111"/>
+              <rect x="176" y="250" width="48" height="10" fill="#111"/>
+              <path d="M196 20 v240 M204 20 v240" stroke="#111" stroke-width="1.5"/>
+            </g>
+            <rect width="400" height="300" fill="url(#dots)" opacity=".35"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="cap">Котельная, 2025 →</figcaption>
+    </figure>
+  </section>
+
+  <p class="strip paper">« Мы не умеем играть. Поэтому играем громко. » — из первого зина, 2019</p>
+
+  <section class="row2">
+    <div class="paper drop note" id="tour">
+      <i class="tape" style="left:40%;top:-12px;transform:rotate(4deg)"></i>
+      <h2>Даты тура</h2>
+      <ul class="dates">
+        <li><span>17.10 — Питер, «Котельная»</span><span class="so">ВСЁ ПРОДАНО</span></li>
+        <li><span>19.10 — Тверь, гараж №14</span><span>донат</span></li>
+        <li><span>24.10 — Москва, прачечная</span><span>донат</span></li>
+        <li><span><s>26.10 — Рязань</s> перенос!</span><span>?</span></li>
+        <li><span>31.10 — Казань, подвал «Бетон»</span><span>донат</span></li>
+        <li><span>07.11 — Пермь, ДК</span><span>500 ₽</span></li>
+      </ul>
+    </div>
+    <div class="zine" id="zine">
+      <div class="paper drop clip">
+        <i class="tape y" style="left:-12px;top:-6px;transform:rotate(-38deg)"></i>
+        <h3>Из зина № 7</h3>
+        <p>Новый альбом записан на кассетный магнитофон в гараже у Димы. Барабаны слышно плохо, потому что Дима в это время чинил машину.</p>
+        <p>Зато в песне «Гвоздь» слышно, как идёт дождь. Мы оставили.</p>
+      </div>
+      <div class="paper drop merch" id="merch">
+        <svg viewBox="0 0 110 100" aria-hidden="true"><path d="M30 8 L10 22 L18 40 L28 34 V94 H82 V34 L92 40 L100 22 L80 8 C 74 18 36 18 30 8 Z" fill="#111"/><text x="55" y="64" text-anchor="middle" font-family="Rubik Mono One, sans-serif" font-size="11" fill="#F5FF00">ГВОЗДИ</text></svg>
+        <div><b>Футболка «Ржавчина»</b><span>трафарет вручную · 1 200 ₽</span><br><button type="button" id="buy">хочу!</button></div>
+      </div>
+      <span class="sticker">БЕРУШИ<br>ВЫДАЁМ</span>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>сделано ножницами и клеем</span><span>группа вымышлена</span></div></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var styles = [
+    ['"Playfair Display", serif', '#111', '#ECE8DF', 'italic'], ['"Rubik Mono One", sans-serif', '#fff', '#E10600', ''], ['"PT Mono", monospace', '#111', '#F5FF00', ''],
+    ['"Yeseva One", serif', '#111', '#fff', ''], ['"Caveat", cursive', '#111', '#C8A27A', ''], ['"Russo One", sans-serif', '#F5FF00', '#111', ''], ['Georgia, serif', '#ECE8DF', '#111', 'italic']
+  ];
+  function ransom(el, text, seed) {
+    var i = 0;
+    el.innerHTML = text.split(' ').map(function (word) {
+      return '<span class="w" aria-hidden="true">' + word.split('').map(function (ch) {
+        var s = styles[(i * 5 + seed) % styles.length], rot = ((i * 37 + seed * 11) % 13) - 6, size = 1 + (((i * 13 + seed) % 5) - 2) * .08;
+        i++;
+        return '<b style="font-family:' + s[0].replace(/"/g, '&quot;') + ';color:' + s[1] + ';background:' + s[2] + ';font-style:' + (s[3] || 'normal') + ';transform:rotate(' + rot + 'deg);font-size:' + size + 'em">' + ch + '</b>';
+      }).join('') + '</span>';
+    }).join('');
+  }
+  ransom(document.getElementById('logo'), 'РЖАВЫЕ ГВОЗДИ', 3);
+  ransom(document.getElementById('title'), 'ТУР ПО ПОДВАЛАМ', 1);
+  document.getElementById('buy').addEventListener('click', function () { this.textContent = 'отложили размер M!'; });
+})();
+</script>
+</body>
+</html>

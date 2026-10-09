@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru" data-style="material">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Пульс · Material Design и Material You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Одно приложение в двух системах. Класс на body (m2 или m3) задаёт токены;
+   в Material You все цвета считаются из одного оттенка --h, как динамический цвет из обоев. */
+:root { --font: "Roboto", "Segoe UI", Arial, sans-serif; color-scheme: light; }
+body.m2 {
+  --bg: #F5F5F5; --surface: #FFFFFF; --text: rgba(0,0,0,.87); --text2: rgba(0,0,0,.6); --line: rgba(0,0,0,.12);
+  --primary: #6200EE; --on-primary: #FFFFFF; --accent: #03DAC6; --on-accent: #00201C;
+  --bar-bg: #6200EE; --bar-fg: #FFFFFF; --bar-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12);
+  --drawer-bg: #FFFFFF; --drawer-line: rgba(0,0,0,.12); --nav-bg: rgba(98,0,238,.12); --nav-fg: #6200EE; --nav-r: 4px;
+  --card-bg: #FFFFFF; --card-r: 4px; --card-sh: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 1px 3px rgba(0,0,0,.12);
+  --card-sh-h: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  --btn-r: 4px; --btn-case: uppercase; --btn-track: .09em; --btn-weight: 500;
+  --tonal-bg: transparent; --tonal-fg: #6200EE;
+  --chip-bg: rgba(0,0,0,.08); --chip-fg: rgba(0,0,0,.87); --chip-line: transparent; --chip-r: 16px; --chip-sel-bg: rgba(98,0,238,.18); --chip-sel-fg: #4A00B4;
+  --fab-bg: #03DAC6; --fab-fg: #00201C; --fab-r: 50%; --fab-sh: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
+  --snack-bg: #323232; --snack-fg: rgba(255,255,255,.87); --snack-act: #BB86FC;
+  --avatar-bg: #E0E0E0; --avatar-fg: #6200EE;
+}
+body.m3 {
+  --h: 295;
+  --primary: oklch(.47 .15 var(--h)); --on-primary: #FFFFFF;
+  --pc: oklch(.91 .065 var(--h)); --on-pc: oklch(.27 .1 var(--h));
+  --sc: oklch(.91 .035 var(--h)); --on-sc: oklch(.26 .04 var(--h));
+  --tc: oklch(.91 .06 calc(var(--h) + 60)); --on-tc: oklch(.28 .08 calc(var(--h) + 60));
+  --bg: oklch(.985 .007 var(--h)); --surface: oklch(.985 .007 var(--h));
+  --sc-low: oklch(.965 .01 var(--h)); --sc-mid: oklch(.945 .014 var(--h)); --sc-high: oklch(.92 .018 var(--h));
+  --text: oklch(.21 .012 var(--h)); --text2: oklch(.44 .02 var(--h)); --line: oklch(.82 .015 var(--h));
+  --accent: var(--primary); --on-accent: var(--on-primary);
+  --bar-bg: var(--bg); --bar-fg: var(--text); --bar-shadow: none;
+  --drawer-bg: var(--sc-low); --drawer-line: transparent; --nav-bg: var(--sc); --nav-fg: var(--on-sc); --nav-r: 999px;
+  --card-bg: var(--sc-mid); --card-r: 16px; --card-sh: none; --card-sh-h: 0 1px 3px rgba(0,0,0,.14), 0 2px 6px 2px rgba(0,0,0,.08);
+  --btn-r: 999px; --btn-case: none; --btn-track: .01em; --btn-weight: 500;
+  --tonal-bg: var(--sc); --tonal-fg: var(--on-sc);
+  --chip-bg: transparent; --chip-fg: var(--text2); --chip-line: var(--line); --chip-r: 8px; --chip-sel-bg: var(--sc); --chip-sel-fg: var(--on-sc);
+  --fab-bg: var(--pc); --fab-fg: var(--on-pc); --fab-r: 16px; --fab-sh: 0 1px 3px rgba(0,0,0,.2), 0 4px 8px 3px rgba(0,0,0,.12);
+  --snack-bg: oklch(.31 .015 var(--h)); --snack-fg: oklch(.95 .01 var(--h)); --snack-act: oklch(.83 .09 var(--h));
+  --avatar-bg: var(--tc); --avatar-fg: var(--on-tc);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; transition: background-color .4s; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+svg.i { width: 24px; height: 24px; fill: currentColor; flex: none; }
+
+.rpl { position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.ripple { position: absolute; border-radius: 50%; pointer-events: none; background: currentColor; opacity: .22; transform: scale(0); animation: ripple .55s cubic-bezier(.2,.8,.2,1) forwards; }
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+
+/* верхняя панель */
+.appbar { position: sticky; top: 0; z-index: 20; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: var(--bar-bg); color: var(--bar-fg); box-shadow: var(--bar-shadow); transition: background .4s, color .4s; }
+.appbar .title { font-size: 20px; font-weight: 500; letter-spacing: .01em; margin-right: auto; }
+body.m3 .appbar .title { font-size: 22px; font-weight: 400; }
+.icon-btn { appearance: none; border: 0; background: transparent; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+.seg { display: flex; border: 1px solid currentColor; border-radius: 4px; overflow: hidden; }
+body.m2 .seg { border-color: rgba(255,255,255,.6); }
+body.m3 .seg { border-radius: 999px; border-color: var(--line); }
+.seg button { appearance: none; border: 0; background: transparent; cursor: pointer; padding: 0 14px; height: 36px; font-weight: 500; font-size: 14px; letter-spacing: var(--btn-track); text-transform: var(--btn-case); display: flex; align-items: center; gap: 6px; }
+.seg button + button { border-left: 1px solid; border-color: inherit; }
+body.m2 .seg button[aria-pressed="true"] { background: rgba(255,255,255,.22); }
+body.m3 .seg button[aria-pressed="true"] { background: var(--sc); color: var(--on-sc); }
+.seg .ck { display: none; width: 18px; height: 18px; }
+body.m3 .seg button[aria-pressed="true"] .ck { display: block; }
+
+/* каркас */
+.layout { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: calc(100% - 64px); }
+.drawer { background: var(--drawer-bg); border-right: 1px solid var(--drawer-line); padding: 12px; display: flex; flex-direction: column; gap: 4px; transition: background .4s; }
+.drawer h3 { margin: 8px 16px 8px; font-size: 14px; font-weight: 500; color: var(--text2); }
+.nav-item { appearance: none; border: 0; background: transparent; text-align: left; display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 16px; border-radius: var(--nav-r); cursor: pointer; color: var(--text2); font-weight: 500; font-size: 14px; }
+body.m3 .nav-item { height: 56px; color: var(--text2); }
+.nav-item[aria-current="page"] { background: var(--nav-bg); color: var(--nav-fg); }
+.nav-item .badge { margin-left: auto; font-size: 12px; }
+
+.content { container: main / inline-size; padding: 24px clamp(16px, 3vw, 32px) 120px; display: grid; gap: 28px; align-content: start; min-width: 0; }
+.headline { margin: 0; font-weight: 400; font-size: 34px; line-height: 1.15; letter-spacing: .007em; }
+body.m3 .headline { font-size: 36px; line-height: 44px; letter-spacing: 0; }
+.sub { margin: 4px 0 0; color: var(--text2); }
+h2 { margin: 0 0 12px; font-size: 20px; font-weight: 500; letter-spacing: .01em; }
+body.m3 h2 { font-size: 22px; font-weight: 400; }
+
+.you { display: none; gap: 14px; padding: 20px; border-radius: 28px; background: var(--sc-high); }
+body.m3 .you { display: grid; }
+.you p { margin: 0; color: var(--text2); }
+.walls { display: flex; flex-wrap: wrap; gap: 12px; }
+.wall { appearance: none; border: 0; padding: 0; cursor: pointer; width: 78px; display: grid; gap: 6px; justify-items: center; font-size: 12px; color: var(--text2); background: none; }
+.wall i { display: block; width: 78px; height: 120px; border-radius: 18px; background: var(--g); box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); position: relative; overflow: hidden; transition: border-radius .25s; }
+.wall i::after { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; right: -20%; bottom: -10%; background: rgba(255,255,255,.28); }
+.wall[aria-pressed="true"] i { border-radius: 28px; outline: 3px solid var(--primary); outline-offset: 3px; }
+.wall[aria-pressed="true"] { color: var(--text); font-weight: 500; }
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--text2); }
+.swatches span { width: 28px; height: 28px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { appearance: none; cursor: pointer; height: 32px; padding: 0 12px; border-radius: var(--chip-r); border: 1px solid var(--chip-line); background: var(--chip-bg); color: var(--chip-fg); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: background .2s, border-radius .3s; }
+.chip svg { width: 18px; height: 18px; display: none; }
+.chip[aria-pressed="true"] { background: var(--chip-sel-bg); color: var(--chip-sel-fg); border-color: transparent; }
+body.m3 .chip[aria-pressed="true"] svg { display: block; }
+
+.albums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@container main (max-width: 680px) { .albums { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.album { background: var(--card-bg); border-radius: var(--card-r); box-shadow: var(--card-sh); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .25s, border-radius .35s, background .4s; }
+.album:hover { box-shadow: var(--card-sh-h); }
+body.m3 .album { padding: 10px; }
+.cover { aspect-ratio: 1; max-width: 100%; background: var(--g); position: relative; }
+body.m3 .cover { border-radius: 12px; }
+.cover::before { content: ""; position: absolute; width: 46%; aspect-ratio: 1; border-radius: 50%; left: 14%; top: 18%; background: rgba(255,255,255,.3); }
+.cover::after { content: ""; position: absolute; width: 36%; height: 36%; right: 12%; bottom: 12%; background: rgba(0,0,0,.18); transform: rotate(18deg); }
+.album .meta { padding: 14px 16px 4px; }
+body.m3 .album .meta { padding: 12px 6px 4px; }
+.album h4 { margin: 0; font-size: 16px; font-weight: 500; }
+.album p { margin: 2px 0 0; color: var(--text2); font-size: 14px; }
+.actions { display: flex; align-items: center; justify-content: space-between; padding: 8px; }
+body.m3 .actions { padding: 8px 2px 2px; }
+.btn { appearance: none; border: 0; cursor: pointer; height: 36px; padding: 0 12px; border-radius: var(--btn-r); font-weight: var(--btn-weight); font-size: 14px; letter-spacing: var(--btn-track); text-transform: var(--btn-case); display: inline-flex; align-items: center; gap: 8px; }
+body.m3 .btn { height: 40px; padding: 0 20px; }
+.btn.tonal { background: var(--tonal-bg); color: var(--tonal-fg); }
+.btn.filled { background: var(--primary); color: var(--on-primary); padding: 0 16px; }
+body.m2 .btn.filled { box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 1px 5px rgba(0,0,0,.12); }
+body.m3 .btn.filled { padding: 0 24px; }
+.heart[aria-pressed="true"] { color: #E53935; }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.panel { background: var(--card-bg); border-radius: var(--card-r); box-shadow: var(--card-sh); padding: 16px 20px; min-width: 0; transition: border-radius .35s, background .4s; }
+body.m3 .panel { border-radius: 24px; }
+.panel h2 { font-size: 18px; margin-bottom: 4px; }
+.setting { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; border-bottom: 1px solid var(--line); }
+.setting:last-of-type { border-bottom: 0; }
+body.m3 .setting { border-bottom: 0; }
+.setting span small { display: block; color: var(--text2); font-size: 13px; }
+
+/* переключатель */
+.sw { appearance: none; border: 0; padding: 0; background: none; cursor: pointer; position: relative; flex: none; }
+body.m2 .sw { width: 36px; height: 20px; }
+body.m2 .sw::before { content: ""; position: absolute; left: 0; right: 0; top: 3px; height: 14px; border-radius: 7px; background: rgba(0,0,0,.38); transition: background .2s; }
+body.m2 .sw::after { content: ""; position: absolute; left: -2px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #FAFAFA; box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 1px 3px rgba(0,0,0,.12); transition: transform .2s, background .2s; }
+body.m2 .sw[aria-checked="true"]::before { background: rgba(98,0,238,.5); }
+body.m2 .sw[aria-checked="true"]::after { transform: translateX(18px); background: #6200EE; }
+body.m3 .sw { width: 52px; height: 32px; border-radius: 16px; background: var(--sc-high); box-shadow: inset 0 0 0 2px var(--text2); transition: background .2s; }
+body.m3 .sw::after { content: ""; position: absolute; left: 8px; top: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--text2); transition: all .25s cubic-bezier(.2,1.4,.4,1); }
+body.m3 .sw[aria-checked="true"] { background: var(--primary); box-shadow: none; }
+body.m3 .sw[aria-checked="true"]::after { left: 24px; top: 4px; width: 24px; height: 24px; background: var(--on-primary); }
+
+/* слайдер */
+.slider-row { display: grid; gap: 4px; padding: 12px 0 4px; }
+.slider-row label { display: flex; justify-content: space-between; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; height: 44px; cursor: pointer; --v: 70%; }
+input[type=range]::-webkit-slider-runnable-track { height: var(--track-h); border-radius: 99px; background: linear-gradient(90deg, var(--primary) var(--v), var(--track-off) var(--v)); }
+input[type=range]::-moz-range-track { height: var(--track-h); border-radius: 99px; background: linear-gradient(90deg, var(--primary) var(--v), var(--track-off) var(--v)); }
+body.m2 input[type=range] { --track-h: 4px; --track-off: rgba(98,0,238,.24); }
+body.m3 input[type=range] { --track-h: 16px; --track-off: var(--sc); }
+body.m2 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #6200EE; margin-top: -8px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+body.m3 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 4px; height: 44px; border-radius: 2px; background: var(--primary); margin-top: -14px; box-shadow: 0 0 0 6px var(--card-bg); }
+body.m2 input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #6200EE; }
+body.m3 input[type=range]::-moz-range-thumb { width: 4px; height: 44px; border: 0; border-radius: 2px; background: var(--primary); box-shadow: 0 0 0 6px var(--card-bg); }
+
+.list { list-style: none; margin: 8px -8px 0; padding: 0; }
+.li { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 0 8px; border-radius: 8px; cursor: pointer; }
+body.m3 .li { border-radius: 16px; }
+.li:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--avatar-bg); color: var(--avatar-fg); font-weight: 500; flex: none; }
+.li .t { flex: 1; min-width: 0; }
+.li .t b { display: block; font-weight: 400; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li .t small { color: var(--text2); font-size: 14px; }
+
+.fab { position: fixed; right: 24px; bottom: 24px; z-index: 30; appearance: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; height: 56px; min-width: 56px; padding: 0 16px; justify-content: center; border-radius: var(--fab-r); background: var(--fab-bg); color: var(--fab-fg); box-shadow: var(--fab-sh); font-weight: 500; font-size: 14px; letter-spacing: var(--btn-track); transition: border-radius .35s, background .4s; }
+body.m2 .fab { padding: 0; width: 56px; }
+.fab .lbl { display: none; }
+body.m3 .fab .lbl { display: inline; }
+body.m3 .fab { padding: 0 20px 0 16px; }
+
+.snack { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 24px); opacity: 0; visibility: hidden; z-index: 40; display: flex; align-items: center; gap: 24px; min-width: min(344px, calc(100vw - 32px)); max-width: calc(100vw - 32px); padding: 6px 8px 6px 16px; border-radius: 4px; background: var(--snack-bg); color: var(--snack-fg); box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14); transition: transform .25s cubic-bezier(.2,.8,.2,1), opacity .2s, visibility .25s; }
+.snack.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+.snack span { flex: 1; }
+.snack button { appearance: none; border: 0; background: transparent; color: var(--snack-act); font-weight: 500; letter-spacing: var(--btn-track); text-transform: var(--btn-case); height: 36px; padding: 0 8px; border-radius: var(--btn-r); cursor: pointer; }
+
+.bottom-nav { display: none; }
+@media (max-width: 900px) {
+  :root { --guide-offset: 80px; }
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .drawer { display: none; }
+  .two { grid-template-columns: minmax(0, 1fr); }
+  .appbar .title { font-size: 18px; }
+  .seg button { padding: 0 10px; font-size: 13px; }
+  .seg .long { display: none; }
+  .bottom-nav { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; height: calc(72px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--surface); box-shadow: 0 -1px 4px rgba(0,0,0,.12); justify-content: space-around; }
+  body.m3 .bottom-nav { background: var(--sc-mid); box-shadow: none; }
+  .bn { appearance: none; border: 0; background: none; flex: 1; display: grid; justify-items: center; align-content: center; gap: 4px; font-size: 12px; color: var(--text2); cursor: pointer; }
+  .bn[aria-current="page"] { color: var(--primary); }
+  body.m3 .bn i { display: grid; place-items: center; width: 64px; height: 32px; border-radius: 16px; }
+  body.m3 .bn[aria-current="page"] i { background: var(--sc); color: var(--on-sc); }
+  body.m3 .bn[aria-current="page"] { color: var(--text); font-weight: 500; }
+  .fab { bottom: calc(146px + env(safe-area-inset-bottom, 0px)); right: 16px; }
+  .snack { bottom: calc(146px + env(safe-area-inset-bottom, 0px)); }
+  .headline { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) { .ripple { display: none; } * { transition: none !important; } }
+</style>
+</head>
+<body class="m2">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 2.5-2.5c.57 0 1.08.19 1.5.51V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><path d="M3.24 6.15C2.51 6.43 2 7.17 2 8v12a2 2 0 0 0 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2H8.3l8.26-3.34L15.88 1 3.24 6.15zM7 20c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-8h-2v-2h-2v2H4V8h16v4z"/></symbol>
+  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></symbol>
+  <symbol id="i-heart-f" viewBox="0 0 24 24"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+</svg>
+
+<header class="appbar">
+  <button class="icon-btn rpl" type="button" aria-label="Меню"><svg class="i"><use href="#i-menu"/></svg></button>
+  <span class="title">Пульс</span>
+  <div class="seg" role="group" aria-label="Версия Material">
+    <button class="rpl" type="button" data-m="m2" aria-pressed="true"><svg class="i ck"><use href="#i-check"/></svg>M2</button>
+    <button class="rpl" type="button" data-m="m3" aria-pressed="false"><svg class="i ck"><use href="#i-check"/></svg>You<span class="long">&nbsp;(M3)</span></button>
+  </div>
+  <button class="icon-btn rpl" type="button" aria-label="Поиск"><svg class="i"><use href="#i-search"/></svg></button>
+</header>
+
+<div class="layout">
+  <nav class="drawer" aria-label="Разделы">
+    <h3>Пульс</h3>
+    <button class="nav-item rpl" type="button" aria-current="page"><svg class="i"><use href="#i-home"/></svg>Главная</button>
+    <button class="nav-item rpl" type="button"><svg class="i"><use href="#i-search"/></svg>Поиск</button>
+    <button class="nav-item rpl" type="button"><svg class="i"><use href="#i-lib"/></svg>Медиатека<span class="badge">128</span></button>
+    <button class="nav-item rpl" type="button"><svg class="i"><use href="#i-radio"/></svg>Радио</button>
+    <button class="nav-item rpl" type="button"><svg class="i"><use href="#i-tune"/></svg>Настройки</button>
+  </nav>
+
+  <main class="content">
+    <div>
+      <h1 class="headline">Добрый вечер, Аня</h1>
+      <p class="sub" id="mode-sub">Material 2: цветная панель сверху, тени показывают высоту слоя, кнопки заглавными буквами.</p>
+    </div>
+
+    <section class="you" aria-label="Обои и цвета">
+      <h2 style="margin:0">Обои и цвета</h2>
+      <p>Material You берёт один цвет из обоев и строит из него всю палитру интерфейса. Выберите обои:</p>
+      <div class="walls" id="walls"></div>
+      <div class="swatches" id="swatches"></div>
+    </section>
+
+    <div class="chips" id="chips"></div>
+
+    <section>
+      <h2>Рекомендации на вечер</h2>
+      <div class="albums" id="albums"></div>
+    </section>
+
+    <div class="two">
+      <section class="panel">
+        <h2>Воспроизведение</h2>
+        <div class="setting"><span>Нормализация громкости<small>Одинаковая громкость у всех треков</small></span><button class="sw" type="button" role="switch" aria-checked="true" aria-label="Нормализация громкости"></button></div>
+        <div class="setting"><span>Загрузка только по Wi-Fi<small>Экономит мобильный трафик</small></span><button class="sw" type="button" role="switch" aria-checked="true" aria-label="Загрузка только по Wi-Fi"></button></div>
+        <div class="setting"><span>Плавный переход<small>Треки перетекают друг в друга</small></span><button class="sw" type="button" role="switch" aria-checked="false" aria-label="Плавный переход"></button></div>
+        <div class="slider-row"><label for="vol"><span>Громкость</span><span id="vol-v">70%</span></label><input id="vol" type="range" min="0" max="100" value="70"></div>
+      </section>
+      <section class="panel">
+        <h2>Недавно</h2>
+        <ul class="list">
+          <li class="li rpl"><span class="avatar">М</span><span class="t"><b>Мира — Цветы на асфальте</b><small>Альбом · 11 треков</small></span><button class="icon-btn rpl" type="button" aria-label="Ещё"><svg class="i"><use href="#i-more"/></svg></button></li>
+          <li class="li rpl"><span class="avatar">П</span><span class="t"><b>Перрон — Электричка в 5:40</b><small>Сингл · 3:12</small></span><button class="icon-btn rpl" type="button" aria-label="Ещё"><svg class="i"><use href="#i-more"/></svg></button></li>
+          <li class="li rpl"><span class="avatar">Н</span><span class="t"><b>Ночной эфир</b><small>Плейлист · 48 треков</small></span><button class="icon-btn rpl" type="button" aria-label="Ещё"><svg class="i"><use href="#i-more"/></svg></button></li>
+          <li class="li rpl"><span class="avatar">К</span><span class="t"><b>Квартал — Лето в бетоне</b><small>Альбом · 9 треков</small></span><button class="icon-btn rpl" type="button" aria-label="Ещё"><svg class="i"><use href="#i-more"/></svg></button></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</div>
+
+<button class="fab rpl" type="button" id="fab" aria-label="Перемешать и слушать"><svg class="i"><use href="#i-shuffle"/></svg><span class="lbl">Перемешать</span></button>
+<div class="snack" id="snack" role="status" aria-live="polite"><span id="snack-text"></span><button type="button" id="snack-act">Отменить</button></div>
+
+<nav class="bottom-nav" aria-label="Разделы">
+  <button class="bn" type="button" aria-current="page"><i><svg class="i"><use href="#i-home"/></svg></i>Главная</button>
+  <button class="bn" type="button"><i><svg class="i"><use href="#i-search"/></svg></i>Поиск</button>
+  <button class="bn" type="button"><i><svg class="i"><use href="#i-lib"/></svg></i>Медиатека</button>
+  <button class="bn" type="button"><i><svg class="i"><use href="#i-radio"/></svg></i>Радио</button>
+</nav>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var body = document.body;
+  var walls = [
+    { name: 'Сирень', h: 295, g: 'linear-gradient(160deg,#E8DEF8,#9A82DB 55%,#4F378B)' },
+    { name: 'Коралл', h: 32, g: 'linear-gradient(160deg,#FFDAD4,#E8836D 55%,#8C3B2A)' },
+    { name: 'Мох', h: 140, g: 'linear-gradient(160deg,#D7F0C8,#79B26B 55%,#2F5D2A)' },
+    { name: 'Море', h: 245, g: 'linear-gradient(160deg,#D3E4FF,#5D8FD9 55%,#1F4C8F)' },
+    { name: 'Охра', h: 85, g: 'linear-gradient(160deg,#F7E6B5,#CFA341 55%,#6E5410)' }
+  ];
+  var albums = [
+    ['Цветы на асфальте', 'Мира', 'linear-gradient(135deg,#FF8A65,#D84315)'],
+    ['Электричка в 5:40', 'Перрон', 'linear-gradient(135deg,#4FC3F7,#01579B)'],
+    ['Тёплый шум', 'Саша Вик', 'linear-gradient(135deg,#AED581,#33691E)'],
+    ['Лето в бетоне', 'Квартал', 'linear-gradient(135deg,#BA68C8,#4A148C)']
+  ];
+  var chips = ['Всё', 'Инди', 'Джаз', 'Электроника', 'Классика', 'Для работы'];
+
+  document.getElementById('walls').innerHTML = walls.map(function (w, i) {
+    return '<button class="wall" type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '"><i style="--g:' + w.g + '"></i>' + w.name + '</button>';
+  }).join('');
+  document.getElementById('albums').innerHTML = albums.map(function (a) {
+    return '<article class="album"><div class="cover" style="--g:' + a[2] + '"></div><div class="meta"><h4>' + a[0] + '</h4><p>' + a[1] + '</p></div>' +
+      '<div class="actions"><button class="btn tonal rpl" type="button" data-play="' + a[0] + '">Слушать</button>' +
+      '<button class="icon-btn heart rpl" type="button" aria-pressed="false" aria-label="В любимое: ' + a[0] + '" data-like="' + a[0] + '"><svg class="i"><use href="#i-heart"/></svg></button></div></article>';
+  }).join('');
+  document.getElementById('chips').innerHTML = chips.map(function (c, i) {
+    return '<button class="chip rpl" type="button" aria-pressed="' + (i === 0) + '"><svg class="i"><use href="#i-check"/></svg>' + c + '</button>';
+  }).join('');
+
+  /* рябь от точки нажатия */
+  document.addEventListener('pointerdown', function (e) {
+    var el = e.target.closest('.rpl');
+    if (!el) return;
+    var r = el.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2.2;
+    var s = document.createElement('span');
+    s.className = 'ripple';
+    s.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d / 2) + 'px;top:' + (e.clientY - r.top - d / 2) + 'px';
+    el.appendChild(s);
+    setTimeout(function () { s.remove(); }, 600);
+  });
+
+  /* режимы */
+  var sub = document.getElementById('mode-sub');
+  function setMode(m) {
+    body.classList.remove('m2', 'm3'); body.classList.add(m);
+    document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.m === m)); });
+    sub.textContent = m === 'm2'
+      ? 'Material 2: цветная панель сверху, тени показывают высоту слоя, кнопки заглавными буквами.'
+      : 'Material You: цвета взяты из обоев, поверхности различаются тоном, а не тенью, углы крупные.';
+    paintSwatches();
+  }
+  document.querySelectorAll('.seg button').forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.m); }); });
+
+  function paintSwatches() {
+    var names = [['--primary', 'основной'], ['--pc', 'контейнер'], ['--sc', 'вторичный'], ['--tc', 'третичный'], ['--sc-high', 'поверхность']];
+    document.getElementById('swatches').innerHTML = 'Палитра из обоев: ' + names.map(function (n) { return '<span title="' + n[1] + '" style="background:var(' + n[0] + ')"></span>'; }).join('');
+  }
+  document.getElementById('walls').addEventListener('click', function (e) {
+    var b = e.target.closest('.wall'); if (!b) return;
+    var w = walls[+b.dataset.i];
+    body.style.setProperty('--h', w.h);
+    document.querySelectorAll('.wall').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    snack('Цвета взяты из обоев «' + w.name + '»', false);
+  });
+
+  /* снэкбар */
+  var snackEl = document.getElementById('snack'), snackT, undo;
+  function snack(text, withUndo, onUndo) {
+    document.getElementById('snack-text').textContent = text;
+    document.getElementById('snack-act').hidden = !withUndo;
+    undo = onUndo;
+    snackEl.classList.add('show');
+    clearTimeout(snackT); snackT = setTimeout(function () { snackEl.classList.remove('show'); }, 3500);
+  }
+  document.getElementById('snack-act').addEventListener('click', function () { if (undo) undo(); snackEl.classList.remove('show'); });
+
+  document.addEventListener('click', function (e) {
+    var like = e.target.closest('[data-like]');
+    if (like) {
+      var on = like.getAttribute('aria-pressed') !== 'true';
+      var setLike = function (v) { like.setAttribute('aria-pressed', String(v)); like.querySelector('use').setAttribute('href', v ? '#i-heart-f' : '#i-heart'); };
+      setLike(on);
+      if (on) snack('«' + like.dataset.like + '» в любимом', true, function () { setLike(false); });
+      return;
+    }
+    var play = e.target.closest('[data-play]');
+    if (play) { snack('Играет «' + play.dataset.play + '»', false); return; }
+    var chip = e.target.closest('.chip');
+    if (chip) { document.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); }); return; }
+    var sw = e.target.closest('.sw');
+    if (sw) { sw.setAttribute('aria-checked', String(sw.getAttribute('aria-checked') !== 'true')); return; }
+    var nav = e.target.closest('.nav-item, .bn');
+    if (nav) { nav.parentNode.querySelectorAll('[aria-current]').forEach(function (x) { x.removeAttribute('aria-current'); }); nav.setAttribute('aria-current', 'page'); }
+  });
+  document.getElementById('fab').addEventListener('click', function () { snack('Перемешиваем 128 треков', false); });
+
+  var vol = document.getElementById('vol');
+  vol.addEventListener('input', function () { vol.style.setProperty('--v', vol.value + '%'); document.getElementById('vol-v').textContent = vol.value + '%'; });
+  vol.style.setProperty('--v', '70%');
+
+  setMode('m2');
+})();
+</script>
+</body>
+</html>

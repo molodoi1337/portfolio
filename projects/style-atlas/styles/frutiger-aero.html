@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru" data-style="frutiger-aero">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Аква · Frutiger Aero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Frutiger Aero: рабочий стол конца 2000-х. Небо, трава и пузыри; стеклянное окно плеера, глянцевые кнопки, гаджеты и панель задач. */
+:root {
+  --sky: #1E8FE1;
+  --sky-lt: #8ED3FF;
+  --mist: #E9F8FF;
+  --grass: #57B947;
+  --deep: #0B4F8A;
+  --ink: #0E2A47;
+  --font: "Noto Sans", "Segoe UI", Tahoma, sans-serif;
+  --gloss: linear-gradient(180deg, #FDFEFF 0%, #E6F4FC 49%, #C9E6F8 50%, #E2F3FC 100%);
+  --guide-offset: 52px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; color: var(--ink); font: 400 14px/1.45 var(--font); overflow-x: hidden; background: linear-gradient(180deg, #0F6FC6 0%, var(--sky) 22%, var(--sky-lt) 58%, var(--mist) 100%); background-attachment: fixed; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid #FFB000; outline-offset: 2px; }
+
+.world { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.glare { position: absolute; right: -10vmax; top: -16vmax; width: 60vmax; height: 60vmax; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.95) 0, rgba(255,255,255,.5) 12%, rgba(255,255,255,0) 45%); }
+.rays { position: absolute; right: 5vw; top: -10vh; width: 120vmax; height: 120vmax; transform: translate(50%, -40%); background: repeating-conic-gradient(from 200deg, rgba(255,255,255,.16) 0 4deg, transparent 4deg 13deg); -webkit-mask: radial-gradient(circle, #000 0, transparent 60%); mask: radial-gradient(circle, #000 0, transparent 60%); animation: turn 120s linear infinite; }
+@keyframes turn { to { transform: translate(50%, -40%) rotate(1turn); } }
+.hills { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 42vh; }
+.bub { position: absolute; bottom: -80px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, rgba(255,255,255,.18) 26%, rgba(255,255,255,.04) 58%, rgba(255,255,255,.5) 96%); box-shadow: inset 0 0 8px rgba(255,255,255,.6), 0 0 6px rgba(255,255,255,.3); animation: rise var(--t) linear infinite; animation-delay: var(--d); }
+@keyframes rise { 0% { transform: translate(0, 0); } 50% { transform: translate(24px, -55vh); } 100% { transform: translate(-10px, -115vh); } }
+
+.desktop { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 26px; max-width: 1240px; margin: 0 auto; padding: 34px clamp(12px, 3vw, 32px) 90px; align-items: start; }
+
+/* стеклянное окно */
+.window { border-radius: 9px; padding: 0 7px 7px; background: linear-gradient(115deg, rgba(255,255,255,.55) 0%, rgba(190,226,248,.35) 30%, rgba(120,190,235,.3) 31%, rgba(170,215,245,.35) 100%); -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%); border: 1px solid rgba(255,255,255,.75); box-shadow: 0 0 0 1px rgba(0,40,80,.45), 0 16px 50px rgba(0,40,80,.45), inset 0 1px 0 rgba(255,255,255,.9); min-width: 0; }
+.titlebar { display: flex; align-items: center; gap: 8px; height: 34px; padding-left: 4px; }
+.app-ic { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #39B6F5 50%, #0B63B8); box-shadow: 0 0 6px rgba(255,255,255,.9); }
+.titlebar .t { font-size: 14px; color: #0B2238; text-shadow: 0 0 8px #fff, 0 0 3px #fff, 0 0 2px #fff; margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wb { display: flex; }
+.wb button { appearance: none; width: 30px; height: 20px; border: 1px solid rgba(0,30,60,.55); border-left-width: 0; background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.25) 50%, rgba(160,205,235,.35) 51%, rgba(255,255,255,.45)); font-size: 12px; line-height: 1; cursor: pointer; color: #fff; text-shadow: 0 0 2px #000; }
+.wb button:first-child { border-left-width: 1px; border-radius: 0 0 0 5px; }
+.wb .close { width: 46px; border-radius: 0 0 5px 0; background: linear-gradient(180deg, #F5A08A 0%, #E2583D 49%, #C9301A 50%, #E8774E 100%); }
+.wb button:hover { filter: brightness(1.15); }
+
+.frame { background: #fff; border: 1px solid rgba(0,40,80,.4); border-radius: 3px; overflow: hidden; }
+.tabs { display: flex; gap: 2px; padding: 6px 8px 0; background: linear-gradient(180deg, #20405F, #0B1C2E); }
+.tab { appearance: none; border: 1px solid rgba(255,255,255,.2); border-bottom: 0; border-radius: 5px 5px 0 0; padding: 7px 16px; color: #E8F6FF; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.04)); cursor: pointer; font-weight: 600; }
+.tab[aria-selected="true"] { background: linear-gradient(180deg, #7FD3FF, #2A9BE0 50%, #1580CC 51%, #3FB0F0); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+
+.body { display: grid; grid-template-columns: 190px minmax(0, 1fr); min-height: 380px; }
+.tree { background: linear-gradient(180deg, #F3FAFF, #DDEFFB); border-right: 1px solid #B9D7EC; padding: 10px 6px; font-size: 13px; }
+.tree h4 { margin: 8px 6px 4px; font-size: 12px; color: #2A5B86; }
+.tree button { appearance: none; display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: 1px solid transparent; background: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+.tree button:hover { border-color: #B8D6F0; background: linear-gradient(180deg, #F5FAFE, #E1EFFB); }
+.tree button[aria-current] { border-color: #7DA2CE; background: linear-gradient(180deg, #DCEBFC, #C1DCF9); }
+.tree i { width: 14px; height: 14px; border-radius: 3px; background: var(--g, linear-gradient(135deg, #8ED3FF, #1E8FE1)); flex: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
+
+.main { min-width: 0; display: grid; grid-template-rows: auto auto; }
+.viz { position: relative; height: 230px; overflow: hidden; background: radial-gradient(ellipse at 50% 120%, #2FB6F2, #0B4F8A 50%, #04203F); display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 22px; padding: 0 26px; color: #fff; }
+.viz::before { content: ""; position: absolute; inset: -50% -10%; background: repeating-conic-gradient(from 0deg at 50% 100%, rgba(255,255,255,.08) 0 3deg, transparent 3deg 11deg); animation: sway 9s ease-in-out infinite alternate; }
+@keyframes sway { to { transform: rotate(8deg); } }
+.vb { position: absolute; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9) 0 8%, rgba(255,255,255,.12) 30%, rgba(255,255,255,.4) 95%); animation: up var(--t) ease-in infinite; animation-delay: var(--d); bottom: -30px; }
+@keyframes up { to { transform: translateY(-300px); opacity: 0; } }
+.viz.paused .vb, .viz.paused::before { animation-play-state: paused; }
+.art { position: relative; width: 132px; aspect-ratio: 1; border-radius: 4px; background: linear-gradient(160deg, #BFF0FF, #3CB7F0 45%, #57B947 75%, #2E8B2A); box-shadow: 0 0 0 2px rgba(255,255,255,.8), 0 10px 26px rgba(0,0,0,.4); -webkit-box-reflect: below 6px linear-gradient(transparent 55%, rgba(255,255,255,.35)); }
+.art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,255,255,.65) 0 30%, transparent 31%); }
+.viz .meta { position: relative; min-width: 0; }
+.viz .meta small { color: #BFE6FF; }
+.viz .meta b { display: block; font-size: 24px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,.4); }
+.viz .meta span { color: #DDF2FF; }
+
+.albums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding: 16px; background: linear-gradient(180deg, #FFFFFF, #EEF7FD); }
+.alb { appearance: none; border: 1px solid transparent; background: none; padding: 6px; border-radius: 4px; cursor: pointer; text-align: left; }
+.alb:hover { border-color: #B8D6F0; background: linear-gradient(180deg, #F5FAFE, #E1EFFB); }
+.alb i { display: block; aspect-ratio: 1; max-width: 100%; border-radius: 3px; background: var(--g); position: relative; box-shadow: 0 3px 8px rgba(0,40,80,.3); }
+.alb i::after { content: ""; position: absolute; inset: 0; border-radius: 3px; background: linear-gradient(160deg, rgba(255,255,255,.6) 0 32%, transparent 33%); }
+.alb b { display: block; margin-top: 8px; font-weight: 600; font-size: 13px; }
+.alb small { color: #4C6E8E; }
+
+.transport { display: flex; align-items: center; gap: 14px; padding: 10px 16px; background: linear-gradient(180deg, #3B5875 0%, #14283D 50%, #0A1828 51%, #1B3550 100%); color: #E1F1FF; flex-wrap: wrap; }
+.orb { appearance: none; position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid rgba(255,255,255,.65); cursor: pointer; background: radial-gradient(circle at 50% 75%, #8BE3FF 0%, #2A9FE0 40%, #0A5EA8 70%, #063D74 100%); box-shadow: 0 0 14px rgba(80,190,255,.75), inset 0 -4px 10px rgba(0,0,0,.35); display: grid; place-items: center; color: #fff; }
+.orb::before { content: ""; position: absolute; left: 12%; right: 12%; top: 4%; height: 46%; border-radius: 50% 50% 45% 45%; background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.1)); }
+.orb svg { position: relative; width: 20px; height: 20px; fill: #fff; filter: drop-shadow(0 1px 1px rgba(0,0,0,.5)); }
+.cap { display: flex; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.4); }
+.cap button { appearance: none; border: 0; width: 38px; height: 26px; cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,.08) 50%, rgba(0,0,0,.1) 51%, rgba(255,255,255,.15)); color: #fff; }
+.cap button + button { border-left: 1px solid rgba(255,255,255,.3); }
+.seek { flex: 1 1 160px; height: 8px; border-radius: 4px; background: linear-gradient(180deg, #0A1828, #23405E); box-shadow: inset 0 1px 2px rgba(0,0,0,.6); position: relative; cursor: pointer; }
+.seek i { position: absolute; left: 0; top: 0; bottom: 0; width: 30%; border-radius: 4px; background: linear-gradient(180deg, #A6E8FF, #2EA8EC 50%, #1786D0 51%, #5BC6F5); box-shadow: 0 0 6px rgba(80,190,255,.8); }
+.time { font-variant-numeric: tabular-nums; font-size: 12px; }
+
+/* гаджеты */
+.gadgets { display: grid; gap: 18px; }
+.gadget { border-radius: 12px; padding: 14px; background: linear-gradient(160deg, rgba(255,255,255,.75), rgba(255,255,255,.25)); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 24px rgba(0,40,80,.3), inset 0 1px 0 #fff; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.gadget svg { display: block; width: 100%; height: auto; }
+.weather { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; }
+.sun-ic { width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFF6C2, #FFD43B 45%, #F59F00); box-shadow: 0 0 18px rgba(255,200,40,.9); }
+.weather b { font-size: 30px; font-weight: 400; line-height: 1; }
+.weather small { display: block; color: #24476A; }
+.gadget .gtitle { font-size: 12px; color: #24476A; margin: 0 0 6px; font-weight: 600; }
+.notes { margin: 0; padding-left: 18px; color: #12304E; }
+
+/* панель задач */
+.taskbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; height: calc(44px + env(safe-area-inset-bottom, 0px)); padding: 0 10px env(safe-area-inset-bottom, 0px); display: flex; align-items: center; gap: 8px; background: linear-gradient(180deg, rgba(60,110,160,.55), rgba(15,45,85,.8) 50%, rgba(5,25,55,.85)); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,.45); box-shadow: 0 -1px 0 rgba(0,0,0,.3); }
+.start { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.6); background: radial-gradient(circle at 50% 80%, #6FE0FF, #1C8EE0 45%, #0B4F8A 75%); box-shadow: 0 0 12px rgba(90,200,255,.8); display: grid; place-items: center; position: relative; flex: none; }
+.start::before { content: ""; position: absolute; left: 14%; right: 14%; top: 5%; height: 45%; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.05)); }
+.start svg { width: 18px; height: 18px; position: relative; }
+.task { width: 54px; height: 36px; border-radius: 4px; border: 1px solid rgba(255,255,255,.35); background: linear-gradient(180deg, rgba(255,255,255,.3), rgba(255,255,255,.06) 50%, rgba(255,255,255,0) 51%, rgba(255,255,255,.12)); display: grid; place-items: center; }
+.task.on { background: linear-gradient(180deg, rgba(140,210,255,.55), rgba(60,150,220,.35) 50%, rgba(30,110,190,.3) 51%, rgba(120,200,255,.45)); box-shadow: 0 0 10px rgba(120,210,255,.6); }
+.task i { width: 22px; height: 22px; border-radius: 5px; background: var(--g); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
+.tray { margin-left: auto; color: #fff; text-align: right; font-size: 12px; line-height: 1.25; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+
+@media (max-width: 1000px) { .desktop { grid-template-columns: minmax(0, 1fr); } .gadgets { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .body { grid-template-columns: minmax(0, 1fr); } .tree { display: none; } .albums { grid-template-columns: repeat(2, minmax(0, 1fr)); } .gadgets { grid-template-columns: minmax(0, 1fr); } .tab:nth-child(n+3) { display: none; } .viz { grid-template-columns: minmax(0, 1fr); justify-items: start; padding-block: 20px; height: auto; } .task:nth-child(n+4) { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bub, .rays, .vb, .viz::before { animation: none; } }
+</style>
+</head>
+<body>
+<div class="world" aria-hidden="true">
+  <i class="rays"></i><i class="glare"></i>
+  <svg class="hills" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="h1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A8E68A"/><stop offset=".4" stop-color="#57B947"/><stop offset="1" stop-color="#2E7D2A"/></linearGradient>
+      <linearGradient id="h2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6F2A6"/><stop offset=".35" stop-color="#6CCB55"/><stop offset="1" stop-color="#3A9433"/></linearGradient>
+    </defs>
+    <path d="M0 210 C 260 120 520 150 760 210 S 1220 300 1440 180 V400 H0Z" fill="url(#h1)"/>
+    <path d="M0 300 C 300 220 640 250 900 300 S 1300 330 1440 270 V400 H0Z" fill="url(#h2)"/>
+    <path d="M0 300 C 300 220 640 250 900 300 S 1300 330 1440 270" stroke="rgba(255,255,255,.6)" stroke-width="4" fill="none"/>
+  </svg>
+  <div id="bubbles"></div>
+</div>
+
+<main class="desktop">
+  <section class="window" aria-label="Окно медиаплеера «Аква»">
+    <div class="titlebar"><i class="app-ic"></i><span class="t">Аква — Медиаплеер</span><div class="wb"><button type="button" aria-label="Свернуть">–</button><button type="button" aria-label="Развернуть">□</button><button class="close" type="button" aria-label="Закрыть">✕</button></div></div>
+    <div class="frame">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" type="button" aria-selected="true">Воспроизведение</button>
+        <button class="tab" role="tab" type="button" aria-selected="false">Библиотека</button>
+        <button class="tab" role="tab" type="button" aria-selected="false">Запись</button>
+        <button class="tab" role="tab" type="button" aria-selected="false">Синхронизация</button>
+      </div>
+      <div class="body">
+        <nav class="tree" aria-label="Библиотека">
+          <h4>Плейлисты</h4>
+          <button type="button" aria-current="page"><i style="--g:linear-gradient(135deg,#BFF0FF,#1E8FE1)"></i>Утро у моря</button>
+          <button type="button"><i style="--g:linear-gradient(135deg,#C6F2A6,#3A9433)"></i>Дождь в лесу</button>
+          <button type="button"><i style="--g:linear-gradient(135deg,#FFE9A8,#F59F00)"></i>Летний полдень</button>
+          <h4>Музыка</h4>
+          <button type="button"><i></i>Исполнители</button>
+          <button type="button"><i></i>Альбомы</button>
+          <button type="button"><i></i>Жанры</button>
+        </nav>
+        <div class="main">
+          <div class="viz" id="viz">
+            <div class="art" role="img" aria-label="Обложка: море и зелёный берег"></div>
+            <div class="meta"><small>Сейчас играет</small><b id="tt">Утро у моря</b><span id="ta">Лагуна · «Прозрачная вода» · 2008</span></div>
+          </div>
+          <div class="albums" id="albums"></div>
+        </div>
+      </div>
+      <div class="transport">
+        <div class="cap"><button type="button" aria-label="Предыдущий" id="prev">⏮</button><button type="button" aria-label="Стоп" id="stop">■</button></div>
+        <button class="orb" type="button" id="play" aria-label="Пауза"><svg viewBox="0 0 24 24" id="pic"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+        <div class="cap"><button type="button" aria-label="Следующий" id="next">⏭</button><button type="button" aria-label="Перемешать">⤮</button></div>
+        <span class="time" id="cur">1:24</span><div class="seek" id="seek"><i id="fill"></i></div><span class="time">4:38</span>
+      </div>
+    </div>
+  </section>
+
+  <aside class="gadgets">
+    <div class="gadget"><p class="gtitle">Часы</p><svg viewBox="0 0 120 120" aria-label="Аналоговые часы">
+      <defs><radialGradient id="face" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D3ECFB"/></radialGradient><linearGradient id="rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FD8FA"/><stop offset="1" stop-color="#1E6FB0"/></linearGradient></defs>
+      <circle cx="60" cy="60" r="56" fill="url(#rim)"/><circle cx="60" cy="60" r="50" fill="url(#face)"/>
+      <g id="ticks" stroke="#2A5B86" stroke-width="2"></g>
+      <line id="hh" x1="60" y1="60" x2="60" y2="32" stroke="#0E2A47" stroke-width="4" stroke-linecap="round"/>
+      <line id="mh" x1="60" y1="60" x2="60" y2="20" stroke="#0E2A47" stroke-width="3" stroke-linecap="round"/>
+      <line id="sh" x1="60" y1="66" x2="60" y2="16" stroke="#E2583D" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="60" cy="60" r="4" fill="#0E2A47"/>
+      <ellipse cx="60" cy="34" rx="36" ry="18" fill="rgba(255,255,255,.45)"/>
+    </svg></div>
+    <div class="gadget weather"><i class="sun-ic"></i><div><b>+24°</b><small>Сочи · ясно</small><small>ветер 3 м/с</small></div></div>
+    <div class="gadget"><p class="gtitle">Заметки</p><ul class="notes"><li>Записать диск для мамы</li><li>Обновить плеер до версии 11</li><li>Скинуть фото с моря</li></ul></div>
+  </aside>
+</main>
+
+<footer class="taskbar" aria-label="Панель задач">
+  <span class="start" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C9 7 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-7-6-12z" fill="#fff"/></svg></span>
+  <span class="task on" aria-hidden="true"><i style="--g:radial-gradient(circle at 35% 30%,#fff,#39B6F5 50%,#0B63B8)"></i></span>
+  <span class="task" aria-hidden="true"><i style="--g:linear-gradient(135deg,#FFE9A8,#F59F00)"></i></span>
+  <span class="task" aria-hidden="true"><i style="--g:linear-gradient(135deg,#C6F2A6,#3A9433)"></i></span>
+  <span class="task" aria-hidden="true"><i style="--g:linear-gradient(135deg,#E0E7FF,#7B8FD6)"></i></span>
+  <span class="tray" id="tray">12:00<br>09.10.2026</span>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* пузыри */
+  var bh = '';
+  for (var i = 0; i < 16; i++) {
+    var s = 14 + Math.random() * 60;
+    bh += '<i class="bub" style="left:' + (Math.random() * 100) + '%;width:' + s + 'px;height:' + s + 'px;--t:' + (14 + Math.random() * 16) + 's;--d:-' + (Math.random() * 20) + 's"></i>';
+  }
+  document.getElementById('bubbles').innerHTML = bh;
+  var viz = document.getElementById('viz'), vh = '';
+  for (var j = 0; j < 12; j++) { var z = 8 + Math.random() * 22; vh += '<i class="vb" style="left:' + (Math.random() * 100) + '%;width:' + z + 'px;height:' + z + 'px;--t:' + (3 + Math.random() * 4) + 's;--d:-' + (Math.random() * 6) + 's"></i>'; }
+  viz.insertAdjacentHTML('afterbegin', vh);
+
+  var albums = [
+    ['Утро у моря', 'Лагуна', 'linear-gradient(160deg,#BFF0FF,#3CB7F0 45%,#57B947 75%,#2E8B2A)'],
+    ['Дождь в лесу', 'Капли', 'linear-gradient(160deg,#E2F8D0,#6CCB55 50%,#1F5E1C)'],
+    ['Летний полдень', 'Солнечный зайчик', 'linear-gradient(160deg,#FFF6C2,#FFD43B 45%,#5BC6F5)'],
+    ['Пузыри', 'Аквариум', 'linear-gradient(160deg,#E0F7FF,#7FD3FF 40%,#0B4F8A)']
+  ];
+  var ai = 0;
+  document.getElementById('albums').innerHTML = albums.map(function (a, k) { return '<button class="alb" type="button" data-k="' + k + '"><i style="--g:' + a[2] + '"></i><b>' + a[0] + '</b><small>' + a[1] + '</small></button>'; }).join('');
+  function pick(k) { ai = (k + albums.length) % albums.length; var a = albums[ai]; document.getElementById('tt').textContent = a[0]; document.getElementById('ta').textContent = a[1] + ' · 2008'; document.querySelector('.art').style.background = a[2]; t = 0; }
+  document.getElementById('albums').addEventListener('click', function (e) { var b = e.target.closest('.alb'); if (b) pick(+b.dataset.k); });
+  document.getElementById('prev').addEventListener('click', function () { pick(ai - 1); });
+  document.getElementById('next').addEventListener('click', function () { pick(ai + 1); });
+  document.querySelectorAll('.tab').forEach(function (tb) { tb.addEventListener('click', function () { document.querySelectorAll('.tab').forEach(function (x) { x.setAttribute('aria-selected', String(x === tb)); }); }); });
+  document.querySelectorAll('.tree button').forEach(function (b) { b.addEventListener('click', function () { document.querySelectorAll('.tree button').forEach(function (x) { x.removeAttribute('aria-current'); }); b.setAttribute('aria-current', 'page'); }); });
+
+  var playing = true, t = 84, total = 278;
+  var play = document.getElementById('play'), pic = document.getElementById('pic');
+  function setPlay(v) { playing = v; viz.classList.toggle('paused', !v); pic.innerHTML = v ? '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>'; play.setAttribute('aria-label', v ? 'Пауза' : 'Играть'); }
+  play.addEventListener('click', function () { setPlay(!playing); });
+  document.getElementById('stop').addEventListener('click', function () { setPlay(false); t = 0; draw(); });
+  document.getElementById('seek').addEventListener('click', function (e) { var r = this.getBoundingClientRect(); t = Math.round((e.clientX - r.left) / r.width * total); draw(); });
+  function draw() { document.getElementById('fill').style.width = (t / total * 100) + '%'; document.getElementById('cur').textContent = Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
+  setInterval(function () { if (playing) { t = (t + 1) % total; draw(); } }, 1000);
+  draw();
+  if (reduce) setPlay(false);
+
+  /* часы-гаджет и часы в трее */
+  var ticks = '';
+  for (var m = 0; m < 12; m++) { var a = m * Math.PI / 6; ticks += '<line x1="' + (60 + Math.sin(a) * 42) + '" y1="' + (60 - Math.cos(a) * 42) + '" x2="' + (60 + Math.sin(a) * 47) + '" y2="' + (60 - Math.cos(a) * 47) + '"/>'; }
+  document.getElementById('ticks').innerHTML = ticks;
+  function clock() {
+    var d = new Date(), h = d.getHours(), mi = d.getMinutes(), se = d.getSeconds();
+    document.getElementById('hh').setAttribute('transform', 'rotate(' + ((h % 12) * 30 + mi / 2) + ' 60 60)');
+    document.getElementById('mh').setAttribute('transform', 'rotate(' + (mi * 6) + ' 60 60)');
+    document.getElementById('sh').setAttribute('transform', 'rotate(' + (se * 6) + ' 60 60)');
+    document.getElementById('tray').innerHTML = h + ':' + String(mi).padStart(2, '0') + '<br>' + String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear();
+  }
+  clock(); setInterval(clock, 1000);
+})();
+</script>
+</body>
+</html>

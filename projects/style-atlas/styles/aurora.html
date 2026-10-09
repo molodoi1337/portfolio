@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru" data-style="aurora">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сияние · Aurora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600&display=swap">
+<style>
+/* Aurora: ночное небо, по которому медленно плывут размытые цветовые занавесы. Поверх — зерно и очень тихий интерфейс. */
+:root {
+  --night: #050816;
+  --teal: #00F5D4;
+  --violet: #7B2FF7;
+  --rose: #F72585;
+  --blue: #4361EE;
+  --text: #EEF1FF;
+  --muted: #A7AED0;
+  --font: "Geologica", "Segoe UI", system-ui, sans-serif;
+  --grad: linear-gradient(100deg, var(--teal), #4CC9F0 30%, var(--violet) 65%, var(--rose));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--night); color: var(--text); font: 300 16px/1.6 var(--font); overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+.sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: radial-gradient(ellipse at 50% 120%, #10173D, var(--night) 60%); }
+#stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+.a { position: absolute; border-radius: 50%; filter: blur(70px); mix-blend-mode: screen; opacity: .8; animation: sway 26s ease-in-out infinite alternate; will-change: transform; }
+.a1 { width: 80vw; height: 34vh; left: -14vw; top: 8vh; background: linear-gradient(90deg, transparent, var(--teal) 30%, #4CC9F0 60%, transparent); transform: rotate(-14deg); }
+.a2 { width: 64vw; height: 52vh; right: -16vw; top: -16vh; background: radial-gradient(closest-side, var(--violet), transparent); animation-duration: 32s; animation-delay: -8s; }
+.a3 { width: 46vw; height: 30vh; left: 22vw; top: 34vh; background: radial-gradient(closest-side, var(--rose), transparent); opacity: .55; animation-duration: 24s; animation-delay: -14s; }
+.a4 { width: 70vw; height: 22vh; left: 18vw; top: 18vh; background: linear-gradient(90deg, transparent, #00F5D4 25%, #7B2FF7 70%, transparent); transform: rotate(8deg); opacity: .55; animation-duration: 38s; }
+@keyframes sway { 0% { translate: 0 0; scale: 1; } 50% { translate: 5vw 3vh; scale: 1.12 .9; } 100% { translate: -4vw 6vh; scale: .95 1.1; } }
+.grain { position: absolute; inset: -50%; opacity: .16; mix-blend-mode: overlay; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+.wrap { max-width: 1140px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.top { display: flex; align-items: center; gap: 24px; padding-block: 24px; }
+.logo { font-weight: 500; font-size: 20px; letter-spacing: -.01em; margin-right: auto; display: flex; gap: 10px; align-items: center; }
+.logo i { width: 22px; height: 22px; border-radius: 50%; background: conic-gradient(var(--teal), var(--violet), var(--rose), var(--teal)); filter: blur(.5px); box-shadow: 0 0 18px rgba(0,245,212,.5); }
+.top a { color: var(--muted); text-decoration: none; font-size: 15px; } .top a:hover { color: var(--text); }
+
+.hero { padding-block: clamp(56px, 10vw, 120px) 56px; max-width: 860px; }
+.eyebrow { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin: 0 0 18px; }
+h1 { margin: 0; font-weight: 400; font-size: clamp(42px, 6.6vw, 88px); line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; }
+.grad { background: var(--grad); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shift 10s ease-in-out infinite alternate; }
+@keyframes shift { to { background-position: 100% 0; } }
+.lead { margin: 24px 0 0; max-width: 34em; font-size: 18px; color: var(--muted); }
+.cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.gb { position: relative; appearance: none; border: 0; cursor: pointer; padding: 15px 26px; border-radius: 999px; font-weight: 500; font-size: 16px; background: rgba(10,14,40,.5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.gb::before { content: ""; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: var(--grad); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.gb.solid { background: var(--grad); color: #07091C; box-shadow: 0 10px 40px -10px rgba(123,47,247,.7); }
+.gb.solid::before { display: none; }
+
+.card { position: relative; border-radius: 28px; background: rgba(10,14,40,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.card::before { content: ""; position: absolute; inset: 0; padding: 1px; border-radius: inherit; pointer-events: none; background: linear-gradient(140deg, rgba(0,245,212,.7), rgba(123,47,247,.35) 40%, rgba(247,37,133,.6)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+
+.breath { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; padding: clamp(24px, 4vw, 44px); margin-bottom: 40px; }
+.orb-wrap { width: clamp(160px, 22vw, 240px); aspect-ratio: 1; display: grid; place-items: center; }
+.orb { width: 60%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #E9FFFB, var(--teal) 30%, var(--violet) 70%, var(--rose)); box-shadow: 0 0 60px rgba(0,245,212,.45), 0 0 120px rgba(123,47,247,.35); transform: scale(var(--s, .7)); transition: transform var(--t, 1s) ease-in-out; }
+.breath h2 { margin: 0; font-weight: 400; font-size: clamp(26px, 3vw, 36px); letter-spacing: -.02em; }
+.breath p { margin: 8px 0 18px; color: var(--muted); max-width: 32em; }
+.phase { font-size: 28px; font-weight: 500; min-height: 1.3em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.phase small { font-size: 16px; }
+
+.sec-h { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.sec-h h2 { margin: 0; font-weight: 400; font-size: clamp(26px, 3vw, 36px); letter-spacing: -.02em; }
+.vol { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+input[type=range] { accent-color: var(--teal); width: 150px; }
+
+.sounds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.sound { padding: 22px; display: grid; gap: 14px; text-align: left; cursor: pointer; appearance: none; border: 0; color: var(--text); transition: transform .3s; }
+.sound:hover { transform: translateY(-4px); }
+.sound svg { width: 44px; height: 44px; fill: none; stroke: url(#ag); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.sound b { font-weight: 500; font-size: 18px; display: block; }
+.sound small { color: var(--muted); font-size: 14px; }
+.sound .st { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.sound .st i { width: 8px; height: 8px; border-radius: 50%; background: #3A4166; }
+.sound[aria-pressed="true"] { background: rgba(0,245,212,.08); }
+.sound[aria-pressed="true"] .st { color: var(--teal); }
+.sound[aria-pressed="true"] .st i { background: var(--teal); box-shadow: 0 0 10px var(--teal); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+
+.timer { margin-top: 40px; padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; }
+.timer b { font-weight: 500; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { appearance: none; border: 1px solid rgba(167,174,208,.3); background: transparent; border-radius: 999px; padding: 8px 16px; cursor: pointer; color: var(--muted); }
+.chip[aria-pressed="true"] { border-color: var(--teal); color: var(--text); background: rgba(0,245,212,.1); }
+.timer .out { color: var(--muted); margin-left: auto; }
+
+footer { padding: 64px 0 120px; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 900px) { .sounds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  .top a { display: none; }
+  .breath { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+  .timer .out { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .a, .grad, .orb { animation: none; transition: none; } }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><canvas id="stars"></canvas><i class="a a1"></i><i class="a a2"></i><i class="a a3"></i><i class="a a4"></i><i class="grain"></i></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00F5D4"/><stop offset=".55" stop-color="#7B2FF7"/><stop offset="1" stop-color="#F72585"/></linearGradient></defs></svg>
+
+<header class="wrap top">
+  <span class="logo"><i></i>Сияние</span>
+  <a href="#breath">Дыхание</a><a href="#sounds">Звуки</a>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Звуки для сна</p>
+    <h1>Засыпайте под <span class="grad">северное сияние</span></h1>
+    <p class="lead">Смешайте дождь, лес, океан и тихий гул космоса. Все звуки синтезируются прямо в браузере и не повторяются.</p>
+    <div class="cta">
+      <button class="gb solid" type="button" id="start">Начать вечер</button>
+      <button class="gb" type="button" onclick="document.getElementById('breath').scrollIntoView({behavior:'smooth'})">Подышать минуту</button>
+    </div>
+  </section>
+
+  <section class="breath card" id="breath">
+    <div class="orb-wrap"><i class="orb" id="orb"></i></div>
+    <div>
+      <h2>Дыхание 4 — 7 — 8</h2>
+      <p>Вдох на четыре счёта, задержка на семь, медленный выдох на восемь. Шар подскажет темп.</p>
+      <div class="phase" id="phase" aria-live="polite">Готовы?</div>
+      <div class="cta" style="margin-top:18px"><button class="gb" type="button" id="breathe">Начать дыхание</button></div>
+    </div>
+  </section>
+
+  <section id="sounds">
+    <div class="sec-h">
+      <h2>Звуки</h2>
+      <label class="vol" for="master">Громкость <input id="master" type="range" min="0" max="100" value="60"></label>
+    </div>
+    <div class="sounds">
+      <button class="sound card" type="button" data-s="rain" aria-pressed="false"><svg viewBox="0 0 48 48"><path d="M14 30a8 8 0 0 1 1-16 11 11 0 0 1 21 3 7 7 0 0 1-1 13z"/><path d="M17 36l-2 5M25 36l-2 5M33 36l-2 5"/></svg><span><b>Дождь по крыше</b><small>Ровный шум, мягкие капли</small></span><span class="st"><i></i><em>выключен</em></span></button>
+      <button class="sound card" type="button" data-s="forest" aria-pressed="false"><svg viewBox="0 0 48 48"><path d="M16 40V30M16 8l-9 14h6l-6 9h18l-6-9h6z"/><path d="M34 40v-8M34 14l-7 10h5l-5 8h14l-5-8h5z"/></svg><span><b>Северный лес</b><small>Ветер в соснах и птицы</small></span><span class="st"><i></i><em>выключен</em></span></button>
+      <button class="sound card" type="button" data-s="ocean" aria-pressed="false"><svg viewBox="0 0 48 48"><path d="M4 22c5 0 5-4 10-4s5 4 10 4 5-4 10-4 5 4 10 4"/><path d="M4 30c5 0 5-4 10-4s5 4 10 4 5-4 10-4 5 4 10 4"/><path d="M4 38c5 0 5-4 10-4s5 4 10 4 5-4 10-4 5 4 10 4"/></svg><span><b>Ночной океан</b><small>Волны каждые 12 секунд</small></span><span class="st"><i></i><em>выключен</em></span></button>
+      <button class="sound card" type="button" data-s="space" aria-pressed="false"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8"/><ellipse cx="24" cy="24" rx="20" ry="7" transform="rotate(-20 24 24)"/><path d="M8 8l1 1M40 10l1 1M38 40l1 1"/></svg><span><b>Тишина космоса</b><small>Низкий тёплый гул</small></span><span class="st"><i></i><em>выключен</em></span></button>
+    </div>
+  </section>
+
+  <section class="timer card">
+    <b>Выключить через</b>
+    <div class="chips" id="chips">
+      <button class="chip" type="button" data-m="15" aria-pressed="false">15 мин</button>
+      <button class="chip" type="button" data-m="30" aria-pressed="true">30 мин</button>
+      <button class="chip" type="button" data-m="60" aria-pressed="false">1 час</button>
+    </div>
+    <span class="out" id="out"></span>
+  </section>
+</main>
+<footer class="wrap">© 2026 Сияние. Спокойной ночи.</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  /* звёзды */
+  var cv = document.getElementById('stars'), cx = cv.getContext('2d');
+  function stars() {
+    var d = Math.min(devicePixelRatio || 1, 2); cv.width = innerWidth * d; cv.height = innerHeight * d;
+    cx.clearRect(0, 0, cv.width, cv.height);
+    for (var i = 0; i < 260; i++) {
+      var x = Math.random() * cv.width, y = Math.random() * cv.height * .85, r = Math.random() * 1.1 * d + .2;
+      cx.fillStyle = 'rgba(238,241,255,' + (Math.random() * .7 + .15) + ')';
+      cx.beginPath(); cx.arc(x, y, r, 0, 6.283); cx.fill();
+    }
+  }
+  stars(); addEventListener('resize', stars);
+
+  /* дыхание 4-7-8 */
+  var orb = document.getElementById('orb'), phase = document.getElementById('phase'), bt, running = false;
+  var steps = [['Вдох', 4, 1], ['Задержка', 7, 1], ['Выдох', 8, .62]];
+  function run(i) {
+    var s = steps[i % 3];
+    orb.style.setProperty('--t', s[1] + 's'); orb.style.setProperty('--s', s[2]);
+    var left = s[1];
+    phase.innerHTML = s[0] + ' <small>' + left + '</small>';
+    clearInterval(bt);
+    bt = setInterval(function () { left--; if (left > 0) phase.innerHTML = s[0] + ' <small>' + left + '</small>'; else { clearInterval(bt); run(i + 1); } }, 1000);
+  }
+  document.getElementById('breathe').addEventListener('click', function () {
+    running = !running;
+    this.textContent = running ? 'Остановить' : 'Начать дыхание';
+    if (running) run(0); else { clearInterval(bt); orb.style.setProperty('--s', .7); phase.textContent = 'Готовы?'; }
+  });
+
+  /* звук */
+  var ctx, master, nodes = {};
+  function ac() {
+    if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); master = ctx.createGain(); master.gain.value = .6; master.connect(ctx.destination); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function noiseBuf(kind) {
+    var len = ctx.sampleRate * 3, b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0), last = 0, b0 = 0, b1 = 0, b2 = 0;
+    for (var i = 0; i < len; i++) {
+      var w = Math.random() * 2 - 1;
+      if (kind === 'brown') { last = (last + .02 * w) / 1.02; d[i] = last * 3.5; }
+      else if (kind === 'pink') { b0 = .99765 * b0 + w * .099; b1 = .963 * b1 + w * .2965; b2 = .57 * b2 + w * 1.0526; d[i] = (b0 + b1 + b2 + w * .1848) * .2; }
+      else d[i] = w * .5;
+    }
+    return b;
+  }
+  function loop(kind) { var s = ctx.createBufferSource(); s.buffer = noiseBuf(kind); s.loop = true; s.start(); return s; }
+  function lfo(freq, depth, target) { var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = freq; g.gain.value = depth; o.connect(g); g.connect(target); o.start(); return o; }
+  var make = {
+    rain: function (out) { var s = loop('white'), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 500; lp.type = 'lowpass'; lp.frequency.value = 7000; s.connect(hp); hp.connect(lp); lp.connect(out); out.gain.value = .22; return [s]; },
+    forest: function (out) {
+      var s = loop('pink'), bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 700; bp.Q.value = .4; s.connect(bp); bp.connect(out); out.gain.value = .5;
+      var l = lfo(.07, 400, bp.frequency);
+      var birds = setInterval(function () {
+        var t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain(), f = 2400 + Math.random() * 1600;
+        o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 1.4, t + .08); o.frequency.exponentialRampToValueAtTime(f * .9, t + .16);
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .02); g.gain.exponentialRampToValueAtTime(.0005, t + .2);
+        o.connect(g); g.connect(out); o.start(t); o.stop(t + .25);
+      }, 2600);
+      return [s, l, { stop: function () { clearInterval(birds); } }];
+    },
+    ocean: function (out) { var s = loop('brown'), lp = ctx.createBiquadFilter(), amp = ctx.createGain(); lp.type = 'lowpass'; lp.frequency.value = 800; amp.gain.value = .35; s.connect(lp); lp.connect(amp); amp.connect(out); out.gain.value = .9; var l = lfo(1 / 12, .3, amp.gain); return [s, l]; },
+    space: function (out) {
+      var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 600; lp.connect(out); out.gain.value = .16;
+      var os = [55, 82.4, 110.6, 164.8].map(function (f, i) { var o = ctx.createOscillator(); o.type = i === 3 ? 'triangle' : 'sine'; o.frequency.value = f; var g = ctx.createGain(); g.gain.value = i === 3 ? .15 : .5; o.connect(g); g.connect(lp); o.start(); return o; });
+      return os.concat([lfo(.05, 300, lp.frequency)]);
+    }
+  };
+  function toggle(btn) {
+    if (!ac()) return;
+    var k = btn.dataset.s, on = btn.getAttribute('aria-pressed') !== 'true';
+    btn.setAttribute('aria-pressed', String(on)); btn.querySelector('em').textContent = on ? 'звучит' : 'выключен';
+    if (on) { var out = ctx.createGain(); out.connect(master); nodes[k] = { out: out, src: make[k](out) }; }
+    else if (nodes[k]) { var n = nodes[k]; n.out.gain.setTargetAtTime(0, ctx.currentTime, .3); setTimeout(function () { n.src.forEach(function (x) { try { x.stop(); } catch (e) {} }); n.out.disconnect(); }, 1200); delete nodes[k]; }
+  }
+  document.querySelectorAll('.sound').forEach(function (b) { b.addEventListener('click', function () { toggle(b); }); });
+  document.getElementById('start').addEventListener('click', function () {
+    ['rain', 'space'].forEach(function (k) { var b = document.querySelector('[data-s="' + k + '"]'); if (b.getAttribute('aria-pressed') !== 'true') toggle(b); });
+    document.getElementById('sounds').scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('master').addEventListener('input', function () { if (master) master.gain.setTargetAtTime(this.value / 100, ctx.currentTime, .1); });
+
+  /* таймер */
+  function out(min) { var d = new Date(Date.now() + min * 60000); document.getElementById('out').textContent = 'Тишина наступит в ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  document.getElementById('chips').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    this.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    out(+b.dataset.m);
+  });
+  out(30);
+})();
+</script>
+</body>
+</html>

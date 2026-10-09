@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru" data-style="flat">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Нотка · Флэт и Флэт 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap">
+<style>
+/* Флэт / Флэт 2.0: одна вёрстка, две системы. Класс .f2 на body добавляет тени, градиенты и скругления. */
+:root {
+  --midnight: #2C3E50; --asphalt: #34495E;
+  --red: #E74C3C; --red-d: #C0392B;
+  --blue: #3498DB; --blue-d: #2980B9;
+  --green: #2ECC71; --green-d: #27AE60;
+  --yellow: #F1C40F; --orange: #F39C12;
+  --purple: #9B59B6; --purple-d: #8E44AD;
+  --clouds: #ECF0F1; --silver: #BDC3C7; --white: #FFFFFF;
+  --font: "Montserrat", "Segoe UI", Arial, sans-serif;
+  --r: 3px; --r-lg: 4px;
+  --sh-card: none; --sh-btn: none; --sh-bar: none;
+  color-scheme: light;
+}
+body.f2 {
+  --r: 12px; --r-lg: 20px;
+  --sh-card: 0 1px 2px rgba(44,62,80,.08), 0 14px 30px -14px rgba(44,62,80,.35);
+  --sh-btn: 0 8px 18px -8px rgba(0,0,0,.45);
+  --sh-bar: 0 4px 18px rgba(0,0,0,.18);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--clouds); color: var(--midnight); font: 500 16px/1.55 var(--font); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+* { transition: border-radius .35s ease, box-shadow .35s ease, background-color .35s ease; }
+
+/* шапка */
+.top { background: var(--midnight); color: var(--white); position: sticky; top: 0; z-index: 10; box-shadow: var(--sh-bar); }
+.top .wrap { display: flex; align-items: center; gap: 24px; min-height: 68px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; text-decoration: none; }
+.logo svg { width: 30px; height: 30px; }
+.links { display: flex; gap: 22px; font-weight: 600; font-size: 14px; margin-right: auto; }
+.links a { text-decoration: none; opacity: .8; } .links a:hover { opacity: 1; }
+.switch { display: flex; background: var(--asphalt); border-radius: var(--r); padding: 3px; }
+.switch button { border: 0; background: transparent; color: var(--white); font: 700 13px var(--font); padding: 9px 14px; border-radius: calc(var(--r) - 1px); cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--yellow); color: var(--midnight); }
+body.f2 .switch button[aria-pressed="true"] { background: linear-gradient(180deg, #F7D748, #F1C40F); box-shadow: 0 3px 8px rgba(0,0,0,.25); }
+.ribbon { background: var(--asphalt); color: var(--clouds); font-size: 13px; }
+.ribbon .wrap { padding-block: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+.ribbon b { color: var(--yellow); }
+
+/* герой */
+.hero { background: var(--blue); color: var(--white); overflow: hidden; }
+body.f2 .hero { background: radial-gradient(ellipse at 80% 10%, rgba(255,255,255,.22), transparent 55%), linear-gradient(160deg, #45A8E8, #2C8BCB); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 64px 0; }
+.hero h1 { margin: 0; font-weight: 800; font-size: clamp(36px, 5.2vw, 64px); line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+.hero p { margin: 20px 0 0; font-size: 18px; max-width: 30em; opacity: .92; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 64px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; border: 0; border-radius: var(--r); padding: 15px 24px; font: 700 15px var(--font); text-decoration: none; cursor: pointer; box-shadow: var(--sh-btn); }
+.btn:active { transform: translateY(1px); }
+.btn-y { background: var(--yellow); color: var(--midnight); }
+.btn-y:hover { background: var(--orange); }
+body.f2 .btn-y { background: linear-gradient(180deg, #F7D748, #F1C40F 60%, #EDB80B); }
+.btn-ghost { background: var(--blue-d); color: var(--white); }
+body.f2 .btn-ghost { background: rgba(255,255,255,.16); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55); }
+.scene { align-self: end; }
+.scene svg { display: block; width: 100%; height: auto; }
+body.f2 .scene .lift { filter: drop-shadow(0 10px 12px rgba(20,40,70,.35)); }
+.g-sun { fill: var(--yellow); } body.f2 .g-sun { fill: url(#gSun); }
+.g-guitar { fill: var(--red); } body.f2 .g-guitar { fill: url(#gGuitar); }
+.g-drum { fill: var(--purple); } body.f2 .g-drum { fill: url(#gDrum); }
+.g-hill { fill: var(--green); } body.f2 .g-hill { fill: url(#gHill); }
+
+/* курсы */
+section.block { padding-block: 72px; }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 28px; }
+.head h2 { margin: 0; font-weight: 800; font-size: clamp(26px, 3vw, 36px); }
+.head p { margin: 0; color: #7F8C8D; }
+.courses { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; }
+.course { background: var(--white); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-card); display: flex; flex-direction: column; }
+.course .ic { height: 140px; display: grid; place-items: center; }
+.course .ic svg { width: 84px; height: 84px; }
+body.f2 .course .ic svg { filter: drop-shadow(0 8px 8px rgba(0,0,0,.22)); }
+.c-red .ic { background: var(--red); } .c-blue .ic { background: var(--blue); } .c-green .ic { background: var(--green); } .c-purple .ic { background: var(--purple); }
+body.f2 .c-red .ic { background: linear-gradient(150deg, #F0645A, #D63C2D); }
+body.f2 .c-blue .ic { background: linear-gradient(150deg, #52ACE6, #2B86C5); }
+body.f2 .c-green .ic { background: linear-gradient(150deg, #48D688, #22B463); }
+body.f2 .c-purple .ic { background: linear-gradient(150deg, #AE70C6, #8A47A9); }
+.course .body { padding: 20px; display: grid; gap: 10px; flex: 1; }
+.course h3 { margin: 0; font-size: 20px; font-weight: 800; }
+.course .meta { font-size: 13px; color: #7F8C8D; }
+.progress { height: 8px; background: var(--clouds); border-radius: var(--r); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: var(--r); }
+body.f2 .progress { box-shadow: inset 0 1px 2px rgba(0,0,0,.12); }
+.c-red .progress i { background: var(--red); } .c-blue .progress i { background: var(--blue); } .c-green .progress i { background: var(--green); } .c-purple .progress i { background: var(--purple); }
+.course .btn { justify-self: start; padding: 11px 18px; font-size: 14px; color: var(--white); }
+.c-red .btn { background: var(--red); } .c-blue .btn { background: var(--blue); } .c-green .btn { background: var(--green); } .c-purple .btn { background: var(--purple); }
+.c-red .btn:hover { background: var(--red-d); } .c-blue .btn:hover { background: var(--blue-d); } .c-green .btn:hover { background: var(--green-d); } .c-purple .btn:hover { background: var(--purple-d); }
+
+/* статистика */
+.stats { background: var(--midnight); color: var(--white); }
+body.f2 .stats { background: linear-gradient(180deg, #34495E, #2C3E50); }
+.stats .wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding-block: 56px; }
+.stat { display: flex; gap: 16px; align-items: center; }
+.stat .dot { flex: none; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: var(--midnight); }
+body.f2 .stat .dot { box-shadow: 0 8px 18px -6px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.35); }
+.stat b { display: block; font-size: 30px; font-weight: 800; line-height: 1; }
+.stat span { font-size: 14px; color: var(--silver); }
+
+/* сравнение */
+.compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.cmp { background: var(--white); border-radius: var(--r-lg); padding: 24px; box-shadow: var(--sh-card); }
+.cmp h3 { margin: 0 0 10px; font-weight: 800; }
+.cmp ul { margin: 0; padding-left: 20px; color: #5D6D7E; }
+.cmp.active { outline: 3px solid var(--yellow); }
+
+footer { background: var(--midnight); color: var(--silver); font-size: 14px; }
+footer .wrap { padding-block: 32px 96px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; }
+
+@media (max-width: 820px) {
+  .links { display: none; }
+  .top .wrap { justify-content: space-between; }
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); padding-top: 40px; }
+  .ctas { margin-bottom: 8px; }
+  .stats .wrap, .compare { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="6" fill="#E74C3C"/><circle cx="12" cy="20" r="5" fill="#fff"/><rect x="15" y="6" width="3" height="14" fill="#fff"/><rect x="15" y="6" width="8" height="3" fill="#fff"/></svg>
+      Нотка
+    </a>
+    <nav class="links" aria-label="Разделы"><a href="#courses">Курсы</a><a href="#stats">Ученики</a><a href="#compare">Флэт и 2.0</a></nav>
+    <div class="switch" role="group" aria-label="Версия стиля">
+      <button type="button" id="m1" aria-pressed="true">Флэт</button>
+      <button type="button" id="m2" aria-pressed="false">Флэт 2.0</button>
+    </div>
+  </div>
+</header>
+<div class="ribbon"><div class="wrap"><span>Сейчас:</span><b id="mode-name">Флэт</b><span id="mode-note">чистые заливки, ни одной тени, минимум скруглений.</span></div></div>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <h1>Учись играть на чём угодно за 15 минут в день</h1>
+      <p>Гитара, фортепиано, барабаны и укулеле. Короткие уроки, приложение слушает, как вы играете, и подсказывает, где ошибка.</p>
+      <div class="ctas">
+        <a class="btn btn-y" href="#courses">Начать бесплатно</a>
+        <a class="btn btn-ghost" href="#compare">Чем отличается 2.0</a>
+      </div>
+    </div>
+    <div class="scene">
+      <svg viewBox="0 0 520 380" aria-label="Иллюстрация: гитара, барабан и клавиши под солнцем">
+        <defs>
+          <linearGradient id="gSun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F9DD5B"/><stop offset="1" stop-color="#F0B90B"/></linearGradient>
+          <linearGradient id="gGuitar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F26B5E"/><stop offset="1" stop-color="#C83A2B"/></linearGradient>
+          <linearGradient id="gDrum" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B579CC"/><stop offset="1" stop-color="#8640A6"/></linearGradient>
+          <linearGradient id="gHill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4BDA8A"/><stop offset="1" stop-color="#22A85C"/></linearGradient>
+        </defs>
+        <circle class="g-sun" cx="420" cy="80" r="56"/>
+        <path class="g-hill" d="M0 300 Q 130 220 260 280 T 520 260 V380 H0Z"/>
+        <g class="lift">
+          <rect x="230" y="70" width="18" height="170" rx="3" fill="#34495E" transform="rotate(24 239 155)"/>
+          <rect x="262" y="40" width="34" height="46" rx="6" fill="#2C3E50" transform="rotate(24 279 63)"/>
+          <circle class="g-guitar" cx="190" cy="250" r="58"/>
+          <circle class="g-guitar" cx="222" cy="194" r="42"/>
+          <circle cx="200" cy="232" r="17" fill="#2C3E50"/>
+          <rect x="166" y="270" width="44" height="9" rx="2" fill="#2C3E50" transform="rotate(24 188 274)"/>
+        </g>
+        <g class="lift">
+          <ellipse class="g-drum" cx="400" cy="300" rx="70" ry="22"/>
+          <rect class="g-drum" x="330" y="236" width="140" height="64"/>
+          <ellipse cx="400" cy="236" rx="70" ry="22" fill="#ECF0F1"/>
+          <path d="M340 250 L370 296 L400 250 L430 296 L460 250" stroke="#F1C40F" stroke-width="5" fill="none"/>
+          <rect x="420" y="160" width="7" height="80" rx="3" fill="#E67E22" transform="rotate(-30 423 200)"/>
+        </g>
+        <g class="lift">
+          <rect x="40" y="318" width="160" height="50" rx="4" fill="#fff"/>
+          <rect x="58" y="318" width="12" height="30" fill="#2C3E50"/><rect x="88" y="318" width="12" height="30" fill="#2C3E50"/>
+          <rect x="138" y="318" width="12" height="30" fill="#2C3E50"/><rect x="168" y="318" width="12" height="30" fill="#2C3E50"/>
+        </g>
+        <g fill="#fff">
+          <circle cx="90" cy="120" r="10"/><rect x="97" y="74" width="4" height="46"/><rect x="97" y="74" width="26" height="6"/><circle cx="116" cy="114" r="10"/><rect x="123" y="74" width="4" height="40"/>
+          <circle cx="330" cy="150" r="9"/><rect x="336" y="112" width="4" height="38"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="courses">
+  <div class="wrap">
+    <div class="head"><h2>Ваши курсы</h2><p>Продолжите с того места, где остановились</p></div>
+    <div class="courses">
+      <article class="course c-red">
+        <div class="ic"><svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="34" cy="52" r="20" fill="#fff"/><circle cx="46" cy="36" r="14" fill="#fff"/><circle cx="36" cy="50" r="6" fill="#E74C3C"/><rect x="50" y="8" width="7" height="34" rx="2" fill="#2C3E50" transform="rotate(35 53 25)"/></svg></div>
+        <div class="body"><h3>Гитара</h3><div class="meta">Урок 12 из 40 · Аккорды до мажор</div><div class="progress"><i style="width:30%"></i></div><a class="btn" href="#courses">Продолжить</a></div>
+      </article>
+      <article class="course c-blue">
+        <div class="ic"><svg viewBox="0 0 84 84" aria-hidden="true"><rect x="8" y="22" width="68" height="40" rx="3" fill="#fff"/><rect x="18" y="22" width="7" height="24" fill="#2C3E50"/><rect x="31" y="22" width="7" height="24" fill="#2C3E50"/><rect x="50" y="22" width="7" height="24" fill="#2C3E50"/><rect x="63" y="22" width="7" height="24" fill="#2C3E50"/></svg></div>
+        <div class="body"><h3>Фортепиано</h3><div class="meta">Урок 5 из 36 · Гамма соль мажор</div><div class="progress"><i style="width:14%"></i></div><a class="btn" href="#courses">Продолжить</a></div>
+      </article>
+      <article class="course c-green">
+        <div class="ic"><svg viewBox="0 0 84 84" aria-hidden="true"><ellipse cx="42" cy="60" rx="28" ry="9" fill="#27AE60"/><rect x="14" y="34" width="56" height="26" fill="#fff"/><ellipse cx="42" cy="34" rx="28" ry="9" fill="#ECF0F1"/><rect x="52" y="8" width="5" height="30" rx="2" fill="#F1C40F" transform="rotate(30 54 23)"/></svg></div>
+        <div class="body"><h3>Барабаны</h3><div class="meta">Урок 21 из 30 · Сбивки</div><div class="progress"><i style="width:70%"></i></div><a class="btn" href="#courses">Продолжить</a></div>
+      </article>
+      <article class="course c-purple">
+        <div class="ic"><svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="38" cy="54" r="18" fill="#fff"/><circle cx="38" cy="54" r="5" fill="#9B59B6"/><rect x="44" y="12" width="7" height="34" rx="2" fill="#fff" transform="rotate(20 47 29)"/></svg></div>
+        <div class="body"><h3>Укулеле</h3><div class="meta">Урок 3 из 18 · Первые бои</div><div class="progress"><i style="width:17%"></i></div><a class="btn" href="#courses">Продолжить</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="stats" id="stats">
+  <div class="wrap">
+    <div class="stat"><span class="dot" style="background:#F1C40F">♪</span><div><b>1,2 млн</b><span>учеников играют каждый день</span></div></div>
+    <div class="stat"><span class="dot" style="background:#2ECC71">✓</span><div><b>94%</b><span>доходят до первой песни</span></div></div>
+    <div class="stat"><span class="dot" style="background:#E74C3C">★</span><div><b>4,8</b><span>средняя оценка в магазинах</span></div></div>
+  </div>
+</section>
+
+<section class="block" id="compare">
+  <div class="wrap">
+    <div class="head"><h2>Флэт или Флэт 2.0?</h2><p>Переключатель в шапке меняет всю страницу</p></div>
+    <div class="compare">
+      <div class="cmp" id="c1"><h3>Флэт (2012–2013)</h3><ul><li>Сплошные заливки без перехода цвета</li><li>Ни одной тени: глубины нет вообще</li><li>Почти прямые углы</li><li>Иконки из кругов и прямоугольников</li></ul></div>
+      <div class="cmp" id="c2"><h3>Флэт 2.0 (с 2014)</h3><ul><li>Те же плоские формы и яркие цвета</li><li>Мягкие тени отделяют слои</li><li>Лёгкие градиенты и блики</li><li>Крупные скругления, подсказки «на что нажать»</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>© 2026 Нотка</span><span>Уроки для всех возрастов</span></div></footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var b1 = document.getElementById('m1'), b2 = document.getElementById('m2');
+  var name = document.getElementById('mode-name'), note = document.getElementById('mode-note');
+  function set(f2) {
+    document.body.classList.toggle('f2', f2);
+    b1.setAttribute('aria-pressed', String(!f2));
+    b2.setAttribute('aria-pressed', String(f2));
+    name.textContent = f2 ? 'Флэт 2.0' : 'Флэт';
+    note.textContent = f2 ? 'те же формы, но с мягкими тенями, лёгкими градиентами и скруглениями.' : 'чистые заливки, ни одной тени, минимум скруглений.';
+    document.getElementById('c1').classList.toggle('active', !f2);
+    document.getElementById('c2').classList.toggle('active', f2);
+  }
+  b1.addEventListener('click', function () { set(false); });
+  b2.addEventListener('click', function () { set(true); });
+  set(false);
+})();
+</script>
+</body>
+</html>

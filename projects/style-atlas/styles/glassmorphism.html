@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru" data-style="glassmorphism">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Стекло · Глассморфизм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Глассморфизм: яркие движущиеся пятна снизу, стеклянные виджеты сверху. Блик на стекле идёт за курсором. */
+:root {
+  --night: #1C1A3A;
+  --rose: #FF6CAB;
+  --violet: #7366FF;
+  --mint: #29D3C4;
+  --peach: #FFB86B;
+  --white: #FFFFFF;
+  --font: "Manrope", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; color: var(--white); font: 500 15px/1.5 var(--font); background: radial-gradient(ellipse at 20% 0%, #3A2A86, transparent 60%), linear-gradient(160deg, #2B1F6E, var(--night) 60%, #12102A); background-attachment: fixed; overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+
+.blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+.blob { position: absolute; border-radius: 50%; filter: blur(2px); animation: drift 22s ease-in-out infinite alternate; transform: translate(var(--px, 0), var(--py, 0)); }
+.b1 { width: 46vmax; height: 46vmax; left: -10vmax; top: -12vmax; background: radial-gradient(circle at 35% 35%, #FFB3D1, var(--rose) 55%, #D93C86); }
+.b2 { width: 38vmax; height: 38vmax; right: -8vmax; top: 18vh; background: radial-gradient(circle at 35% 35%, #9EF7EE, var(--mint) 55%, #149E95); animation-duration: 28s; animation-delay: -6s; }
+.b3 { width: 30vmax; height: 30vmax; left: 30vw; bottom: -14vmax; background: radial-gradient(circle at 35% 35%, #B3ABFF, var(--violet) 60%, #4A3BD6); animation-duration: 25s; animation-delay: -12s; }
+.b4 { width: 16vmax; height: 16vmax; left: 52vw; top: 8vh; background: radial-gradient(circle at 35% 35%, #FFE0B8, var(--peach) 60%, #F08A3A); animation-duration: 18s; }
+@keyframes drift { 0% { translate: 0 0; } 50% { translate: 6vw 4vh; } 100% { translate: -4vw 8vh; } }
+
+.glass {
+  position: relative; isolation: isolate;
+  background: linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,.07));
+  border: 1px solid rgba(255,255,255,.36);
+  -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+  box-shadow: 0 24px 60px -24px rgba(12,6,48,.55), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(255,255,255,.08);
+  border-radius: 26px; overflow: hidden;
+}
+.glass::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(420px circle at var(--mx, 20%) var(--my, 0%), rgba(255,255,255,.22), transparent 45%); }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.nav { margin-top: 20px; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 20px; border-radius: 999px; }
+.logo { font-weight: 800; font-size: 18px; letter-spacing: -.02em; margin-right: auto; display: flex; align-items: center; gap: 10px; }
+.logo i { width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.3)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.6); }
+.nav a { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 999px; }
+.nav a:hover, .nav a[aria-current] { background: rgba(255,255,255,.16); color: var(--white); }
+.me { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--peach), var(--rose)); border: 2px solid rgba(255,255,255,.7); }
+
+.hero { padding-block: clamp(40px, 7vw, 80px) 28px; }
+.hero h1 { margin: 0; font-weight: 800; font-size: clamp(40px, 6.4vw, 84px); line-height: .98; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 4px 30px rgba(20,10,60,.35); }
+.hero p { margin: 16px 0 0; max-width: 32em; font-size: 17px; color: rgba(255,255,255,.85); }
+
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; padding-bottom: 120px; }
+.now { grid-column: span 7; padding: 24px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; align-items: center; }
+.art { aspect-ratio: 1; max-width: 100%; border-radius: 18px; position: relative; overflow: hidden; background: linear-gradient(140deg, #FF9ACB, #7366FF); box-shadow: 0 16px 40px -12px rgba(30,10,80,.6); }
+.art::before { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; right: -18%; top: -14%; background: radial-gradient(circle at 40% 40%, #FFE0B8, #FFB86B); }
+.art::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: 14%; height: 34%; background: repeating-linear-gradient(180deg, rgba(255,255,255,.55) 0 3px, transparent 3px 10px); transform: rotate(-8deg); }
+.label { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.now h2 { margin: 6px 0 2px; font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
+.now .artist { color: rgba(255,255,255,.75); }
+.bar { margin-top: 18px; height: 6px; border-radius: 99px; background: rgba(255,255,255,.18); box-shadow: inset 0 1px 2px rgba(0,0,0,.15); overflow: hidden; cursor: pointer; }
+.bar i { display: block; height: 100%; width: 42%; border-radius: inherit; background: linear-gradient(90deg, rgba(255,255,255,.7), #fff); box-shadow: 0 0 12px rgba(255,255,255,.7); }
+.times { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.7); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.ctrl { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.cbtn { appearance: none; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.14); width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: background .2s, transform .15s; }
+.cbtn:hover { background: rgba(255,255,255,.26); }
+.cbtn:active { transform: scale(.94); }
+.cbtn.big { width: 62px; height: 62px; background: rgba(255,255,255,.88); color: #2B1F6E; border-color: #fff; box-shadow: 0 10px 30px -8px rgba(255,255,255,.6); }
+.cbtn svg { width: 20px; height: 20px; fill: currentColor; }
+.cbtn.big svg { width: 24px; height: 24px; }
+
+.queue { grid-column: span 5; padding: 22px; }
+.queue h3, .eq h3, .lyrics h3, .stat h3 { margin: 0 0 12px; font-size: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+.queue ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.queue li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px; border-radius: 14px; cursor: pointer; transition: background .2s; }
+.queue li:hover { background: rgba(255,255,255,.12); }
+.queue li i { width: 44px; height: 44px; border-radius: 10px; background: var(--g); }
+.queue li b { display: block; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.queue li small { color: rgba(255,255,255,.7); }
+.queue li span.d { font-size: 13px; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+
+.eq { grid-column: span 4; padding: 22px; }
+.bars { height: 120px; display: flex; align-items: flex-end; gap: 6px; }
+.bars i { flex: 1; height: 100%; border-radius: 6px; background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.25)); transform-origin: bottom; transform: scaleY(var(--s, .4)); animation: eq var(--d, 1s) ease-in-out infinite alternate; }
+body.paused .bars i { animation-play-state: paused; }
+@keyframes eq { from { transform: scaleY(.15); } to { transform: scaleY(var(--s, .9)); } }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.pill { appearance: none; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 13px; cursor: pointer; }
+.pill[aria-pressed="true"] { background: rgba(255,255,255,.88); color: #2B1F6E; }
+
+.lyrics { grid-column: span 5; padding: 22px; }
+.lyrics p { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.35; color: rgba(255,255,255,.42); transition: color .4s, transform .4s; transform-origin: left; }
+.lyrics p.on { color: var(--white); transform: scale(1.03); }
+.lyrics .lines { display: grid; gap: 8px; }
+
+.stat { grid-column: span 3; padding: 22px; display: grid; align-content: space-between; gap: 10px; }
+.stat .num { font-size: 40px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.stat p { margin: 0; color: rgba(255,255,255,.75); font-size: 13px; }
+.ring { width: 64px; height: 64px; border-radius: 50%; background: conic-gradient(#fff 0 68%, rgba(255,255,255,.18) 0); -webkit-mask: radial-gradient(circle closest-side, transparent 0 74%, #000 75%); mask: radial-gradient(circle closest-side, transparent 0 74%, #000 75%); }
+
+@media (max-width: 980px) {
+  .now, .queue, .eq, .lyrics, .stat { grid-column: span 12; }
+  .stat { grid-column: span 6; }
+}
+@media (max-width: 620px) {
+  .nav a { display: none; }
+  .now { grid-template-columns: minmax(0, 1fr); }
+  .art { width: min(240px, 100%); }
+  .stat { grid-column: span 12; }
+}
+@media (prefers-reduced-motion: reduce) { .blob, .bars i { animation: none; } }
+</style>
+</head>
+<body>
+<div class="blobs" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
+
+<div class="wrap">
+  <nav class="nav glass" aria-label="Разделы">
+    <span class="logo"><i></i>Стекло</span>
+    <a href="#now" aria-current="page">Сейчас</a><a href="#queue">Очередь</a><a href="#eq">Звук</a>
+    <span class="me" aria-label="Профиль"></span>
+  </nav>
+
+  <header class="hero">
+    <h1>Музыка, которую видно сквозь стекло</h1>
+    <p>Виджеты для рабочего стола: плеер, очередь, эквалайзер и текст песни. Двигайте курсор по панелям, и блик на стекле поплывёт за ним.</p>
+  </header>
+
+  <main class="grid">
+    <section class="now glass" id="now">
+      <div class="art" role="img" aria-label="Обложка: розовое солнце над волнами"></div>
+      <div>
+        <span class="label">Сейчас играет</span>
+        <h2>Неон на воде</h2>
+        <div class="artist">Сёстры Ветер · альбом «Пирс»</div>
+        <div class="bar" id="bar" role="progressbar" aria-label="Прогресс трека" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42"><i id="fill"></i></div>
+        <div class="times"><span id="cur">1:37</span><span>3:52</span></div>
+        <div class="ctrl">
+          <button class="cbtn" type="button" aria-label="Предыдущий"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+          <button class="cbtn big" type="button" id="play" aria-label="Пауза"><svg viewBox="0 0 24 24" id="play-ic"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+          <button class="cbtn" type="button" aria-label="Следующий"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="queue glass" id="queue">
+      <h3>Дальше <span class="label">4 трека</span></h3>
+      <ol>
+        <li><i style="--g:linear-gradient(135deg,#29D3C4,#7366FF)"></i><div><b>Пирс в тумане</b><small>Сёстры Ветер</small></div><span class="d">4:10</span></li>
+        <li><i style="--g:linear-gradient(135deg,#FFB86B,#FF6CAB)"></i><div><b>Лимонад</b><small>Мира</small></div><span class="d">2:58</span></li>
+        <li><i style="--g:linear-gradient(135deg,#7366FF,#1C1A3A)"></i><div><b>Последний трамвай</b><small>Перрон</small></div><span class="d">3:41</span></li>
+        <li><i style="--g:linear-gradient(135deg,#FF6CAB,#7366FF)"></i><div><b>Стеклянный город</b><small>Квартал</small></div><span class="d">5:02</span></li>
+      </ol>
+    </section>
+
+    <section class="eq glass" id="eq">
+      <h3>Эквалайзер <span class="label" id="preset-name">Ровно</span></h3>
+      <div class="bars" id="bars" aria-hidden="true"></div>
+      <div class="pills" role="group" aria-label="Пресеты">
+        <button class="pill" type="button" aria-pressed="true" data-p="flat">Ровно</button>
+        <button class="pill" type="button" aria-pressed="false" data-p="bass">Бас</button>
+        <button class="pill" type="button" aria-pressed="false" data-p="voice">Голос</button>
+      </div>
+    </section>
+
+    <section class="lyrics glass">
+      <h3>Текст <span class="label">караоке</span></h3>
+      <div class="lines" id="lines">
+        <p>Город светится в воде,</p>
+        <p>отражения плывут,</p>
+        <p>мы стоим на самом краю,</p>
+        <p>где неон встречает тьму.</p>
+        <p>Не спеши, ещё чуть-чуть.</p>
+      </div>
+    </section>
+
+    <section class="stat glass">
+      <h3>Сегодня</h3>
+      <div class="ring" aria-hidden="true"></div>
+      <div><div class="num">2 ч 14 м</div><p>68% дневной цели прослушивания</p></div>
+    </section>
+  </main>
+</div>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* блик за курсором */
+  document.querySelectorAll('.glass').forEach(function (g) {
+    g.addEventListener('pointermove', function (e) {
+      var r = g.getBoundingClientRect();
+      g.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      g.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+  /* пятна слегка смещаются за мышью — так видно, что стекло их размывает */
+  if (!reduce) window.addEventListener('pointermove', function (e) {
+    var x = (e.clientX / innerWidth - .5), y = (e.clientY / innerHeight - .5);
+    document.querySelectorAll('.blob').forEach(function (b, i) {
+      var k = (i + 1) * 14;
+      b.style.setProperty('--px', (x * k) + 'px'); b.style.setProperty('--py', (y * k) + 'px');
+    });
+  });
+
+  /* эквалайзер */
+  var presets = { flat: [.7, .75, .7, .72, .7, .68, .7, .72, .7, .7, .66, .7], bass: [1, .95, .85, .7, .55, .45, .4, .38, .35, .33, .3, .3], voice: [.3, .35, .45, .6, .85, 1, .95, .8, .6, .45, .35, .3] };
+  var names = { flat: 'Ровно', bass: 'Бас', voice: 'Голос' };
+  var bars = document.getElementById('bars');
+  bars.innerHTML = presets.flat.map(function (_, i) { return '<i style="--d:' + (0.5 + (i * 37 % 7) / 10) + 's"></i>'; }).join('');
+  function preset(p) {
+    bars.querySelectorAll('i').forEach(function (b, i) { b.style.setProperty('--s', presets[p][i]); });
+    document.getElementById('preset-name').textContent = names[p];
+    document.querySelectorAll('.pill').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.p === p)); });
+  }
+  document.querySelectorAll('.pill').forEach(function (b) { b.addEventListener('click', function () { preset(b.dataset.p); }); });
+  preset('flat');
+
+  /* плеер */
+  var playing = true, t = 97, total = 232, line = 0;
+  var play = document.getElementById('play'), ic = document.getElementById('play-ic');
+  var lines = document.querySelectorAll('#lines p');
+  function draw() {
+    document.getElementById('fill').style.width = (t / total * 100) + '%';
+    document.getElementById('bar').setAttribute('aria-valuenow', Math.round(t / total * 100));
+    document.getElementById('cur').textContent = Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+    lines.forEach(function (p, i) { p.classList.toggle('on', i === line); });
+  }
+  play.addEventListener('click', function () {
+    playing = !playing;
+    document.body.classList.toggle('paused', !playing);
+    ic.innerHTML = playing ? '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+    play.setAttribute('aria-label', playing ? 'Пауза' : 'Играть');
+  });
+  document.getElementById('bar').addEventListener('click', function (e) {
+    var r = this.getBoundingClientRect(); t = Math.round((e.clientX - r.left) / r.width * total); draw();
+  });
+  setInterval(function () { if (!playing) return; t = (t + 1) % total; if (t % 3 === 0) line = (line + 1) % lines.length; draw(); }, 1000);
+  draw();
+})();
+</script>
+</body>
+</html>

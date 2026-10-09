@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru" data-style="y2k">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ХРОМ-2000 · Y2K</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,700;1,500;1,800&family=Unbounded:wght@600;800;900&display=swap">
+<style>
+/* Y2K: хромированные буквы, голографические переливы, полупрозрачный «конфетный» пластик и искры. */
+:root {
+  --ice: #EAF1F8;
+  --silver: #C8CDD6;
+  --baby: #9EE7FF;
+  --bubble: #FF9CEE;
+  --lime: #C6FF3D;
+  --grape: #3A2D7A;
+  --chrome: linear-gradient(180deg, #FFFFFF 0%, #DCE3EC 30%, #8E9AAB 49%, #3B4452 50%, #8E9AAB 62%, #E6EBF2 85%, #FFFFFF 100%);
+  --holo: linear-gradient(120deg, #9EE7FF, #C9B8FF 25%, #FF9CEE 50%, #FFF3A8 70%, #9EE7FF 100%);
+  --display: "Unbounded", "Arial Black", sans-serif;
+  --body: "Exo 2", "Trebuchet MS", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--grape); font: 500 17px/1.5 var(--body); overflow-x: hidden;
+  background: radial-gradient(circle at 12% 8%, rgba(158,231,255,.9), transparent 30%), radial-gradient(circle at 90% 30%, rgba(255,156,238,.7), transparent 32%), radial-gradient(circle at 30% 90%, rgba(198,255,61,.4), transparent 30%),
+    linear-gradient(rgba(58,45,122,.06) 1px, transparent 1px) 0 0 / 34px 34px, linear-gradient(90deg, rgba(58,45,122,.06) 1px, transparent 1px) 0 0 / 34px 34px, var(--ice); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--bubble); outline-offset: 3px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+.chrome { background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 1.5px var(--grape); filter: drop-shadow(0 4px 0 rgba(58,45,122,.35)) drop-shadow(0 0 18px rgba(255,255,255,.9)); }
+.spark { position: absolute; color: #fff; text-shadow: 0 0 8px #fff, 0 0 18px var(--baby), 0 0 30px var(--bubble); pointer-events: none; animation: tw 2.4s ease-in-out infinite; font-family: system-ui, sans-serif; }
+@keyframes tw { 50% { transform: scale(.55) rotate(25deg); opacity: .5; } }
+
+.pill { appearance: none; border: 1px solid rgba(58,45,122,.25); cursor: pointer; padding: 12px 22px; border-radius: 999px; font: 700 15px var(--body); letter-spacing: .04em; color: var(--grape); text-decoration: none; display: inline-flex; gap: 8px; align-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 48%, rgba(158,231,255,.6) 52%, rgba(158,231,255,.95) 100%); box-shadow: inset 0 1px 0 #fff, 0 6px 16px -6px rgba(58,45,122,.45); transition: transform .2s; }
+.pill:hover { transform: translateY(-2px); }
+.pill.pink { background: linear-gradient(180deg, #FFE4F9 0%, #FFC4F3 48%, #FF8FE9 52%, #FF9CEE 100%); }
+.pill.lime { background: linear-gradient(180deg, #F2FFD0 0%, #E2FF94 48%, #B8F02A 52%, #C6FF3D 100%); }
+
+header .wrap { display: flex; align-items: center; gap: 12px; padding-block: 18px; flex-wrap: wrap; }
+.logo { font: 900 26px/1 var(--display); margin-right: auto; letter-spacing: -.02em; }
+
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 40px 64px; }
+.hero h1 { margin: 0; font: 900 clamp(44px, 7vw, 96px)/.92 var(--display); letter-spacing: -.03em; transform: skewX(-6deg); }
+.hero .sub { margin: 20px 0 0; font: italic 500 20px/1.4 var(--body); max-width: 26em; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.burst { position: absolute; left: 44%; top: 6%; width: 120px; aspect-ratio: 1; display: grid; place-items: center; text-align: center; font: 800 14px/1 var(--display); color: var(--grape); background: var(--lime); transform: rotate(-14deg); z-index: 3;
+  clip-path: polygon(50% 0, 60% 18%, 79% 9%, 79% 30%, 100% 34%, 86% 50%, 100% 66%, 79% 70%, 79% 91%, 60% 82%, 50% 100%, 40% 82%, 21% 91%, 21% 70%, 0 66%, 14% 50%, 0 34%, 21% 30%, 21% 9%, 40% 18%); animation: wob 3s ease-in-out infinite; }
+@keyframes wob { 50% { transform: rotate(-4deg) scale(1.08); } }
+
+/* плеер из конфетного пластика */
+.player-wrap { display: grid; justify-items: center; gap: 18px; }
+.player { --body: rgba(0,170,230,.55); --edge: rgba(0,120,190,.8); position: relative; width: min(300px, 80vw); aspect-ratio: .62; border-radius: 46px 46px 60px 60px;
+  background: radial-gradient(ellipse at 30% 12%, rgba(255,255,255,.85), transparent 28%), linear-gradient(160deg, rgba(255,255,255,.35), transparent 40%), var(--body);
+  border: 2px solid rgba(255,255,255,.7); box-shadow: inset 0 0 0 6px rgba(255,255,255,.18), inset 0 -20px 40px var(--edge), 0 30px 50px -20px rgba(58,45,122,.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .5s, box-shadow .5s; }
+.player::before { content: ""; position: absolute; inset: 16px; border-radius: 34px 34px 48px 48px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 2px, transparent 2px 9px); pointer-events: none; }
+.lcd { position: absolute; left: 13%; right: 13%; top: 11%; height: 30%; border-radius: 14px; background: linear-gradient(180deg, #B9F5FF, #6FD8F0); border: 3px solid rgba(58,45,122,.6); box-shadow: inset 0 3px 8px rgba(0,60,90,.45); overflow: hidden; font: 700 13px/1.2 var(--body); color: #0B3A4D; padding: 10px; }
+.lcd .row1 { display: flex; justify-content: space-between; font-size: 11px; }
+.lcd .scroll { white-space: nowrap; overflow: hidden; margin: 8px 0; font-size: 15px; }
+.lcd .scroll span { display: inline-block; padding-left: 100%; animation: mq 9s linear infinite; }
+.player.on .lcd .scroll span { animation-duration: 6s; }
+@keyframes mq { to { transform: translateX(-100%); } }
+.lcd .eq { display: flex; gap: 3px; align-items: flex-end; height: 26px; }
+.lcd .eq i { flex: 1; background: #0B3A4D; height: 20%; transition: height .15s; }
+.wheel { position: absolute; left: 50%; bottom: 10%; width: 56%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,.45) 50%, rgba(255,255,255,.25)); border: 2px solid rgba(255,255,255,.8); box-shadow: inset 0 -8px 16px rgba(0,0,0,.12), 0 6px 14px rgba(0,0,0,.15); }
+.wheel button { position: absolute; appearance: none; border: 0; background: transparent; cursor: pointer; font: 800 15px var(--body); color: var(--grape); width: 34%; height: 34%; display: grid; place-items: center; }
+.wheel .up { left: 33%; top: 2%; } .wheel .dn { left: 33%; bottom: 2%; } .wheel .lf { left: 2%; top: 33%; } .wheel .rt { right: 2%; top: 33%; }
+.wheel .mid { left: 30%; top: 30%; width: 40%; height: 40%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #E1E7F0); box-shadow: inset 0 -4px 8px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.2); font-size: 18px; }
+.flavors { display: flex; gap: 12px; align-items: center; font: italic 500 15px var(--body); }
+.flv { appearance: none; border: 2px solid #fff; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(58,45,122,.3), inset 0 2px 4px rgba(255,255,255,.7); }
+.flv[aria-pressed="true"] { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* характеристики */
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; padding-block: 24px 56px; }
+.spec { position: relative; padding: 22px 20px; border-radius: 24px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 12px 30px -16px rgba(58,45,122,.5); overflow: hidden; }
+.spec::before { content: ""; position: absolute; inset: 0; background: var(--holo); opacity: .35; mix-blend-mode: multiply; transition: opacity .3s; }
+.spec:hover::before { opacity: .7; }
+.spec > * { position: relative; }
+.spec b { display: block; font: 900 34px/1 var(--display); letter-spacing: -.03em; }
+.spec span { font-style: italic; }
+
+.banner { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; justify-content: space-between; padding: 24px 28px; border-radius: 28px; background: var(--holo); background-size: 200% 100%; animation: holo 8s linear infinite; border: 2px solid #fff; box-shadow: 0 16px 40px -18px rgba(58,45,122,.6); }
+@keyframes holo { to { background-position: 200% 0; } }
+.banner h2 { margin: 0; font: 800 clamp(22px, 3vw, 34px)/1.1 var(--display); }
+footer { padding: 48px 0 110px; font-style: italic; text-align: center; }
+footer .tiny { font-size: 13px; opacity: .8; }
+
+@media (max-width: 880px) { .hero { grid-template-columns: minmax(0, 1fr); } .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .burst { left: auto; right: 4%; top: 0; } header nav { display: none; } }
+@media (prefers-reduced-motion: reduce) { .spark, .burst, .banner, .lcd .scroll span { animation: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="logo chrome">ХРОМ-2000</span>
+    <nav style="display:flex;gap:10px"><a class="pill" href="#player">Плеер</a><a class="pill pink" href="#specs">Начинка</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="spark" style="left:2%;top:4%;font-size:34px">✦</span>
+    <span class="spark" style="left:38%;top:64%;font-size:22px;animation-delay:-.8s">✦</span>
+    <span class="spark" style="right:4%;top:70%;font-size:28px;animation-delay:-1.6s">✧</span>
+    <div>
+      <h1 class="chrome">Музыка будущего уже в кармане</h1>
+      <p class="sub">Новый MP3-плеер «ХРОМ-2000»: 64 МБ памяти, 16 песен без кассет и дисков, корпус из прозрачного пластика четырёх вкусов.</p>
+      <div class="cta"><a class="pill lime" href="#player">Хочу такой! ✦</a><a class="pill" href="#specs">Что внутри</a></div>
+    </div>
+    <div class="player-wrap" id="player">
+      <div class="burst">НОВИНКА<br>2000!</div>
+      <div class="player" id="dev">
+        <div class="lcd">
+          <div class="row1"><span id="trk">01/16</span><span>♪ 128 kbps</span><span>▮▮▮▯</span></div>
+          <div class="scroll"><span id="title">Мира — Цифровая любовь (Millennium Mix)</span></div>
+          <div class="eq" id="eq"></div>
+        </div>
+        <div class="wheel">
+          <button class="up" type="button" aria-label="Громче">+</button>
+          <button class="dn" type="button" aria-label="Тише">−</button>
+          <button class="lf" type="button" aria-label="Предыдущая" data-d="-1">⏮</button>
+          <button class="rt" type="button" aria-label="Следующая" data-d="1">⏭</button>
+          <button class="mid" type="button" id="play" aria-label="Играть">▶</button>
+        </div>
+      </div>
+      <div class="flavors" role="group" aria-label="Цвет корпуса">
+        <button class="flv" type="button" aria-pressed="true" aria-label="Морская волна" data-b="rgba(0,170,230,.55)" data-e="rgba(0,120,190,.8)" style="background:#29B8E8"></button>
+        <button class="flv" type="button" aria-pressed="false" aria-label="Клубника" data-b="rgba(255,90,170,.55)" data-e="rgba(200,40,120,.8)" style="background:#FF5AAA"></button>
+        <button class="flv" type="button" aria-pressed="false" aria-label="Лайм" data-b="rgba(150,220,30,.55)" data-e="rgba(90,160,0,.8)" style="background:#96DC1E"></button>
+        <button class="flv" type="button" aria-pressed="false" aria-label="Виноград" data-b="rgba(140,90,230,.55)" data-e="rgba(90,40,180,.8)" style="background:#8C5AE6"></button>
+        <span id="flv-name">Морская волна</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="specs" id="specs">
+    <div class="spec"><b>64 МБ</b><span>целых 16 песен!</span></div>
+    <div class="spec"><b>12 ч</b><span>от двух батареек АА</span></div>
+    <div class="spec"><b>USB</b><span>скачивай музыку с компьютера</span></div>
+    <div class="spec"><b>79 г</b><span>легче пейджера</span></div>
+  </section>
+
+  <section class="banner">
+    <h2 class="chrome">Скачай драйвер на свой ПК</h2>
+    <button class="pill pink" type="button" id="dl">Скачать 1,4 МБ ✦</button>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>© 2000 «ХРОМ-ЭЛЕКТРОНИКС». Все права защищены.</p>
+  <p class="tiny">Сайт лучше всего смотреть в разрешении 800×600 и браузере версии 5.0 или новее.</p>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var songs = ['Мира — Цифровая любовь (Millennium Mix)', 'Перрон — Пейджер молчит', 'Сёстры Ветер — Хромированное сердце', 'Квартал — Модем 56k', 'DJ Пломбир — Баг 2000', 'Тёплый шум — Прозрачный пластик'];
+  var dev = document.getElementById('dev'), eq = document.getElementById('eq'), idx = 0, on = false;
+  eq.innerHTML = new Array(15).join('<i></i>');
+  var bars = eq.querySelectorAll('i');
+  function setSong() {
+    document.getElementById('title').textContent = songs[idx];
+    document.getElementById('trk').textContent = String(idx + 1).padStart(2, '0') + '/16';
+  }
+  document.getElementById('play').addEventListener('click', function () {
+    on = !on; dev.classList.toggle('on', on); this.textContent = on ? '❚❚' : '▶'; this.setAttribute('aria-label', on ? 'Пауза' : 'Играть');
+  });
+  document.querySelectorAll('.wheel [data-d]').forEach(function (b) {
+    b.addEventListener('click', function () { idx = (idx + +b.dataset.d + songs.length) % songs.length; setSong(); });
+  });
+  setInterval(function () { bars.forEach(function (b) { b.style.height = on ? (20 + Math.random() * 80) + '%' : '12%'; }); }, 160);
+  document.querySelectorAll('.flv').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.flv').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      dev.style.setProperty('--body', b.dataset.b); dev.style.setProperty('--edge', b.dataset.e);
+      document.getElementById('flv-name').textContent = b.getAttribute('aria-label');
+    });
+  });
+  document.getElementById('dl').addEventListener('click', function () {
+    var btn = this, p = 0;
+    btn.disabled = true;
+    var t = setInterval(function () {
+      p += 7; btn.textContent = 'Загрузка… ' + Math.min(p, 100) + '%';
+      if (p >= 100) { clearInterval(t); btn.textContent = 'Готово! Перезагрузите компьютер ✦'; }
+    }, 180);
+  });
+})();
+</script>
+</body>
+</html>

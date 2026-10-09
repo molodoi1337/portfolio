@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ru" data-style="pixel">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8-БИТ · Пиксель-арт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<style>
+/* Пиксель-арт: палитра PICO-8, всё по сетке 4 px, углы срезаны ступенькой, работающий чиптюн-секвенсор. */
+:root {
+  --c0: #000000; --c1: #1D2B53; --c2: #7E2553; --c3: #008751; --c4: #AB5236; --c5: #5F574F; --c6: #C2C3C7; --c7: #FFF1E8;
+  --c8: #FF004D; --c9: #FFA300; --c10: #FFEC27; --c11: #00E436; --c12: #29ADFF; --c13: #83769C; --c14: #FF77A8; --c15: #FFCCAA;
+  --font: "Press Start 2P", "Courier New", monospace;
+  --notch: polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--c1); color: var(--c7); font: 12px/2 var(--font); image-rendering: pixelated; overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 4px solid var(--c10); outline-offset: 2px; }
+
+.sky { position: relative; overflow: hidden; padding: 32px 16px 0; }
+.stars { position: absolute; left: 0; top: 0; width: 4px; height: 4px; background: var(--c7); }
+.moon { position: absolute; right: 8%; top: 40px; width: 64px; height: 64px; background: var(--c10); clip-path: var(--notch); box-shadow: inset -16px 0 0 var(--c9); }
+.hud { position: relative; max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 11px; }
+.hud .hearts { color: var(--c8); letter-spacing: 4px; }
+.hud .coin { color: var(--c10); }
+.title { position: relative; text-align: center; padding: 48px 0 12px; }
+.title h1 { margin: 0; font-size: clamp(30px, 7vw, 76px); line-height: 1.2; color: var(--c10); text-shadow: 4px 4px 0 var(--c8), 8px 8px 0 var(--c2); }
+.title .sub { margin: 18px 0 0; color: var(--c12); font-size: clamp(10px, 1.4vw, 14px); }
+.blink { animation: blink 1s steps(1) infinite; color: var(--c7); }
+@keyframes blink { 50% { visibility: hidden; } }
+.stage { position: relative; max-width: 1100px; margin: 24px auto 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: end; }
+#hero { width: 160px; height: 160px; image-rendering: pixelated; display: block; }
+.dialog { position: relative; background: var(--c0); color: var(--c7); padding: 18px 20px; clip-path: var(--notch); box-shadow: inset 0 0 0 4px var(--c7), inset 0 0 0 8px var(--c0), inset 0 0 0 12px var(--c13); min-height: 120px; margin-bottom: 24px; font-size: 12px; line-height: 2.2; }
+.dialog b { color: var(--c10); }
+.dialog .next { position: absolute; right: 20px; bottom: 12px; color: var(--c10); animation: bob .6s steps(2) infinite; background: none; border: 0; cursor: pointer; }
+@keyframes bob { 50% { transform: translateY(4px); } }
+.ground { height: 64px; margin-top: -4px; background: linear-gradient(var(--c11) 0 8px, var(--c3) 8px 12px, transparent 12px), repeating-linear-gradient(90deg, var(--c4) 0 28px, #7A3A26 28px 32px), var(--c4);
+  background-size: auto, 32px 100%, auto; box-shadow: inset 0 -4px 0 #5A2A1A; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 40px 16px 120px; }
+h2 { margin: 0 0 18px; font-size: clamp(16px, 2.4vw, 22px); color: var(--c14); text-shadow: 3px 3px 0 var(--c2); }
+.panel { background: var(--c0); padding: 20px; clip-path: var(--notch); box-shadow: inset 0 0 0 4px var(--c6); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; align-items: center; }
+.pbtn { appearance: none; border: 0; cursor: pointer; padding: 12px 16px; font-size: 11px; line-height: 1; color: var(--c7); background: var(--c8); clip-path: var(--notch); box-shadow: inset -4px -4px 0 var(--c2), inset 4px 4px 0 var(--c14); }
+.pbtn:active, .pbtn[aria-pressed="true"] { box-shadow: inset 4px 4px 0 var(--c2), inset -4px -4px 0 var(--c14); transform: translateY(2px); }
+.pbtn.b { background: var(--c12); box-shadow: inset -4px -4px 0 var(--c1), inset 4px 4px 0 #9FE0FF; }
+.pbtn.g { background: var(--c3); box-shadow: inset -4px -4px 0 #00502F, inset 4px 4px 0 var(--c11); }
+.pbtn.b:active { box-shadow: inset 4px 4px 0 var(--c1), inset -4px -4px 0 #9FE0FF; }
+.tempo { font-size: 11px; color: var(--c6); }
+.seq-wrap { overflow-x: auto; padding-bottom: 6px; }
+.seq { display: grid; grid-template-columns: 76px repeat(16, minmax(22px, 1fr)); gap: 4px; min-width: 520px; }
+.seq .lbl { font-size: 9px; color: var(--c6); display: flex; align-items: center; }
+.cell { appearance: none; border: 0; padding: 0; aspect-ratio: 1; cursor: pointer; background: var(--c5); box-shadow: inset -3px -3px 0 rgba(0,0,0,.35); }
+.cell.beat { background: #4A433C; }
+.cell[aria-pressed="true"] { background: var(--col); box-shadow: inset -3px -3px 0 rgba(0,0,0,.35), inset 3px 3px 0 rgba(255,255,255,.35); }
+.cell.ph { outline: 3px solid var(--c7); outline-offset: -1px; }
+.legend { margin-top: 14px; font-size: 9px; color: var(--c6); line-height: 2; }
+
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+.card { padding: 20px; clip-path: var(--notch); background: var(--c2); box-shadow: inset 0 0 0 4px var(--c14); font-size: 11px; line-height: 2; }
+.card:nth-child(2) { background: var(--c1); box-shadow: inset 0 0 0 4px var(--c12); }
+.card:nth-child(3) { background: #00502F; box-shadow: inset 0 0 0 4px var(--c11); }
+.card b { display: block; color: var(--c10); font-size: 13px; margin-bottom: 8px; }
+.icon { width: 48px; height: 48px; margin-bottom: 10px; image-rendering: pixelated; }
+footer { text-align: center; color: var(--c13); font-size: 10px; padding: 24px 16px 110px; }
+
+@media (max-width: 760px) { .stage { grid-template-columns: minmax(0, 1fr); justify-items: center; } .cards { grid-template-columns: minmax(0, 1fr); } #hero { width: 128px; height: 128px; } }
+@media (prefers-reduced-motion: reduce) { .blink, .dialog .next { animation: none; } }
+</style>
+</head>
+<body>
+<header class="sky">
+  <i class="stars" id="stars" aria-hidden="true"></i>
+  <i class="moon" aria-hidden="true"></i>
+  <div class="hud"><span>СЧЁТ <span id="score">000420</span></span><span class="hearts" aria-label="Три жизни">♥♥♥</span><span class="coin">● x<span id="coins">07</span></span><span>МИР 1-1</span></div>
+  <div class="title">
+    <h1>8-БИТ СИНТ</h1>
+    <p class="sub">ЧИПТЮН-СЕКВЕНСОР · <span class="blink">НАЖМИ СТАРТ</span></p>
+  </div>
+  <div class="stage">
+    <canvas id="hero" width="16" height="16" aria-label="Пиксельный персонаж Бип в наушниках"></canvas>
+    <div class="dialog" aria-live="polite"><span id="say"></span><button class="next" type="button" id="next" aria-label="Дальше">▼</button></div>
+  </div>
+  <div class="ground" aria-hidden="true"></div>
+</header>
+
+<main>
+  <h2>► СЕКВЕНСОР</h2>
+  <section class="panel">
+    <div class="controls">
+      <button class="pbtn" type="button" id="play" aria-pressed="false">► ИГРАТЬ</button>
+      <button class="pbtn b" type="button" id="rand">СЛУЧАЙНО</button>
+      <button class="pbtn g" type="button" id="clear">ОЧИСТИТЬ</button>
+      <button class="pbtn b" type="button" id="slow" aria-label="Медленнее">−</button>
+      <span class="tempo"><span id="bpm">128</span> УД/МИН</span>
+      <button class="pbtn b" type="button" id="fast" aria-label="Быстрее">+</button>
+    </div>
+    <div class="seq-wrap"><div class="seq" id="seq"></div></div>
+    <p class="legend">КВАДРАТНАЯ ВОЛНА — МЕЛОДИЯ · ТРЕУГОЛЬНАЯ — БАС · ШУМ — БАРАБАНЫ. НАЖИМАЙ НА КЛЕТКИ.</p>
+  </section>
+
+  <div class="cards">
+    <div class="card"><canvas class="icon" width="12" height="12" data-icon="note"></canvas><b>3 КАНАЛА</b>Как у старых приставок: две волны и генератор шума. Больше нельзя — это и есть стиль.</div>
+    <div class="card"><canvas class="icon" width="12" height="12" data-icon="heart"></canvas><b>16 ЦВЕТОВ</b>Палитра PICO-8. Каждый пиксель на странице взят из неё, включая этот текст.</div>
+    <div class="card"><canvas class="icon" width="12" height="12" data-icon="coin"></canvas><b>0 СКРУГЛЕНИЙ</b>Углы срезаны ступенькой в один пиксель вместо border-radius.</div>
+  </div>
+</main>
+<footer>© 2026 БИП СОФТ · ВСТАВЬ МОНЕТУ, ЧТОБЫ ПРОДОЛЖИТЬ</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var PAL = { K: '#000000', R: '#FF004D', H: '#AB5236', S: '#FFCCAA', P: '#FF77A8', B: '#29ADFF', W: '#FFF1E8', D: '#1D2B53', Y: '#FFEC27', O: '#FFA300', G: '#00E436', N: '#7E2553' };
+  var frameA = [
+    '................', '.....KKKKKK.....', '....KRRRRRRK....', '...KRKKKKKKRK...', '..KRKHHHHHHKRK..', '.KRRKHHHHHHKRRK.', '.KRRKSSSSSSKRRK.', '.KRRKSKSSKSKRRK.',
+    '..KKKSSSSSSKKK..', '....KSSPPSSK....', '.....KSSSSK.....', '....KBBBBBBK....', '...KBBWBBWBBK...', '...KBBBBBBBBK...', '....KDDKKDDK....', '....KKK..KKK....'];
+  var frameB = frameA.slice(); frameB[7] = '.KRRKSSSSSSKRRK.';
+  var hero = document.getElementById('hero').getContext('2d');
+  function draw(ctx, map, dy) {
+    ctx.clearRect(0, 0, 16, 16);
+    map.forEach(function (row, y) { for (var x = 0; x < row.length; x++) { var c = PAL[row[x]]; if (c) { ctx.fillStyle = c; ctx.fillRect(x, y + (dy || 0), 1, 1); } } });
+  }
+  var icons = {
+    note: ['....KKKK....', '....KYYK....', '....KYKK....', '....KYK.....', '....KYK.....', '....KYK.....', '.KKKKYK.....', 'KYYYYYK.....', 'KYYYYYK.....', 'KYYYYK......', '.KKKK.......', '............'],
+    heart: ['............', '.KKK..KKK...', 'KRRRKKRRRK..', 'KRWRRRRRRK..', 'KRRRRRRRRK..', 'KRRRRRRRRK..', '.KRRRRRRK...', '..KRRRRK....', '...KRRK.....', '....KK......', '............', '............'],
+    coin: ['...KKKK.....', '..KYYYYK....', '.KYOOOOYK...', '.KYOYYOYK...', '.KYOYYOYK...', '.KYOYYOYK...', '.KYOYYOYK...', '.KYOOOOYK...', '..KYYYYK....', '...KKKK.....', '............', '............']
+  };
+  document.querySelectorAll('canvas[data-icon]').forEach(function (c) { draw(c.getContext('2d'), icons[c.dataset.icon]); });
+
+  /* звёзды из box-shadow */
+  var sh = [];
+  for (var i = 0; i < 46; i++) sh.push((Math.floor(Math.random() * 300) * 4) + 'px ' + (Math.floor(Math.random() * 60) * 4) + 'px 0 ' + ['#FFF1E8', '#FFEC27', '#29ADFF', '#FF77A8'][i % 4]);
+  document.getElementById('stars').style.boxShadow = sh.join(',');
+
+  /* диалог */
+  var lines = ['Привет! Я <b>Бип</b>. Это чиптюн-синтезатор.', 'Нажимай на клетки ниже, чтобы сочинить мелодию.', 'Потом жми <b>► ИГРАТЬ</b>. Я буду качаться в ритм!', 'Звук собран из квадратной волны, как в приставках 80-х.'];
+  var li = 0, typing;
+  function say(html) {
+    var el = document.getElementById('say'), plain = html.replace(/<[^>]+>/g, ''), n = 0;
+    clearInterval(typing);
+    typing = setInterval(function () { n++; el.textContent = plain.slice(0, n); if (n >= plain.length) { clearInterval(typing); el.innerHTML = html; } }, 28);
+  }
+  document.getElementById('next').addEventListener('click', function () { li = (li + 1) % lines.length; say(lines[li]); });
+  say(lines[0]);
+
+  /* секвенсор */
+  var rows = [
+    { n: 'МИ 5', m: 76, k: 'sq', c: '#FF004D' }, { n: 'РЕ 5', m: 74, k: 'sq', c: '#FFA300' }, { n: 'ДО 5', m: 72, k: 'sq', c: '#FFEC27' },
+    { n: 'ЛЯ 4', m: 69, k: 'sq', c: '#00E436' }, { n: 'СОЛЬ 4', m: 67, k: 'sq', c: '#29ADFF' },
+    { n: 'БАС', m: 45, k: 'tri', c: '#FF77A8' }, { n: 'БОЧКА', k: 'kick', c: '#FFCCAA' }, { n: 'ШУМ', k: 'noise', c: '#C2C3C7' }
+  ];
+  var demo = { 0: [0, 10], 1: [2, 12], 2: [3, 8, 13], 3: [4, 14], 4: [6], 5: [0, 3, 6, 8, 11, 14], 6: [0, 4, 8, 12], 7: [4, 12] };
+  var grid = rows.map(function (_, r) { var a = new Array(16).fill(false); (demo[r] || []).forEach(function (s) { a[s] = true; }); return a; });
+  var seq = document.getElementById('seq');
+  function build() {
+    var h = '';
+    rows.forEach(function (row, r) {
+      h += '<span class="lbl">' + row.n + '</span>';
+      for (var s = 0; s < 16; s++) h += '<button class="cell' + (s % 4 === 0 ? ' beat' : '') + '" type="button" style="--col:' + row.c + '" data-r="' + r + '" data-s="' + s + '" aria-pressed="' + grid[r][s] + '" aria-label="' + row.n + ', шаг ' + (s + 1) + '"></button>';
+    });
+    seq.innerHTML = h;
+  }
+  build();
+  var score = 420;
+  seq.addEventListener('click', function (e) {
+    var c = e.target.closest('.cell'); if (!c) return;
+    var r = +c.dataset.r, s = +c.dataset.s; grid[r][s] = !grid[r][s]; c.setAttribute('aria-pressed', String(grid[r][s]));
+    score += 10; document.getElementById('score').textContent = String(score).padStart(6, '0');
+    if (grid[r][s]) { ac(); voice(r, ctx.currentTime + .01); }
+  });
+
+  var ctx, noiseBuf, bpm = 128, step = 0, nextT = 0, timer, playing = false, queue = [];
+  function ac() {
+    if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; ctx = new AC(); var len = ctx.sampleRate * .3; noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; }
+    if (ctx.state === 'suspended') ctx.resume();
+  }
+  function midi(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+  function voice(r, t) {
+    var row = rows[r], g = ctx.createGain();
+    g.connect(ctx.destination);
+    if (row.k === 'sq' || row.k === 'tri') {
+      var o = ctx.createOscillator(); o.type = row.k === 'sq' ? 'square' : 'triangle'; o.frequency.value = midi(row.m);
+      var v = row.k === 'sq' ? .06 : .22, len = row.k === 'sq' ? .16 : .22;
+      g.gain.setValueAtTime(v, t); g.gain.setValueAtTime(v, t + len * .6); g.gain.linearRampToValueAtTime(0, t + len);
+      o.connect(g); o.start(t); o.stop(t + len + .02);
+    } else if (row.k === 'kick') {
+      var k = ctx.createOscillator(); k.type = 'triangle'; k.frequency.setValueAtTime(160, t); k.frequency.exponentialRampToValueAtTime(40, t + .12);
+      g.gain.setValueAtTime(.5, t); g.gain.exponentialRampToValueAtTime(.001, t + .16); k.connect(g); k.start(t); k.stop(t + .2);
+    } else {
+      var n = ctx.createBufferSource(), f = ctx.createBiquadFilter(); n.buffer = noiseBuf; f.type = 'highpass'; f.frequency.value = 1800;
+      g.gain.setValueAtTime(.18, t); g.gain.exponentialRampToValueAtTime(.001, t + .12); n.connect(f); f.connect(g); n.start(t); n.stop(t + .14);
+    }
+  }
+  function sched() {
+    var dur = 60 / bpm / 4;
+    while (nextT < ctx.currentTime + .12) {
+      for (var r = 0; r < rows.length; r++) if (grid[r][step]) voice(r, nextT);
+      queue.push({ s: step, t: nextT });
+      nextT += dur; step = (step + 1) % 16;
+    }
+  }
+  var lastStep = -1, bobUp = false;
+  function frame() {
+    if (playing && ctx) {
+      while (queue.length && queue[0].t <= ctx.currentTime) {
+        var q = queue.shift();
+        if (q.s !== lastStep) {
+          seq.querySelectorAll('.ph').forEach(function (c) { c.classList.remove('ph'); });
+          seq.querySelectorAll('[data-s="' + q.s + '"]').forEach(function (c) { c.classList.add('ph'); });
+          if (q.s % 4 === 0) { bobUp = !bobUp; draw(hero, frameA, bobUp ? -1 : 0); }
+          lastStep = q.s;
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+  var playBtn = document.getElementById('play');
+  playBtn.addEventListener('click', function () {
+    ac(); playing = !playing;
+    playBtn.setAttribute('aria-pressed', String(playing)); playBtn.textContent = playing ? '■ СТОП' : '► ИГРАТЬ';
+    if (playing) { step = 0; nextT = ctx.currentTime + .05; queue = []; sched(); timer = setInterval(sched, 25); }
+    else { clearInterval(timer); seq.querySelectorAll('.ph').forEach(function (c) { c.classList.remove('ph'); }); draw(hero, frameA); }
+  });
+  document.getElementById('rand').addEventListener('click', function () {
+    grid = rows.map(function (row, r) { return new Array(16).fill(false).map(function (_, s) { return r === 6 ? s % 4 === 0 : r === 7 ? s % 8 === 4 : r === 5 ? Math.random() < .3 : Math.random() < .12; }); });
+    build(); document.getElementById('coins').textContent = String(Math.floor(Math.random() * 90) + 10);
+  });
+  document.getElementById('clear').addEventListener('click', function () { grid = rows.map(function () { return new Array(16).fill(false); }); build(); });
+  document.getElementById('slow').addEventListener('click', function () { bpm = Math.max(80, bpm - 8); document.getElementById('bpm').textContent = bpm; });
+  document.getElementById('fast').addEventListener('click', function () { bpm = Math.min(200, bpm + 8); document.getElementById('bpm').textContent = bpm; });
+
+  /* моргание, пока музыка не играет */
+  draw(hero, frameA);
+  setInterval(function () { if (playing) return; draw(hero, frameB); setTimeout(function () { if (!playing) draw(hero, frameA); }, 160); }, 2600);
+})();
+</script>
+</body>
+</html>

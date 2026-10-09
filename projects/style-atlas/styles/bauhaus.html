@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru" data-style="bauhaus">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Цвет и звук · Баухаус</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;800&display=swap">
+<style>
+/* Баухаус: круг, квадрат, треугольник и три основных цвета. Толстые чёрные линии делят плоскость, текст бывает повёрнут. */
+:root {
+  --cream: #F1E9DA;
+  --ink: #111111;
+  --red: #D7263D;
+  --yellow: #F4C430;
+  --blue: #1B4F9C;
+  --font: "Jost", "Futura", "Century Gothic", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--ink); font: 400 18px/1.5 var(--font); overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+header { border-bottom: 8px solid var(--ink); }
+header .wrap { display: flex; align-items: center; gap: 20px; padding-block: 16px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-right: auto; }
+.logo i { width: 18px; height: 18px; } .logo .c { border-radius: 50%; background: var(--blue); } .logo .s { background: var(--red); } .logo .t { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+header nav { display: flex; gap: 24px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; font-size: 14px; }
+header nav a { color: inherit; text-decoration: none; }
+header nav a:hover { color: var(--red); }
+
+/* композиция-обложка */
+.hero { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(90px, auto)); border-bottom: 8px solid var(--ink); }
+.hero > * { min-width: 0; }
+.b-red { grid-column: 1 / 3; grid-row: 1 / 4; background: var(--red); position: relative; border-right: 8px solid var(--ink); }
+.b-red span { position: absolute; left: 50%; bottom: 24px; transform-origin: left bottom; transform: rotate(-90deg) translateY(50%); white-space: nowrap; color: var(--cream); font-weight: 800; font-size: clamp(28px, 4vw, 54px); letter-spacing: .08em; text-transform: uppercase; }
+.b-title { grid-column: 3 / 7; grid-row: 1 / 3; padding: clamp(20px, 3vw, 40px); display: flex; flex-direction: column; justify-content: end; border-bottom: 8px solid var(--ink); }
+.b-title h1 { margin: 0; font-weight: 800; font-size: clamp(44px, 7.4vw, 112px); line-height: .9; letter-spacing: -.02em; text-transform: uppercase; }
+.b-title h1 span { color: var(--blue); }
+.b-circle { grid-column: 3 / 5; grid-row: 3 / 5; display: grid; place-items: center; border-right: 8px solid var(--ink); padding: 20px; }
+.b-circle i { width: min(100%, 260px); aspect-ratio: 1; border-radius: 50%; background: var(--blue); }
+.b-text { grid-column: 5 / 7; grid-row: 3 / 5; padding: clamp(18px, 2.4vw, 32px); display: grid; align-content: space-between; gap: 18px; background: var(--yellow); }
+.b-text p { margin: 0; font-size: clamp(16px, 1.4vw, 19px); font-weight: 500; }
+.b-black { grid-column: 1 / 3; grid-row: 4; background: var(--ink); color: var(--cream); padding: 18px clamp(16px, 2vw, 28px); display: flex; align-items: center; justify-content: space-between; gap: 12px; border-right: 8px solid var(--ink); }
+.b-black b { font-size: clamp(40px, 5vw, 70px); line-height: 1; font-weight: 800; }
+.b-black small { text-transform: uppercase; letter-spacing: .1em; font-size: 13px; }
+.btn { appearance: none; border: 4px solid var(--ink); background: var(--cream); padding: 12px 20px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; justify-self: start; transition: background .15s, color .15s; text-decoration: none; color: var(--ink); }
+.btn:hover { background: var(--ink); color: var(--cream); }
+
+/* синтезатор Кандинского */
+.synth { padding-block: 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 48px; align-items: center; border-bottom: 8px solid var(--ink); }
+.synth h2, .course h2 { margin: 0 0 16px; font-weight: 800; font-size: clamp(32px, 4vw, 56px); line-height: .95; text-transform: uppercase; }
+.synth p { margin: 0 0 14px; max-width: 30em; }
+.synth .q { padding-left: 16px; border-left: 8px solid var(--red); font-weight: 500; }
+.shapes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 2vw, 28px); align-items: end; }
+.shape { appearance: none; border: 0; padding: 0; background: none; cursor: pointer; display: grid; justify-items: center; gap: 14px; }
+.shape i { display: block; width: 100%; aspect-ratio: 1; max-width: 100%; transition: transform .35s cubic-bezier(.3,1.8,.5,1); }
+.shape .tri { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.shape .sq { background: var(--red); }
+.shape .ci { background: var(--blue); border-radius: 50%; }
+.shape span { font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: 14px; }
+.shape span small { display: block; font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 14px; text-align: center; }
+.shape.hit .tri { transform: scale(1.1) rotate(-8deg); }
+.shape.hit .sq { transform: scale(1.08) rotate(12deg); }
+.shape.hit .ci { transform: scale(1.12); }
+.shape:hover i { transform: translateY(-6px); }
+
+.course { padding-block: 64px 40px; }
+.weeks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 8px solid var(--ink); }
+.week { padding: 24px; border-right: 8px solid var(--ink); display: grid; gap: 12px; align-content: start; min-width: 0; }
+.week:last-child { border-right: 0; }
+.week .n { width: 56px; height: 56px; display: grid; place-items: center; font-weight: 800; font-size: 26px; color: var(--cream); }
+.week:nth-child(1) .n { background: var(--ink); border-radius: 50%; }
+.week:nth-child(2) .n { background: var(--red); }
+.week:nth-child(3) .n { background: var(--blue); clip-path: polygon(50% 0, 100% 100%, 0 100%); padding-top: 14px; }
+.week:nth-child(4) .n { background: var(--yellow); color: var(--ink); border-radius: 50% 0 50% 50%; }
+.week h3 { margin: 0; font-weight: 800; text-transform: uppercase; font-size: 20px; line-height: 1.1; }
+.week p { margin: 0; font-size: 16px; }
+.enroll { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-top: 28px; padding: 22px 26px; background: var(--ink); color: var(--cream); }
+.enroll b { font-size: clamp(22px, 2.6vw, 32px); text-transform: uppercase; }
+.enroll .btn { background: var(--yellow); border-color: var(--yellow); }
+.enroll .btn:hover { background: var(--cream); color: var(--ink); }
+footer { padding-block: 24px 120px; font-size: 14px; text-transform: uppercase; letter-spacing: .1em; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+  .b-red { grid-column: 1; grid-row: 1 / 3; min-height: 280px; }
+  .b-title { grid-column: 2; grid-row: 1 / 3; border-bottom: 0; }
+  .b-circle { grid-column: 1; grid-row: 3; border-top: 8px solid var(--ink); }
+  .b-text { grid-column: 2; grid-row: 3; border-top: 8px solid var(--ink); }
+  .b-black { grid-column: 1 / 3; grid-row: 4; border-top: 8px solid var(--ink); border-right: 0; }
+  .synth { grid-template-columns: minmax(0, 1fr); }
+  .weeks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .week:nth-child(2) { border-right: 0; } .week:nth-child(-n+2) { border-bottom: 8px solid var(--ink); }
+  header nav { display: none; }
+}
+@media (max-width: 560px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .b-red { grid-column: 1; grid-row: 1; min-height: 120px; border-right: 0; border-bottom: 8px solid var(--ink); }
+  .b-red span { position: static; transform: none; display: block; padding: 20px; font-size: 32px; }
+  .b-title, .b-circle, .b-text, .b-black { grid-column: 1; grid-row: auto; border-right: 0; }
+  .weeks { grid-template-columns: minmax(0, 1fr); }
+  .week { border-right: 0; border-bottom: 8px solid var(--ink); } .week:last-child { border-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .shape i { transition: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="logo"><i class="c"></i><i class="s"></i><i class="t"></i>Мастерская «Цвет и звук»</span>
+    <nav aria-label="Разделы"><a href="#synth">Синтезатор</a><a href="#course">Курс</a></nav>
+  </div>
+</header>
+
+<section class="hero" aria-label="Обложка курса">
+  <div class="b-red"><span>Курс 1926</span></div>
+  <div class="b-title"><h1>Форма.<br>Цвет.<br><span>Звук.</span></h1></div>
+  <div class="b-circle"><i></i></div>
+  <div class="b-text">
+    <p>Четырёхнедельный курс для музыкантов и художников. Учимся слышать картины и видеть музыку по методу преподавателей Баухауса.</p>
+    <a class="btn" href="#synth">Послушать фигуры</a>
+  </div>
+  <div class="b-black"><b>4</b><small>недели<br>12 занятий</small></div>
+</section>
+
+<section class="wrap synth" id="synth">
+  <div>
+    <h2>Синтезатор Кандинского</h2>
+    <p class="q">В 1923 году Кандинский раздал студентам Баухауса анкету: какой цвет подходит треугольнику, квадрату и кругу? Сам он отвечал: жёлтый, красный, синий.</p>
+    <p>Жёлтый он сравнивал с резкой трубой, синий — с виолончелью и органом. Нажмите на фигуры, чтобы услышать, как это могло бы звучать. Клавиши <b>1</b>, <b>2</b>, <b>3</b> тоже работают.</p>
+  </div>
+  <div class="shapes">
+    <button class="shape" type="button" data-s="tri"><i class="tri"></i><span>Треугольник<small>жёлтый · высокий и резкий</small></span></button>
+    <button class="shape" type="button" data-s="sq"><i class="sq"></i><span>Квадрат<small>красный · твёрдый, средний</small></span></button>
+    <button class="shape" type="button" data-s="ci"><i class="ci"></i><span>Круг<small>синий · глубокий и спокойный</small></span></button>
+  </div>
+</section>
+
+<section class="wrap course" id="course">
+  <h2>Программа курса</h2>
+  <div class="weeks">
+    <article class="week"><span class="n">1</span><h3>Точка и линия</h3><p>Ритм как расстояние между точками. Рисуем партитуру одной линией.</p></article>
+    <article class="week"><span class="n">2</span><h3>Цвет</h3><p>Тёплые и холодные тона. Почему жёлтый «приближается», а синий «уходит».</p></article>
+    <article class="week"><span class="n">3</span><h3>Форма</h3><p>Круг, квадрат и треугольник как три характера звука.</p></article>
+    <article class="week"><span class="n">4</span><h3>Композиция</h3><p>Собираем плакат-партитуру и исполняем его вчетвером.</p></article>
+  </div>
+  <div class="enroll"><b>Старт 3 ноября · 12 мест</b><a class="btn" href="#course" id="enroll">Записаться</a></div>
+</section>
+<footer class="wrap">Мастерская вымышлена · Факты о Кандинском настоящие</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var ctx;
+  function ac() { if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ctx = new AC(); } if (ctx && ctx.state === 'suspended') ctx.resume(); return ctx; }
+  function play(kind) {
+    var c = ac(); if (!c) return;
+    var t = c.currentTime, out = c.createGain(); out.connect(c.destination);
+    if (kind === 'tri') {
+      var f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(5000, t); f.frequency.exponentialRampToValueAtTime(1800, t + .5); f.connect(out);
+      [784, 1175].forEach(function (fr) { var o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = fr; o.connect(f); o.start(t); o.stop(t + .7); });
+      out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(.12, t + .03); out.gain.exponentialRampToValueAtTime(.001, t + .7);
+    } else if (kind === 'sq') {
+      var o = c.createOscillator(); o.type = 'square'; o.frequency.value = 262; var f2 = c.createBiquadFilter(); f2.type = 'lowpass'; f2.frequency.value = 1400; o.connect(f2); f2.connect(out);
+      out.gain.setValueAtTime(.16, t); out.gain.setValueAtTime(.16, t + .35); out.gain.linearRampToValueAtTime(0, t + .45); o.start(t); o.stop(t + .5);
+    } else {
+      [98, 147, 196].forEach(function (fr, i) { var o = c.createOscillator(); o.type = 'sine'; o.frequency.value = fr; var g = c.createGain(); g.gain.value = [.5, .25, .15][i]; o.connect(g); g.connect(out); o.start(t); o.stop(t + 2.2); });
+      out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(.4, t + .15); out.gain.exponentialRampToValueAtTime(.001, t + 2.2);
+    }
+  }
+  function hit(btn) { play(btn.dataset.s); btn.classList.add('hit'); setTimeout(function () { btn.classList.remove('hit'); }, 260); }
+  var shapes = document.querySelectorAll('.shape');
+  shapes.forEach(function (b) { b.addEventListener('click', function () { hit(b); }); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+    var i = ['1', '2', '3'].indexOf(e.key); if (i >= 0) hit(shapes[i]);
+  });
+  document.getElementById('enroll').addEventListener('click', function (e) { e.preventDefault(); this.textContent = 'Вы в списке'; });
+})();
+</script>
+</body>
+</html>

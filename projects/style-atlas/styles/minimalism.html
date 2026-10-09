@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru" data-style="minimalism">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Пауза · Минимализм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500&display=swap">
+<style>
+/* Минимализм: одна колонка воздуха, одна гарнитура, один цвет на обложке. */
+:root {
+  --paper: #F3F2EE;
+  --ink: #141414;
+  --muted: #8E8D88;
+  --line: #DEDCD5;
+  --sand: #C9B79C;
+  --font: "Onest", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 300 17px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(20px, 7vw, 104px); }
+
+header .wrap { display: flex; justify-content: space-between; align-items: baseline; padding-block: 32px; }
+.logo { font-weight: 500; font-size: 15px; letter-spacing: -.01em; }
+nav { display: flex; gap: clamp(16px, 3vw, 40px); font-size: 14px; color: var(--muted); }
+nav a { transition: color .2s; }
+nav a:hover, nav a[aria-current] { color: var(--ink); }
+
+.hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(40px, 8vw, 128px); align-items: end; padding-block: clamp(80px, 18vh, 200px) clamp(80px, 14vh, 160px); }
+.label { font-size: 13px; color: var(--muted); letter-spacing: .01em; margin: 0 0 28px; }
+h1 { margin: 0; font-weight: 300; font-size: clamp(72px, 12vw, 176px); line-height: .88; letter-spacing: -.055em; }
+.lead { margin: 40px 0 0; max-width: 26em; color: var(--muted); }
+.listen { display: inline-flex; gap: 14px; align-items: center; margin-top: 40px; font-weight: 400; font-size: 15px; padding-bottom: 6px; background: linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 1px no-repeat; transition: background-size .35s ease; }
+.listen:hover { background-size: 0 1px; background-position: 100% 100%; }
+.cover { margin: 0; }
+.art { aspect-ratio: 1; max-width: 100%; background: #E6E3DB; position: relative; overflow: hidden; }
+.art::before { content: ""; position: absolute; width: 44%; aspect-ratio: 1; border-radius: 50%; background: var(--sand); left: 50%; top: 56%; transform: translate(-50%, -50%); }
+.art::after { content: ""; position: absolute; left: 0; right: 0; top: 56%; height: 1px; background: rgba(20,20,20,.18); }
+figcaption { margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+.tracks { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(24px, 6vw, 96px); padding-block: 48px 120px; border-top: 1px solid var(--line); }
+.tracks h2, .about h2 { margin: 0; font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: .01em; }
+ol { list-style: none; margin: 0; padding: 0; }
+.track { width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 18px 0; border: 0; border-bottom: 1px solid var(--line); background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; position: relative; }
+.track .n { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.track .name { font-size: 19px; font-weight: 300; transition: transform .3s ease; }
+.track .d { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.track:hover .name { transform: translateX(6px); }
+.track[aria-pressed="true"] .n { color: transparent; }
+.track[aria-pressed="true"] .n::before { content: ""; position: absolute; left: 2px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--ink); }
+.track .bar { position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: var(--ink); }
+.track[aria-pressed="true"] .bar { animation: progress 40s linear forwards; }
+@keyframes progress { to { width: 100%; } }
+
+.about { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(24px, 6vw, 96px); padding-block: 48px 140px; border-top: 1px solid var(--line); }
+.about p { margin: 0; font-size: clamp(24px, 3vw, 38px); line-height: 1.25; letter-spacing: -.02em; max-width: 20em; text-wrap: balance; }
+.about p span { color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 32px; padding-block: 40px 96px; font-size: 13px; color: var(--muted); }
+form { display: flex; gap: 20px; align-items: end; }
+label { display: grid; gap: 6px; }
+input { width: min(260px, 60vw); border: 0; border-bottom: 1px solid var(--ink); background: transparent; font: 300 16px/1.4 var(--font); color: var(--ink); padding: 6px 0; border-radius: 0; }
+input:focus { outline: none; border-bottom-width: 2px; }
+button.text { border: 0; background: none; font: 400 14px var(--font); color: var(--ink); cursor: pointer; padding: 6px 0; }
+.note { min-height: 1.6em; margin: 0; }
+
+@media (max-width: 760px) {
+  nav a:not(:first-child) { display: none; }
+  .hero, .tracks, .about { grid-template-columns: minmax(0, 1fr); }
+  .hero { padding-top: 56px; }
+  .cover { max-width: 420px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } .track[aria-pressed="true"] .bar { animation: none; width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top">Пауза</a>
+    <nav aria-label="Разделы">
+      <a href="#tracks" aria-current="page">Релизы</a>
+      <a href="#about">О лейбле</a>
+      <a href="#subscribe">Подписка</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <section class="hero">
+    <div>
+      <p class="label">Релиз 012 · 14 ноября 2026</p>
+      <h1>Воздух</h1>
+      <p class="lead">Восемь пьес для фортепиано, ленточного шума и тишины между ними. Записано за одну ночь в пустом концертном зале.</p>
+      <a class="listen" href="#tracks">Слушать альбом <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="cover">
+      <div class="art" role="img" aria-label="Обложка альбома: песочный круг над тонкой линией горизонта"></div>
+      <figcaption>Обложка — Вера Ланская</figcaption>
+    </figure>
+  </section>
+
+  <section class="tracks" id="tracks">
+    <h2>Треки · 34 минуты</h2>
+    <ol id="list"></ol>
+  </section>
+
+  <section class="about" id="about">
+    <h2>О лейбле</h2>
+    <p>«Пауза» издаёт музыку, которую слушают вполголоса. <span>Не больше четырёх альбомов в год, только на виниле и в цифре.</span></p>
+  </section>
+</main>
+
+<footer id="subscribe">
+  <div class="wrap">
+    <form id="sub" novalidate>
+      <label for="email">Письмо в день релиза
+        <input id="email" type="email" placeholder="почта" autocomplete="email">
+      </label>
+      <button class="text" type="submit">Подписаться</button>
+    </form>
+    <p class="note" id="note" aria-live="polite"></p>
+    <span>© 2026 Пауза</span>
+  </div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/guide.js"></script>
+<script>
+(function () {
+  var tracks = [
+    ['Утро без звонка', '3:42'], ['Белая комната', '4:15'], ['Вдох', '2:58'], ['Пыль на окне', '5:07'],
+    ['Медленный снег', '4:31'], ['Половина седьмого', '3:26'], ['Выдох', '2:44'], ['Тишина после', '6:10']
+  ];
+  var list = document.getElementById('list');
+  list.innerHTML = tracks.map(function (t, i) {
+    return '<li><button class="track" type="button" aria-pressed="false"><span class="n">0' + (i + 1) + '</span><span class="name">' + t[0] + '</span><span class="d">' + t[1] + '</span><i class="bar"></i></button></li>';
+  }).join('');
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('.track');
+    if (!b) return;
+    var on = b.getAttribute('aria-pressed') !== 'true';
+    list.querySelectorAll('.track').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    if (on) { void b.offsetWidth; b.setAttribute('aria-pressed', 'true'); }
+  });
+  document.getElementById('sub').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = document.getElementById('email').value.trim();
+    document.getElementById('note').textContent = /.+@.+\..+/.test(v) ? 'Готово. Письмо придёт 14 ноября.' : 'Нужен адрес почты, например имя@почта.рф';
+  });
+})();
+</script>
+</body>
+</html>
