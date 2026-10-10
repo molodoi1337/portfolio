@@ -7,6 +7,7 @@ const projects = [
     kind: "Веб-приложение · сайт + CRM",
     text: "Сайт автосервиса с онлайн-записью на свободные слоты, статусом ремонта по ссылке, личным кабинетом и админкой: дашборд выручки, канбан заказов, расписание постов.",
     note: "Демо: на странице входа кнопка «Администратор» — вход в один клик",
+    warn: "Из России открывается только через VPN",
     tags: ["Next.js", "База данных", "Авторизация", "Админка", "Telegram-уведомления"],
   },
   {
@@ -68,7 +69,7 @@ grid.innerHTML = projects.map((p) => `
     </button>
     <div class="card-body">
       <div class="card-top"><h3>${p.title}</h3><span class="kind">${p.kind}</span></div>
-      <p>${p.text}</p>${p.note ? `<p class="note">${p.note}</p>` : ""}
+      <p>${p.text}</p>${p.note ? `<p class="note">${p.note}</p>` : ""}${p.warn ? `<p class="warn">⚠ ${p.warn}</p>` : ""}
       <ul class="tags">${p.tags.map((t) => `<li>${t}</li>`).join('')}</ul>
       <div class="card-actions">
         <button class="btn btn-primary" data-open="${p.id}">Посмотреть</button>

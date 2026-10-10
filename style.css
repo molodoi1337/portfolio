@@ -126,3 +126,4 @@ dialog[open] { display: flex; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 .card .note { color: var(--accent); font-size: 14px; }
+.card .warn { display: inline-block; align-self: flex-start; padding: 6px 10px; border-radius: 8px; font-size: 13px; color: #ffb4a8; background: rgba(255, 99, 71, .12); border: 1px solid rgba(255, 99, 71, .35); }
