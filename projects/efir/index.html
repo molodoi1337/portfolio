@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ЭФИР Сфера — наушники с пространственным звуком</title>
+  <meta name="description" content="ЭФИР Сфера — беспроводные наушники, которые размещают музыку вокруг вас. Трекинг головы, шумоподавление −45 дБ, 48 часов работы.">
+  <meta name="theme-color" content="#04030A">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2304030A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%238A7CFF'/%3E%3Cellipse cx='16' cy='16' rx='13' ry='4.5' fill='none' stroke='%23FF7AD9' stroke-width='1.6' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+  <div class="nebula" aria-hidden="true"></div>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-orbit" viewBox="0 0 120 120"><circle cx="60" cy="60" r="16"/><ellipse cx="60" cy="60" rx="50" ry="17"/></svg>
+    <span>Собираем частицы</span>
+  </div>
+
+  <header class="nav" id="nav">
+    <a class="logo" href="#top" aria-label="ЭФИР — наверх">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="6"/><ellipse cx="16" cy="16" rx="14" ry="5" transform="rotate(-20 16 16)"/></svg>
+      <span>ЭФИР</span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Разделы">
+      <a href="#sound">Звук</a>
+      <a href="#design">Форма</a>
+      <a href="#colors">Цвета</a>
+      <a href="#specs">Характеристики</a>
+      <a href="#buy">Купить</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn eq-btn" type="button" data-sound aria-pressed="false" aria-label="Включить звуковую сцену">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <button class="cart-btn" type="button" id="cartOpen">
+        <span class="cart-label">Корзина</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="icon-btn burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Меню">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 0 · Планета -->
+    <section class="hero" id="top" data-scene="0">
+      <div class="hero-inner">
+        <p class="eyebrow reveal"><span class="pulse-dot"></span>Новинка · пространственный звук</p>
+        <h1 class="reveal" style="--i:1">Звук, у&nbsp;которого есть <span class="grad">орбита</span></h1>
+        <p class="lead reveal" style="--i:2">ЭФИР Сфера раскладывает музыку вокруг вас: голос&nbsp;— впереди, гитара&nbsp;— слева, зал&nbsp;— повсюду. Поворачиваете голову&nbsp;— сцена остаётся на&nbsp;месте.</p>
+        <div class="hero-cta reveal" style="--i:3">
+          <a class="btn btn-primary" href="#buy">Купить от 19&nbsp;990&nbsp;₽</a>
+          <button class="btn btn-ghost" type="button" data-sound aria-pressed="false">
+            <span class="play-ico" aria-hidden="true"></span><span data-sound-label>Включить сцену</span>
+          </button>
+        </div>
+        <p class="hint reveal" style="--i:4">Лучше в&nbsp;наушниках: трек синтезируется прямо в&nbsp;браузере, а&nbsp;мелодия кружит вокруг головы.</p>
+      </div>
+
+      <ul class="hero-stats" aria-label="Коротко о наушниках">
+        <li class="chip glass depth" style="--depth:1.6; --top:17%; --right:6%"><div class="bob"><b>360°</b><span>сцена с&nbsp;трекингом головы</span></div></li>
+        <li class="chip glass depth" style="--depth:0.8; --top:47%; --right:2.5%"><div class="bob" style="--d:7s"><b>−45&nbsp;дБ</b><span>адаптивное шумоподавление</span></div></li>
+        <li class="chip glass depth" style="--depth:1.2; --top:74%; --right:24%"><div class="bob" style="--d:9s"><b>48&nbsp;ч</b><span>музыки без подзарядки</span></div></li>
+      </ul>
+
+      <a class="scroll-cue" href="#sound"><span class="mouse" aria-hidden="true"></span>Листайте&nbsp;— частицы соберутся заново</a>
+    </section>
+
+    <!-- 1 · Волны -->
+    <section class="section sound" id="sound" data-scene="1">
+      <div class="section-head center reveal">
+        <p class="kicker">01 — Звук</p>
+        <h2>Музыка расходится волнами, а&nbsp;не&nbsp;льётся из&nbsp;двух точек</h2>
+      </div>
+      <div class="orbit-cards">
+        <article class="card glass depth reveal" style="--depth:1.3; --i:1">
+          <div class="bob">
+            <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9"/><path d="M12 6.5a5.5 5.5 0 0 1 5.5 5.5M12 17.5A5.5 5.5 0 0 1 6.5 12"/></svg></span>
+            <h3>Трекинг головы</h3>
+            <p>Гироскоп 200 раз в&nbsp;секунду пересчитывает сцену. Отвернулись&nbsp;— оркестр остался там, где играл.</p>
+          </div>
+        </article>
+        <article class="card glass depth reveal" style="--depth:0.7; --i:2">
+          <div class="bob" style="--d:8s">
+            <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span>
+            <h3>Драйверы 40&nbsp;мм</h3>
+            <p>Диафрагмы с&nbsp;бериллиевым напылением, от&nbsp;4&nbsp;Гц до&nbsp;40&nbsp;кГц. Бас ощущается кожей, но&nbsp;не&nbsp;давит на&nbsp;уши.</p>
+          </div>
+        </article>
+        <article class="card glass depth reveal" style="--depth:0.9; --i:3">
+          <div class="bob" style="--d:7s">
+            <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+            <h3>12 микрофонов</h3>
+            <p>Шумоподавление до&nbsp;−45&nbsp;дБ само подстраивается под метро, офис и&nbsp;самолёт. Голос в&nbsp;звонках&nbsp;— чистый даже на&nbsp;ветру.</p>
+          </div>
+        </article>
+        <article class="card glass depth reveal" style="--depth:1.5; --i:4">
+          <div class="bob" style="--d:9s">
+            <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></svg></span>
+            <h3>LDAC и&nbsp;LE&nbsp;Audio</h3>
+            <p>Hi-Res по&nbsp;воздуху до&nbsp;990&nbsp;кбит/с и&nbsp;подключение к&nbsp;двум устройствам сразу: ноутбук и&nbsp;телефон без переключений.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2 · Наушники -->
+    <section class="section split" id="design" data-scene="2">
+      <div class="stage-space" aria-hidden="true"></div>
+      <div class="split-text">
+        <p class="kicker reveal">02 — Форма</p>
+        <h2 class="reveal" style="--i:1">Тысячи частиц собрались в&nbsp;254&nbsp;грамма</h2>
+        <p class="lead reveal" style="--i:2">Оголовье из&nbsp;анодированного алюминия, амбушюры из&nbsp;пены с&nbsp;памятью в&nbsp;мягкой эко-коже. Чашки поворачиваются на&nbsp;90° и&nbsp;складываются в&nbsp;чехол толщиной 4&nbsp;см.</p>
+        <dl class="facts">
+          <div class="fact glass reveal" style="--i:3"><dt>254&nbsp;г</dt><dd>можно не&nbsp;снимать весь перелёт</dd></div>
+          <div class="fact glass reveal" style="--i:4"><dt>90°</dt><dd>поворот чашек, складываются плоско</dd></div>
+          <div class="fact glass reveal" style="--i:5"><dt>IPX4</dt><dd>не&nbsp;боятся дождя и&nbsp;пота</dd></div>
+          <div class="fact glass reveal" style="--i:6"><dt>5&nbsp;мин</dt><dd>зарядки&nbsp;— 4&nbsp;часа музыки</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 2 · Цвета -->
+    <section class="section split" id="colors" data-scene="3">
+      <figure class="product-stage" id="productStage" role="img" aria-label="ЭФИР Сфера в цвете Туманность">
+        <div class="product-glow" aria-hidden="true"></div>
+        <div class="product-orbit" aria-hidden="true"><i></i></div>
+        <div class="product depth" style="--depth:-0.6"><div class="product-tilt" id="product"></div></div>
+        <figcaption class="product-tag glass"><span class="color-dot" aria-hidden="true"></span><span data-color-name>Туманность</span></figcaption>
+      </figure>
+      <div class="split-text">
+        <p class="kicker reveal">03 — Цвета</p>
+        <h2 class="reveal" style="--i:1">Четыре оттенка космоса</h2>
+        <p class="lead reveal" style="--i:2">Анодированный алюминий в&nbsp;четырёх цветах. Выберите свой&nbsp;— галактика на&nbsp;фоне перекрасится вместе с&nbsp;корпусом.</p>
+        <div class="swatches reveal" style="--i:3" id="swatches" role="radiogroup" aria-label="Цвет корпуса"></div>
+        <div class="color-info glass reveal" style="--i:4">
+          <p class="color-name" id="colorName">Туманность</p>
+          <p class="color-desc" id="colorDesc"></p>
+          <a class="btn btn-ghost small" href="#buy">Выбрать комплект →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · Галактика: характеристики -->
+    <section class="section" id="specs" data-scene="3">
+      <div class="section-head center reveal">
+        <p class="kicker">04 — Характеристики</p>
+        <h2>Всё, что внутри</h2>
+      </div>
+      <div class="specs glass reveal" style="--i:1">
+        <div class="spec-group">
+          <h3>Звук</h3>
+          <dl>
+            <div><dt>Драйверы</dt><dd>40&nbsp;мм, бериллиевое напыление</dd></div>
+            <div><dt>Диапазон</dt><dd>4&nbsp;Гц&nbsp;— 40&nbsp;кГц</dd></div>
+            <div><dt>Шумоподавление</dt><dd>адаптивное, до&nbsp;−45&nbsp;дБ</dd></div>
+            <div><dt>Пространственный звук</dt><dd>360°, трекинг головы</dd></div>
+          </dl>
+        </div>
+        <div class="spec-group">
+          <h3>Связь</h3>
+          <dl>
+            <div><dt>Bluetooth</dt><dd>5.4, LE&nbsp;Audio</dd></div>
+            <div><dt>Кодеки</dt><dd>LDAC, LC3, AAC, SBC</dd></div>
+            <div><dt>Мультипоинт</dt><dd>2 устройства</dd></div>
+            <div><dt>Задержка</dt><dd>40&nbsp;мс в&nbsp;игровом режиме</dd></div>
+          </dl>
+        </div>
+        <div class="spec-group">
+          <h3>Питание</h3>
+          <dl>
+            <div><dt>С&nbsp;шумоподавлением</dt><dd>до&nbsp;48&nbsp;ч</dd></div>
+            <div><dt>Без шумоподавления</dt><dd>до&nbsp;60&nbsp;ч</dd></div>
+            <div><dt>Быстрая зарядка</dt><dd>5&nbsp;мин → 4&nbsp;ч</dd></div>
+            <div><dt>Провод</dt><dd>USB-C, 24&nbsp;бит / 96&nbsp;кГц</dd></div>
+          </dl>
+        </div>
+        <div class="spec-group">
+          <h3>Корпус</h3>
+          <dl>
+            <div><dt>Вес</dt><dd>254&nbsp;г</dd></div>
+            <div><dt>Материалы</dt><dd>алюминий, пена с&nbsp;памятью</dd></div>
+            <div><dt>Защита</dt><dd>IPX4</dd></div>
+            <div><dt>В&nbsp;комплекте</dt><dd>чехол, кабель USB-C, переходник 3,5&nbsp;мм</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · Галактика: покупка -->
+    <section class="section" id="buy" data-scene="3">
+      <div class="section-head center reveal">
+        <p class="kicker">05 — Купить</p>
+        <h2>Выберите свою орбиту</h2>
+        <p class="lead">Цвет корпуса: <a href="#colors" class="color-link"><span class="color-dot" aria-hidden="true"></span><span data-color-name>Туманность</span></a></p>
+      </div>
+
+      <div class="tiers">
+        <article class="tier glass reveal" style="--i:1">
+          <div class="tier-img" data-hp></div>
+          <h3>Сфера Lite</h3>
+          <p class="tier-price">19&nbsp;990&nbsp;₽</p>
+          <p class="tier-note">или 3&nbsp;332&nbsp;₽/мес в&nbsp;рассрочку</p>
+          <ul>
+            <li>Пространственный звук без трекинга</li>
+            <li>Шумоподавление до&nbsp;−35&nbsp;дБ</li>
+            <li>До&nbsp;40&nbsp;ч работы</li>
+            <li>AAC, SBC, мультипоинт</li>
+          </ul>
+          <button class="btn btn-ghost wide" type="button" data-add="lite">В&nbsp;корзину</button>
+        </article>
+        <article class="tier tier-hit glass reveal" style="--i:2">
+          <span class="badge">Хит</span>
+          <div class="tier-img" data-hp></div>
+          <h3>Сфера</h3>
+          <p class="tier-price">34&nbsp;990&nbsp;₽</p>
+          <p class="tier-note">или 5&nbsp;832&nbsp;₽/мес в&nbsp;рассрочку</p>
+          <ul>
+            <li>Всё, о&nbsp;чём эта страница</li>
+            <li>Трекинг головы, 360°</li>
+            <li>Шумоподавление до&nbsp;−45&nbsp;дБ</li>
+            <li>До&nbsp;48&nbsp;ч, LDAC и&nbsp;LE&nbsp;Audio</li>
+          </ul>
+          <button class="btn btn-primary wide" type="button" data-add="sfera">В&nbsp;корзину</button>
+        </article>
+        <article class="tier glass reveal" style="--i:3">
+          <div class="tier-img" data-hp></div>
+          <h3>Сфера Pro</h3>
+          <p class="tier-price">49&nbsp;990&nbsp;₽</p>
+          <p class="tier-note">или 8&nbsp;332&nbsp;₽/мес в&nbsp;рассрочку</p>
+          <ul>
+            <li>Всё из&nbsp;«Сферы»</li>
+            <li>Титановое оголовье</li>
+            <li>Док-станция с&nbsp;ЦАП 32&nbsp;бит</li>
+            <li>Кожаный чехол, гарантия 3&nbsp;года</li>
+          </ul>
+          <button class="btn btn-ghost wide" type="button" data-add="pro">В&nbsp;корзину</button>
+        </article>
+      </div>
+
+      <ul class="perks reveal">
+        <li><b>Бесплатная доставка</b><span>по&nbsp;России за&nbsp;1–3 дня</span></li>
+        <li><b>30 дней на&nbsp;возврат</b><span>без объяснения причин</span></li>
+        <li><b>Рассрочка 0%</b><span>на&nbsp;6 месяцев</span></li>
+        <li><b>Гарантия 2 года</b><span>и&nbsp;сервис в&nbsp;12 городах</span></li>
+      </ul>
+
+      <div class="faq reveal">
+        <details class="glass">
+          <summary>Пространственный звук работает с&nbsp;любой музыкой?</summary>
+          <p>Да. Треки в&nbsp;Dolby Atmos звучат объёмно сразу, обычное стерео ЭФИР раскладывает на&nbsp;сцену сам. Режим можно выключить двойным касанием по&nbsp;чашке.</p>
+        </details>
+        <details class="glass">
+          <summary>Подойдут, если я&nbsp;ношу очки?</summary>
+          <p>Да: у&nbsp;амбушюр есть мягкие вырезы под дужки, а&nbsp;пена с&nbsp;памятью принимает форму за&nbsp;пару минут.</p>
+        </details>
+        <details class="glass">
+          <summary>Можно сначала послушать?</summary>
+          <p>Курьер подождёт 15 минут, пока вы примеряете. Не&nbsp;понравились&nbsp;— отдадите обратно и&nbsp;ничего не&nbsp;заплатите.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="logo" href="#top" aria-label="ЭФИР — наверх">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="6"/><ellipse cx="16" cy="16" rx="14" ry="5" transform="rotate(-20 16 16)"/></svg>
+      <span>ЭФИР</span>
+    </a>
+    <p>© 2026 ЭФИР. Концепт-магазин для портфолио: товар вымышлен, заказы никуда не&nbsp;отправляются.</p>
+    <a href="#top">Наверх ↑</a>
+  </footer>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" inert>
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Корзина</h2>
+      <button class="icon-btn" type="button" id="cartClose" aria-label="Закрыть корзину">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-view" data-view="cart">
+      <ul class="cart-list" id="cartList"></ul>
+      <div class="cart-empty" id="cartEmpty">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="16"/><ellipse cx="60" cy="60" rx="50" ry="17"/></svg>
+        <p>Здесь пока пустой космос.</p>
+        <a class="btn btn-ghost small" href="#buy" data-close>Выбрать наушники</a>
+      </div>
+      <div class="cart-sum" id="cartSum">
+        <div><span>Товары</span><span id="sumItems">0 ₽</span></div>
+        <div><span>Доставка</span><span>бесплатно</span></div>
+        <div class="total"><span>Итого</span><span id="sumTotal">0 ₽</span></div>
+        <button class="btn btn-primary wide" type="button" id="toCheckout">Оформить заказ</button>
+      </div>
+    </div>
+
+    <form class="drawer-view" data-view="form" id="orderForm" novalidate hidden>
+      <button class="back-link" type="button" id="backToCart">← Вернуться в&nbsp;корзину</button>
+      <label class="field">
+        <span>Имя</span>
+        <input name="name" autocomplete="name" required placeholder="Как к вам обращаться">
+        <small class="err"></small>
+      </label>
+      <label class="field">
+        <span>Телефон</span>
+        <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+7 (900) 000-00-00">
+        <small class="err"></small>
+      </label>
+      <label class="field">
+        <span>Город</span>
+        <input name="city" autocomplete="address-level2" required placeholder="Москва">
+        <small class="err"></small>
+      </label>
+      <fieldset class="field">
+        <legend>Доставка</legend>
+        <div class="seg">
+          <label><input type="radio" name="delivery" value="courier" checked><span>Курьер</span></label>
+          <label><input type="radio" name="delivery" value="pickup"><span>Пункт выдачи</span></label>
+        </div>
+      </fieldset>
+      <label class="field" id="addressField">
+        <span>Адрес</span>
+        <input name="address" autocomplete="street-address" placeholder="Улица, дом, квартира">
+        <small class="err"></small>
+      </label>
+      <fieldset class="field">
+        <legend>Оплата</legend>
+        <div class="seg">
+          <label><input type="radio" name="pay" value="card" checked><span>При получении</span></label>
+          <label><input type="radio" name="pay" value="split"><span>Рассрочка 0%</span></label>
+        </div>
+      </fieldset>
+      <div class="cart-sum">
+        <div class="total"><span>К&nbsp;оплате</span><span id="formTotal">0 ₽</span></div>
+        <button class="btn btn-primary wide" type="submit">Подтвердить заказ</button>
+        <p class="fineprint">Это демо: данные никуда не&nbsp;отправляются.</p>
+      </div>
+    </form>
+
+    <div class="drawer-view done" data-view="done" hidden>
+      <svg class="done-orbit" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="16"/><ellipse cx="60" cy="60" rx="50" ry="17"/></svg>
+      <h3>Заказ <span id="orderNo"></span> принят</h3>
+      <p id="orderText"></p>
+      <button class="btn btn-ghost wide" type="button" data-close>Вернуться на&nbsp;орбиту</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/scene.js?v=4"></script>
+  <script src="js/audio.js?v=4"></script>
+  <script src="js/product.js?v=5"></script>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>
