@@ -81,7 +81,7 @@ const grid = document.getElementById('grid');
 grid.innerHTML = projects.map((p) => `
   <article class="card">
     <button class="shot" data-open="${p.id}" aria-label="Посмотреть сайт ${p.title}">
-      <img src="shots/${p.id}.png" alt="Главная страница сайта ${p.title}" loading="lazy">
+      <img src="shots/${p.id}.png?v=2" alt="Главная страница сайта ${p.title}" loading="lazy">
     </button>
     <div class="card-body">
       <div class="card-top"><h3>${p.title}</h3><span class="kind">${p.kind}</span></div>
