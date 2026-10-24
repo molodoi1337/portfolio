@@ -1,0 +1,29 @@
+name: Deploy to FastHost
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-fasthost
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package
+        run: |
+          zip -rq site.zip index.html style.css script.js projects shots \
+            -x '*.DS_Store' '*/_redirects'
+
+      - name: Deploy
+        run: |
+          curl --fail-with-body -sS -X POST \
+            -H "X-Api-Key: ${{ secrets.FASTHOST_API_KEY }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary @site.zip \
+            https://api.sudzekai.ru/fast-host/api/deploy/6
