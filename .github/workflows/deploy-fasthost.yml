@@ -26,4 +26,4 @@ jobs:
             -H "X-Api-Key: ${{ secrets.FASTHOST_API_KEY }}" \
             -H "Content-Type: application/zip" \
             --data-binary @site.zip \
-            https://api.sudzekai.ru/fast-host/api/deploy/6
+            https://api.sudzekai.ru/fast-host/api/deploy/8
