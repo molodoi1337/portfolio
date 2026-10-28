@@ -69,7 +69,7 @@
   .res .op .pts { color: var(--accent2); }
   .flow { text-align: left; margin-bottom: 12px; }
   .flow span { font-size: 13px; color: var(--muted); }
-  .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px; padding: 4px; border-radius: 12px; background: rgba(255, 255, 255, .06); }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 6px; padding: 4px; border-radius: 12px; background: rgba(255, 255, 255, .06); }
   .seg button { border: 0; background: transparent; color: var(--muted); padding: 8px 2px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
   .seg button.on { background: var(--accent); color: #fff; }
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
@@ -130,10 +130,9 @@
 const LANES = 4, LANE_W = 3.6, ROAD_W = LANES * LANE_W;
 const CAR_W = 1.9, CAR_L = 4.4;
 const ROUND = +new URLSearchParams(location.search).get('round') || 120, COUNTDOWN = 3;  // ?round=N for quick tests
-const CHUNK = 200;
 const VMAX = 38;  // ~137 km/h, the same all round long
-// traffic density: k scales the gaps between cars
-const FLOWS = [{ name: 'Свободный', k: 2.4 }, { name: 'Средний', k: 1.5 }, { name: 'Плотный', k: 1 }, { name: 'Пробка', k: 0.55 }];
+// traffic density: average distance between cars in a lane, metres
+const FLOWS = [{ name: 'Свободный', gap: 45 }, { name: 'Средний', gap: 31 }, { name: 'Плотный', gap: 22 }];
 const ID_PREFIX = 'molodoi-shashki-v1-';
 const COLORS = ['#e8e8ea', '#c9ccd2', '#3d4450', '#1f2329', '#8a1f24', '#2c4f7c', '#5c6b3a', '#d9b44a', '#7a7f87', '#a34d2a', '#efe7d6', '#3a6b6b'];
 
@@ -154,81 +153,136 @@ function rngOf(seed) {
 }
 const laneX = (i) => (i + 0.5) * LANE_W - ROAD_W / 2;
 
-// ---------- traffic: deterministic from the seed, same on both devices ----------
-// Every lane moves at its own constant speed, so cars in one lane never overlap.
+// ---------- traffic: every bot has its own speed, follows the car ahead and changes lanes ----------
+const AHEAD = 230, BEHIND = 130;               // bots live in this window around the player
+const IDM = { a: 2.6, b: 4, s0: 2.5, T: 0.9 };  // intelligent driver model: accel, comfy brake, min gap, headway
+const occupies = (x, w, lane) => Math.abs(x - laneX(lane)) < w / 2 + LANE_W / 2 - 0.25;
+const laneOf = (x) => Math.max(0, Math.min(LANES - 1, Math.round((x + ROAD_W / 2) / LANE_W - 0.5)));
+
 const traffic = {
-  seed: 1, k: 1, laneV: [], cache: new Map(),
-  lag: new Map(), maxLag: 0,  // metres a bot fell back because it braked behind the player (local only)
-  reset(seed, flow) {
-    this.seed = seed; this.k = FLOWS[flow] ? FLOWS[flow].k : 1;
-    this.cache.clear(); this.lag.clear(); this.maxLag = 0;
-    const r = rngOf(hash(seed, 999, 7));
-    this.laneV = [23, 19, 15.5, 12].map((v) => v + (r() - 0.5) * 2);
-  },
-  chunk(lane, k) {
-    const key = lane * 1e6 + k;
-    let list = this.cache.get(key);
-    if (list) return list;
-    list = [];
-    const r = rngOf(hash(this.seed, lane, k));
-    const end = (k + 1) * CHUNK;
-    let pos = k * CHUNK + r() * 8;
-    let i = 0;
-    while (true) {
-      const truck = lane >= 2 && r() < 0.22;
-      const len = truck ? 7.5 + r() * 2 : 4 + r() * 0.8;
-      if (pos + len > end - 2) break;
-      if (pos + len < -15 || pos > 45) {  // keep the start line clear
-        list.push({ id: key * 100 + i, lane, y0: pos, len, w: truck ? 2.3 : CAR_W, truck, color: COLORS[(r() * COLORS.length) | 0] });
-      }
-      i++;
-      pos += len + Math.max(3, (4 + r() * r() * 36) * this.k);
-    }
-    this.cache.set(key, list);
-    return list;
-  },
-  // cars whose current position is within [yMin, yMax] at race time t
-  near(t, yMin, yMax, out) {
-    out.length = 0;
+  cars: [], r: Math.random, gap: 40, need: [], nextId: 1,
+  reset(seed, flow, y) {
+    this.r = rngOf(hash(seed, 999, 7));
+    this.gap = (FLOWS[flow] || FLOWS[1]).gap;
+    this.cars = []; this.need = [];
     for (let lane = 0; lane < LANES; lane++) {
-      const shift = this.laneV[lane] * t;
-      const k0 = Math.floor((yMin - shift - 10) / CHUNK), k1 = Math.floor((yMax - shift + this.maxLag) / CHUNK);
-      for (let k = k0; k <= k1; k++) {
-        for (const c of this.chunk(lane, k)) {
-          const y = c.y0 + shift + c.len / 2 - (this.lag.get(c.id) || 0);
-          if (y > yMin - c.len && y < yMax + c.len) { c.y = y; c.x = laneX(lane); out.push(c); }
-        }
+      let pos = y + 45 + this.r() * this.gap;
+      while (pos < y + AHEAD) { this.spawn(lane, pos); pos += this.spawnGap(); }
+      this.need[lane] = this.spawnGap();
+    }
+  },
+  spawnGap() { return this.gap * (0.45 + this.r() * 1.1); },
+  spawn(lane, y, v0) {
+    const r = this.r;
+    const truck = r() < 0.14;
+    const len = truck ? 7.5 + r() * 2 : 4 + r() * 0.8;
+    v0 = v0 || (truck ? 12 + r() * 5 : 13 + r() * 14);  // 43–97 km/h, any lane
+    this.cars.push({
+      id: this.nextId++, lane, x: laneX(lane), y, v: v0 * (0.85 + r() * 0.15), v0, acc: 0, len, w: truck ? 2.3 : CAR_W, truck,
+      color: COLORS[(r() * COLORS.length) | 0], brake: false, blink: 0, blinkT: 0, cool: 1 + r() * 5,
+    });
+  },
+  // nearest vehicle ahead of / behind c that touches `lane`, with the bumper-to-bumper gap
+  ahead(c, lane, vs) {
+    let best = null, g = Infinity;
+    for (const o of vs) {
+      if (o === c || o.y < c.y || !(o.lane === lane || occupies(o.x, o.w, lane))) continue;
+      const gap = o.y - c.y - (o.len + c.len) / 2;
+      if (gap < g) { g = gap; best = o; }
+    }
+    return best && { o: best, gap: g };
+  },
+  behind(c, lane, vs) {
+    let best = null, g = Infinity;
+    for (const o of vs) {
+      if (o === c || o.y > c.y || !(o.lane === lane || occupies(o.x, o.w, lane))) continue;
+      const gap = c.y - o.y - (o.len + c.len) / 2;
+      if (gap < g) { g = gap; best = o; }
+    }
+    return best && { o: best, gap: g };
+  },
+  safe(c, lane, vs) {
+    const f = this.ahead(c, lane, vs), b = this.behind(c, lane, vs);
+    if (f && f.gap < Math.max(6, (c.v - f.o.v) * 2 + 5)) return false;
+    // the player gets extra room, so a bot never cuts in right under the nose
+    if (b && b.gap < (b.o.ego ? Math.max(14, (b.o.v - c.v) * 1.6 + 10) : Math.max(6, (b.o.v - c.v) * 2 + 5))) return false;
+    return true;
+  },
+  think(c, vs) {
+    const r = this.r;
+    c.cool = 1 + r() * 2;
+    const cur = this.ahead(c, c.lane, vs);
+    const stuck = cur && cur.gap < 30 + c.v && cur.o.v < c.v0 - 1.5;
+    if (!stuck && r() > 0.1) return;  // now and then a bot changes lanes for no reason
+    for (const d of r() < 0.5 ? [-1, 1] : [1, -1]) {
+      const L = c.lane + d;
+      if (L < 0 || L >= LANES || !this.safe(c, L, vs)) continue;
+      if (stuck) {
+        const f = this.ahead(c, L, vs);
+        if (f && f.gap < cur.gap + 10 && f.o.v <= cur.o.v + 0.5) continue;
+      }
+      c.lane = L; c.blink = d; c.blinkT = 0.6 + r() * 0.6; c.cool = 4 + r() * 5;
+      return;
+    }
+  },
+  step(dt, p) {
+    const cars = this.cars;
+    const ego = { x: p.x, y: p.y, v: p.v, len: CAR_L, w: CAR_W, ego: true };
+    const vs = cars.concat(ego);
+    for (const c of cars) {
+      let lead = null, gap = Infinity;
+      for (let lane = 0; lane < LANES; lane++) {
+        if (lane !== c.lane && !occupies(c.x, c.w, lane)) continue;
+        const f = this.ahead(c, lane, vs);
+        if (f && f.gap < gap) { gap = f.gap; lead = f.o; }
+      }
+      let a = IDM.a * (1 - (c.v / c.v0) ** 4);
+      if (lead) {
+        const want = IDM.s0 + Math.max(0, c.v * IDM.T + c.v * (c.v - lead.v) / (2 * Math.sqrt(IDM.a * IDM.b)));
+        a -= IDM.a * (want / Math.max(0.1, gap)) ** 2;
+      }
+      c.acc = Math.max(-10, a);
+    }
+    for (const c of cars) {
+      c.v = Math.max(0, c.v + c.acc * dt);
+      c.y += c.v * dt;
+      c.brake = c.acc < -1.2;
+      if (c.blinkT > 0) {
+        // blinker first; if the gap closed meanwhile, stay in lane
+        c.blinkT -= dt;
+        if (c.blinkT <= 0 && !this.safe(c, c.lane, vs)) { c.lane = laneOf(c.x); c.blink = 0; c.cool = 1.5; }
+      } else {
+        const d = laneX(c.lane) - c.x;
+        c.x += Math.sign(d) * Math.min(Math.abs(d), 2.8 * dt);
+        if (Math.abs(d) < 0.01) c.blink = 0;
+      }
+      c.cool -= dt;
+      if (c.cool <= 0 && !c.blink) this.think(c, vs);
+    }
+    // last resort against overlaps: whoever is behind gets put back and slowed down
+    for (const c of cars) {
+      for (const o of vs) {
+        if (o === c || o.y < c.y || Math.abs(o.x - c.x) >= (o.w + c.w) / 2) continue;
+        const minDy = (o.len + c.len) / 2 + (o.ego ? 1 : 0.3);
+        if (o.y - c.y < minDy) { c.y = o.y - minDy; c.v = Math.min(c.v, o.v); }
       }
     }
-    if (this.cache.size > 400) {
-      for (const key of this.cache.keys()) { this.cache.delete(key); if (this.cache.size < 200) break; }
+    // recycle: drop bots far away, add new ones at the edges of the window
+    const front = p.y + AHEAD, back = p.y - BEHIND;
+    this.cars = cars.filter((c) => c.y < front + 40 && c.y > back - 40);
+    for (let lane = 0; lane < LANES; lane++) {
+      let maxY = -Infinity, minY = Infinity;
+      for (const c of this.cars) if (c.lane === lane) { maxY = Math.max(maxY, c.y); minY = Math.min(minY, c.y); }
+      if (front - maxY > this.need[lane]) { this.spawn(lane, front); this.need[lane] = this.spawnGap(); }
+      // from behind only bots faster than the player, otherwise they'd just drop out again
+      if (minY - back > this.gap * 1.2 && p.v < 24 && this.r() < dt * 2) {
+        const v0 = 13 + this.r() * 14;
+        if (v0 > p.v + 3) this.spawn(lane, back, v0);
+      }
     }
-    return out;
-  },
-  holdBack(c, d) {
-    const l = (this.lag.get(c.id) || 0) + d;
-    this.lag.set(c.id, l);
-    this.maxLag = Math.max(this.maxLag, l);
-    c.y -= d;
   },
 };
-
-// Bots never rear-end the player: a car closing in from behind brakes and follows,
-// and the cars behind it in the lane queue up too.
-const around = [];
-function yieldTraffic(t, p) {
-  traffic.near(t, p.y - 120, p.y + 3, around);
-  for (let lane = 0; lane < LANES; lane++) {
-    const cars = around.filter((c) => c.lane === lane).sort((a, b) => b.y - a.y);
-    let rear = Infinity;  // rear bumper of the car ahead in this lane
-    for (const c of cars) {
-      let maxY = rear - 2 - c.len / 2;
-      if (c.y < p.y && Math.abs(c.x - p.x) < (c.w + CAR_W) / 2 + 0.2) maxY = Math.min(maxY, p.y - (c.len + CAR_L) / 2 - 1.2);
-      if (c.y > maxY) traffic.holdBack(c, c.y - maxY);
-      rear = c.y - c.len / 2;
-    }
-  }
-}
+const menuCam = { x: 99, y: 0, v: 24 };  // off-road "player" for the menu background
 
 // ---------- state ----------
 const cv = document.getElementById('cv');
@@ -446,7 +500,7 @@ function onPeerLost(msg) {
 // ---------- round ----------
 // round = { n, seed, at } — `at` is in server time so both devices start together
 function startRound(round) {
-  traffic.reset(round.seed, round.flow ?? flow);
+  traffic.reset(round.seed, round.flow ?? flow, 0);
   roundN = round.n || 0;
   me = newPlayer();
   op = solo ? null : { x: laneX(2), y: 0, v: 0, score: 0, crashed: false, net: null };
@@ -463,7 +517,6 @@ function startRound(round) {
 
 function raceTime(now) { return Math.max(0, (now - startAt) / 1000); }
 
-const near = [];
 function update(dt, now) {
   const t = raceTime(now);
   const p = me;
@@ -482,14 +535,14 @@ function update(dt, now) {
       p.x = Math.max(-lim, Math.min(lim, p.x));
     }
     p.y += p.v * dt;
-    yieldTraffic(t, p);
+    traffic.step(dt, p);
 
-    // collisions and near misses
-    traffic.near(t, p.y - 12, p.y + 12, near);
+    // collisions and near misses; only the player can hit a bot ahead, bots behind always yield
     const invuln = now < p.invulnUntil;
-    for (const c of near) {
+    for (const c of traffic.cars) {
       const dx = Math.abs(c.x - p.x), dy = Math.abs(c.y - p.y);
-      const hit = dx < (c.w + CAR_W) / 2 - 0.15 && dy < (c.len + CAR_L) / 2 - 0.2;
+      if (dy > 12) continue;
+      const hit = dx < (c.w + CAR_W) / 2 - 0.15 && dy < (c.len + CAR_L) / 2 - 0.2 && c.y > p.y - 1;
       if (hit && !invuln) { crash(now); break; }
       const rel = c.y - p.y, prev = p.prevRel.get(c.id);
       if (prev !== undefined && prev > 0 && rel <= 0 && !invuln && !crashed) {
@@ -599,14 +652,19 @@ function drawCar(cx, cy, w, l, color, o = {}) {
   ctx.fillRect(x + w * 0.08, y, w * 0.2, Math.max(2, l * 0.03)); ctx.fillRect(x + w * 0.72, y, w * 0.2, Math.max(2, l * 0.03));
   ctx.fillStyle = o.brake ? '#ff2a2a' : '#a3131a';
   ctx.fillRect(x + w * 0.06, y + l - 3, w * 0.22, 3); ctx.fillRect(x + w * 0.72, y + l - 3, w * 0.22, 3);
+  if (o.blink) {
+    ctx.fillStyle = '#ffb31a';
+    const bx = o.blink < 0 ? x - 1 : x + w - 3;
+    ctx.fillRect(bx, y + 1, 4, 4); ctx.fillRect(bx, y + l - 5, 4, 4);
+  }
   if (o.stripe) { ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(-w * 0.07, y + 2, w * 0.14, l * 0.2); ctx.fillRect(-w * 0.07, y + l * 0.82, w * 0.14, l * 0.16); }
   ctx.restore();
 }
 
 function draw(now) {
   // menu background: the flow drives past on its own
-  const t = me ? raceTime(now) : now / 1000;
-  const p = me || { x: laneX(1), y: t * 26, invulnUntil: 0 };
+  const t = me ? raceTime(now) : 0;
+  const p = me || menuCam;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const sx = shake > 0 ? (Math.random() - 0.5) * 10 * shake : 0, sy = shake > 0 ? (Math.random() - 0.5) * 10 * shake : 0;
   ctx.translate(sx, sy);
@@ -662,8 +720,10 @@ function draw(now) {
   }
 
   // traffic
-  for (const c of traffic.near(t, camY - behind, camY + ahead, near)) {
-    drawCar(toX(c.x), toY(c.y), c.w * S, c.len * S, c.color, { truck: c.truck });
+  const blinkOn = Math.floor(now / 260) % 2 === 0;
+  for (const c of traffic.cars) {
+    if (c.y < camY - behind || c.y > camY + ahead) continue;
+    drawCar(toX(c.x), toY(c.y), c.w * S, c.len * S, c.color, { truck: c.truck, brake: c.brake, blink: blinkOn ? c.blink : 0 });
   }
 
   // opponent ghost
@@ -762,10 +822,11 @@ function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   if (mode === 'race') update(dt, now);
+  else if (!me) { menuCam.y += menuCam.v * dt; traffic.step(dt, menuCam); }
   draw(now);
   requestAnimationFrame(frame);
 }
-traffic.reset(12345);
+traffic.reset(12345, 1, 0);
 requestAnimationFrame(frame);
 
 // ---------- buttons ----------
@@ -801,7 +862,7 @@ $('btn-again').onclick = () => {
   status('res-status', wantAgain.op ? 'Поехали!' : 'Ждём ответа друга…');
   maybeRestart();
 };
-$('btn-menu').onclick = () => { closeNet(); solo = false; me = null; op = null; mode = 'menu'; show('menu'); status('menu-status', ''); };
+$('btn-menu').onclick = () => { closeNet(); solo = false; me = null; op = null; mode = 'menu'; traffic.reset(12345, 1, menuCam.y); show('menu'); status('menu-status', ''); };
 
 // join link: ?c=1234
 const linkCode = new URLSearchParams(location.search).get('c');
