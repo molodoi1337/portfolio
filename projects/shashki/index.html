@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#14161b">
+<title>Шашки в потоке</title>
+<style>
+  :root {
+    --bg: #14161b;
+    --panel: rgba(20, 22, 27, .86);
+    --text: #f2f3f5;
+    --muted: #9aa0ab;
+    --accent: #ff5a36;
+    --accent2: #2ed3ff;
+    --line: rgba(255, 255, 255, .12);
+    --sat: env(safe-area-inset-top, 0px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); overflow: hidden; }
+  body {
+    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: fixed; inset: 0;
+    touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .screen {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    padding: 16px; background: rgba(10, 11, 14, .55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  }
+  .screen.on { display: flex; }
+  .card {
+    width: 100%; max-width: 380px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 20px; padding: 26px 22px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+  }
+  h1 { font-size: 40px; line-height: 1; letter-spacing: .04em; font-weight: 900; font-style: italic; }
+  h1 span { color: var(--accent); }
+  h2 { font-size: 28px; font-weight: 900; font-style: italic; margin-bottom: 6px; }
+  .sub { color: var(--muted); margin: 8px 0 22px; font-size: 15px; }
+  button, input { font: inherit; }
+  .btn {
+    display: block; width: 100%; padding: 14px 16px; border-radius: 12px; border: 0; cursor: pointer;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 17px; margin-top: 10px;
+  }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
+  .btn:active { transform: scale(.98); }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .row .btn { margin-top: 0; }
+  input.code {
+    width: 120px; flex: none; text-align: center; font-size: 22px; font-weight: 800; letter-spacing: .2em;
+    border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .06); color: var(--text);
+    padding: 10px 6px; user-select: text; -webkit-user-select: text;
+  }
+  .or { color: var(--muted); font-size: 13px; margin: 18px 0 4px; }
+  .big-code { font-size: 54px; font-weight: 900; letter-spacing: .18em; margin: 6px 0 4px; color: var(--accent2); }
+  .status { color: var(--muted); font-size: 14px; min-height: 20px; margin-top: 12px; }
+  .status.err { color: #ff8d7a; }
+  .help { color: var(--muted); font-size: 13px; text-align: left; margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .help b { color: var(--text); font-weight: 600; }
+  .res { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 6px; }
+  .res div { border: 1px solid var(--line); border-radius: 12px; padding: 10px 6px; }
+  .res .who { font-size: 13px; color: var(--muted); }
+  .res .pts { font-size: 26px; font-weight: 900; }
+  .res .det { font-size: 12px; color: var(--muted); }
+  .res .me .pts { color: var(--accent); }
+  .res .op .pts { color: var(--accent2); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
+  .dot.live { background: #3ddc84; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<div class="screen on" id="menu">
+  <div class="card">
+    <h1>ШАШКИ<br><span>В ПОТОКЕ</span></h1>
+    <p class="sub">Гонка в плотном потоке на двоих — с ноутбука и с телефона</p>
+    <button class="btn" id="btn-host">Создать заезд</button>
+    <div class="row">
+      <input class="code" id="code-in" inputmode="numeric" maxlength="4" placeholder="код" autocomplete="off">
+      <button class="btn ghost" id="btn-join">Подключиться</button>
+    </div>
+    <p class="or">или</p>
+    <button class="btn ghost" id="btn-solo">Тренировка в одиночку</button>
+    <p class="status" id="menu-status"></p>
+    <div class="help">
+      <b>Ноутбук:</b> ← → или A D — руль, ↓ / пробел — тормоз.<br>
+      <b>Телефон:</b> держи вертикально; касание слева / справа — руль, по центру — тормоз.<br>
+      Заезд 2 минуты. Очки — за дистанцию и обгоны впритирку, авария — минус очки.
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="lobby">
+  <div class="card">
+    <h2>Код заезда</h2>
+    <div class="big-code" id="lobby-code">····</div>
+    <p class="sub" style="margin-bottom:6px">Друг вводит этот код на своём устройстве</p>
+    <button class="btn ghost" id="btn-copy">Скопировать ссылку</button>
+    <p class="status" id="lobby-status"><span class="dot live"></span>Ждём друга…</p>
+    <button class="btn ghost" id="btn-cancel">Отмена</button>
+  </div>
+</div>
+
+<div class="screen" id="result">
+  <div class="card">
+    <h2 id="res-title">Финиш</h2>
+    <div class="res" id="res-grid"></div>
+    <p class="status" id="res-status"></p>
+    <button class="btn" id="btn-again">Ещё заезд</button>
+    <button class="btn ghost" id="btn-menu">В меню</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ---------- constants (metres, seconds) ----------
+const LANES = 4, LANE_W = 3.6, ROAD_W = LANES * LANE_W;
+const CAR_W = 1.9, CAR_L = 4.4;
+const ROUND = +new URLSearchParams(location.search).get('round') || 120, COUNTDOWN = 3;  // ?round=N for quick tests
+const CHUNK = 200;
+const ID_PREFIX = 'molodoi-shashki-v1-';
+const COLORS = ['#e8e8ea', '#c9ccd2', '#3d4450', '#1f2329', '#8a1f24', '#2c4f7c', '#5c6b3a', '#d9b44a', '#7a7f87', '#a34d2a', '#efe7d6', '#3a6b6b'];
+
+// ---------- random helpers ----------
+function hash(a, b, c) {
+  let x = (a ^ Math.imul((b + 0x9e3779b9) | 0, 0x85ebca6b) ^ Math.imul((c + 0x632be5ab) | 0, 0xc2b2ae35)) | 0;
+  x ^= x >>> 16; x = Math.imul(x, 0x7feb352d); x ^= x >>> 15; x = Math.imul(x, 0x846ca68b); x ^= x >>> 16;
+  return x >>> 0;
+}
+function rngOf(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const laneX = (i) => (i + 0.5) * LANE_W - ROAD_W / 2;
+
+// ---------- traffic: deterministic from the seed, same on both devices ----------
+// Every lane moves at its own constant speed, so cars in one lane never overlap.
+const traffic = {
+  seed: 1, laneV: [], cache: new Map(),
+  reset(seed) {
+    this.seed = seed; this.cache.clear();
+    const r = rngOf(hash(seed, 999, 7));
+    this.laneV = [23, 19, 15.5, 12].map((v) => v + (r() - 0.5) * 2);
+  },
+  chunk(lane, k) {
+    const key = lane * 1e6 + k;
+    let list = this.cache.get(key);
+    if (list) return list;
+    list = [];
+    const r = rngOf(hash(this.seed, lane, k));
+    const end = (k + 1) * CHUNK;
+    let pos = k * CHUNK + r() * 8;
+    let i = 0;
+    while (true) {
+      const truck = lane >= 2 && r() < 0.22;
+      const len = truck ? 7.5 + r() * 2 : 4 + r() * 0.8;
+      if (pos + len > end - 2) break;
+      if (pos + len < -15 || pos > 45) {  // keep the start line clear
+        list.push({ id: key * 100 + i, lane, y0: pos, len, w: truck ? 2.3 : CAR_W, truck, color: COLORS[(r() * COLORS.length) | 0] });
+      }
+      i++;
+      pos += len + 4 + r() * r() * 36;
+    }
+    this.cache.set(key, list);
+    return list;
+  },
+  // cars whose current position is within [yMin, yMax] at race time t
+  near(t, yMin, yMax, out) {
+    out.length = 0;
+    for (let lane = 0; lane < LANES; lane++) {
+      const shift = this.laneV[lane] * t;
+      const k0 = Math.floor((yMin - shift - 10) / CHUNK), k1 = Math.floor((yMax - shift) / CHUNK);
+      for (let k = k0; k <= k1; k++) {
+        for (const c of this.chunk(lane, k)) {
+          const y = c.y0 + shift + c.len / 2;
+          if (y > yMin - c.len && y < yMax + c.len) { c.y = y; c.x = laneX(lane); out.push(c); }
+        }
+      }
+    }
+    if (this.cache.size > 400) {
+      for (const key of this.cache.keys()) { this.cache.delete(key); if (this.cache.size < 200) break; }
+    }
+    return out;
+  },
+};
+
+// ---------- state ----------
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, S = 10, SAT = 0;
+const isTouch = matchMedia('(pointer: coarse)').matches;
+
+let mode = 'menu';         // menu | lobby | race | result
+let net = null;            // { code, role, host, offset, ... } while playing with a friend
+let solo = false;
+let startAt = 0;           // performance.now() when the race clock hits 0
+let me = null, op = null;
+let popups = [];
+let shake = 0;
+let finished = false, opEnd = null, wantAgain = { me: false, op: false };
+const input = { left: false, right: false, brake: false };
+const keys = new Set();
+const touches = new Map();
+
+function newPlayer() {
+  return { x: laneX(1), y: 0, v: 0, score: 0, bonus: 0, combo: 0, comboUntil: 0, crashedUntil: 0, invulnUntil: 0, crashes: 0, misses: 0, prevRel: new Map() };
+}
+
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  S = Math.min(W / 19, H / 66);
+  SAT = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
+}
+addEventListener('resize', resize);
+resize();
+
+// ---------- input ----------
+const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowDown: 'brake', KeyS: 'brake', Space: 'brake' };
+addEventListener('keydown', (e) => {
+  if (KEYMAP[e.code] && mode === 'race') { keys.add(KEYMAP[e.code]); e.preventDefault(); }
+});
+addEventListener('keyup', (e) => { if (KEYMAP[e.code]) keys.delete(KEYMAP[e.code]); });
+addEventListener('blur', () => { keys.clear(); touches.clear(); });
+
+function zoneOf(x) { return x < W * 0.38 ? 'left' : x > W * 0.62 ? 'right' : 'brake'; }
+function onTouch(e) {
+  if (mode !== 'race') return;
+  e.preventDefault();
+  touches.clear();
+  for (const t of e.touches) touches.set(t.identifier, zoneOf(t.clientX));
+}
+cv.addEventListener('touchstart', onTouch, { passive: false });
+cv.addEventListener('touchmove', onTouch, { passive: false });
+cv.addEventListener('touchend', onTouch, { passive: false });
+cv.addEventListener('touchcancel', onTouch, { passive: false });
+
+function readInput() {
+  const z = new Set(touches.values());
+  input.left = keys.has('left') || z.has('left');
+  input.right = keys.has('right') || z.has('right');
+  input.brake = keys.has('brake') || z.has('brake');
+}
+
+// ---------- screens ----------
+const $ = (id) => document.getElementById(id);
+function show(id) {
+  for (const s of document.querySelectorAll('.screen')) s.classList.toggle('on', s.id === id);
+}
+function status(id, text, err) { const el = $(id); el.textContent = text; el.classList.toggle('err', !!err); }
+
+// ---------- networking: both devices poll api.php on the same site ----------
+const API = 'api.php';
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let roundN = 0;
+
+async function api(a, code, role, body) {
+  const t0 = Date.now();
+  const r = await fetch(`${API}?a=${a}&c=${code || ''}&r=${role || ''}`, {
+    method: body ? 'POST' : 'GET', body: body ? JSON.stringify(body) : undefined, cache: 'no-store',
+  });
+  const j = await r.json();
+  const t1 = Date.now();
+  // server clock offset, trusting the fastest round trip
+  if (net && j.now) {
+    const rtt = t1 - t0;
+    if (rtt <= net.bestRtt) { net.bestRtt = rtt; net.offset = j.now - (t0 + t1) / 2; }
+    net.bestRtt += 2;
+  }
+  return j;
+}
+const serverNow = () => Date.now() + net.offset;
+const serverToPerf = (ms) => ms - net.offset - Date.now() + performance.now();
+
+function newNet(code, role) {
+  return { code, role, host: role === 'h', offset: 0, bestRtt: 1e9, fails: 0, round: null, met: false, lastOp: 0 };
+}
+
+function closeNet() {
+  if (net) {
+    const u = `${API}?a=leave&c=${net.code}&r=${net.role}`;
+    if (!(navigator.sendBeacon && navigator.sendBeacon(u))) fetch(u, { method: 'POST', keepalive: true }).catch(() => {});
+  }
+  net = null;
+}
+addEventListener('pagehide', () => { if (net) closeNet(); });
+
+async function hostGame() {
+  closeNet();
+  status('menu-status', 'Создаём заезд…');
+  let j;
+  try { j = await (await fetch(`${API}?a=create`, { cache: 'no-store' })).json(); }
+  catch (_) { status('menu-status', 'Сервер игры недоступен — проверь интернет', true); return; }
+  if (!j.ok) { status('menu-status', 'Не удалось создать заезд, попробуй ещё раз', true); return; }
+  status('menu-status', '');
+  net = newNet(j.c, 'h');
+  roundN = 0;
+  $('lobby-code').textContent = j.c;
+  $('lobby-status').innerHTML = '<span class="dot live"></span>Ждём друга…';
+  show('lobby'); mode = 'lobby';
+  pollLoop(net);
+}
+
+async function joinGame(code) {
+  if (!/^\d{4}$/.test(code)) { status('menu-status', 'Введи код из 4 цифр', true); return; }
+  closeNet();
+  status('menu-status', 'Подключаемся…');
+  const n = newNet(code, 'g');
+  net = n;
+  let j;
+  try { j = await api('join', code, 'g'); }
+  catch (_) { net = null; status('menu-status', 'Сервер игры недоступен — проверь интернет', true); return; }
+  if (net !== n) return;
+  if (!j.ok) {
+    net = null;
+    status('menu-status', j.err === 'nf' ? 'Заезд с таким кодом не найден' : j.err === 'full' ? 'В этом заезде уже двое' : 'Не получилось подключиться', true);
+    return;
+  }
+  roundN = 0;
+  status('menu-status', 'Подключено, сейчас начнём…');
+  pollLoop(n);
+}
+
+async function pollLoop(n) {
+  while (net === n) {
+    const t0 = performance.now();
+    try {
+      const body = { s: myState() };
+      if (n.host && n.round) body.round = n.round;
+      const j = await api('sync', n.code, n.role, body);
+      if (net !== n) return;
+      if (!j.ok) { onPeerLost(j.err === 'nf' ? 'Заезд закрыт' : 'Ошибка сервера'); return; }
+      n.fails = 0;
+      onSync(n, j);
+    } catch (_) {
+      if (++n.fails > 40) { onPeerLost('Пропала связь с сервером'); return; }
+    }
+    await sleep(Math.max(15, (mode === 'race' ? 100 : 350) - (performance.now() - t0)));
+  }
+}
+
+function myState() {
+  if (!me || mode === 'lobby' || mode === 'menu') return { n: 0 };
+  return {
+    n: roundN, y: +me.y.toFixed(2), x: +me.x.toFixed(2), v: +me.v.toFixed(2), sc: me.score,
+    cr: performance.now() < me.crashedUntil, fin: finished, cc: me.crashes, nm: me.misses, again: wantAgain.me,
+  };
+}
+
+function onSync(n, j) {
+  const now = performance.now();
+  const o = j.op;
+  if (o && o.age < 6000) { n.met = true; n.lastOp = now; }
+  else if (n.met && (!o || now - n.lastOp > 8000)) { onPeerLost('Друг отключился'); return; }
+
+  if (n.host && mode === 'lobby' && n.met) hostStartRound();
+  if (!n.host && j.round && j.round.n > roundN) { startRound(j.round); return; }
+
+  const s = o && o.s;
+  if (!s || s.n !== roundN || !op) return;
+  op.net = { y: s.y, x: s.x, v: s.v, at: now - o.age };
+  op.score = s.sc; op.crashed = !!s.cr;
+  if (s.fin && !opEnd) { opEnd = { score: s.sc, crashes: s.cc, misses: s.nm }; if (finished) setTimeout(showResult, 600); }
+  if (s.again && !wantAgain.op && mode === 'result') {
+    wantAgain.op = true;
+    status('res-status', wantAgain.me ? 'Поехали!' : 'Друг хочет ещё заезд');
+    maybeRestart();
+  }
+}
+
+function hostStartRound() {
+  net.round = { n: roundN + 1, seed: Math.floor(Math.random() * 2 ** 31), at: Math.round(serverNow() + 1200 + COUNTDOWN * 1000) };
+  startRound(net.round);
+}
+
+function maybeRestart() {
+  if (net && net.host && wantAgain.me && wantAgain.op) hostStartRound();
+}
+
+function onPeerLost(msg) {
+  if (!net || solo) return;
+  net = null;
+  if (mode === 'race' || mode === 'result') {
+    mode = 'result';
+    $('res-title').textContent = msg;
+    $('res-grid').innerHTML = '';
+    status('res-status', '');
+    $('btn-again').style.display = 'none';
+    show('result');
+  } else {
+    show('menu'); mode = 'menu';
+    status('menu-status', msg, true);
+  }
+}
+
+// ---------- round ----------
+// round = { n, seed, at } — `at` is in server time so both devices start together
+function startRound(round) {
+  traffic.reset(round.seed);
+  roundN = round.n || 0;
+  me = newPlayer();
+  op = solo ? null : { x: laneX(2), y: 0, v: 0, score: 0, crashed: false, net: null };
+  if (op) {
+    me.x = laneX(net.host ? 1 : 2);
+    op.x = laneX(net.host ? 2 : 1);
+  }
+  popups = []; finished = false; opEnd = null; wantAgain = { me: false, op: false };
+  keys.clear(); touches.clear();
+  startAt = solo ? performance.now() + COUNTDOWN * 1000 : serverToPerf(round.at);
+  mode = 'race';
+  show(null);
+}
+
+function raceTime(now) { return Math.max(0, (now - startAt) / 1000); }
+
+const near = [];
+function update(dt, now) {
+  const t = raceTime(now);
+  const p = me;
+  const running = now >= startAt && !finished;
+
+  readInput();
+  if (running) {
+    const crashed = now < p.crashedUntil;
+    const vMax = 30 + 20 * Math.min(1, t / ROUND);    // 108 → 180 km/h by the end
+    if (crashed) p.v = 0;
+    else if (input.brake) p.v = Math.max(9, p.v - 22 * dt);
+    else p.v = Math.min(vMax, p.v + (p.v < 20 ? 14 : 7) * dt);
+    if (!crashed) {
+      const steer = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+      p.x += steer * (6 + p.v * 0.12) * dt;
+      const lim = ROAD_W / 2 - CAR_W / 2 - 0.1;
+      p.x = Math.max(-lim, Math.min(lim, p.x));
+    }
+    p.y += p.v * dt;
+
+    // collisions and near misses
+    traffic.near(t, p.y - 12, p.y + 12, near);
+    const invuln = now < p.invulnUntil;
+    for (const c of near) {
+      const dx = Math.abs(c.x - p.x), dy = Math.abs(c.y - p.y);
+      const hit = dx < (c.w + CAR_W) / 2 - 0.15 && dy < (c.len + CAR_L) / 2 - 0.2;
+      if (hit && !invuln) { crash(now); break; }
+      const rel = c.y - p.y, prev = p.prevRel.get(c.id);
+      if (prev !== undefined && prev > 0 && rel <= 0 && !invuln && !crashed) {
+        const gap = dx - (c.w + CAR_W) / 2;
+        if (gap < 0.75) nearMiss(now, gap);
+      }
+      p.prevRel.set(c.id, rel);
+    }
+    if (p.prevRel.size > 300) p.prevRel.clear();
+    if (now > p.comboUntil) p.combo = 0;
+    p.score = Math.max(0, Math.floor(p.y) + p.bonus);
+
+    if (t >= ROUND) finishRound();
+  }
+
+  // opponent: extrapolate from the last network state and smooth it
+  if (op && op.net) {
+    const age = Math.min(0.5, (now - op.net.at) / 1000);
+    const ty = op.net.y + op.net.v * age;
+    op.y += (ty - op.y) * Math.min(1, dt * 10);
+    if (Math.abs(ty - op.y) > 30) op.y = ty;
+    op.x += (op.net.x - op.x) * Math.min(1, dt * 12);
+    op.v = op.net.v;
+  }
+
+  for (const pp of popups) pp.life -= dt;
+  popups = popups.filter((pp) => pp.life > 0);
+  shake = Math.max(0, shake - dt * 3);
+}
+
+function crash(now) {
+  const p = me;
+  p.crashedUntil = now + 1500;
+  p.invulnUntil = now + 3200;
+  p.v = 0; p.crashes++;
+  p.bonus -= 300; p.combo = 0;
+  shake = 1;
+  popups.push({ text: 'АВАРИЯ  −300', color: '#ff5a5a', life: 1.4, max: 1.4, big: true });
+  if (navigator.vibrate) navigator.vibrate(120);
+  // after the stun the car restarts at a sane speed
+  setTimeout(() => { if (me === p) p.v = 18; }, 1500);
+}
+
+function nearMiss(now, gap) {
+  const p = me;
+  p.combo = Math.min(5, p.combo + 1);
+  p.comboUntil = now + 3000;
+  const pts = 100 * p.combo;
+  p.bonus += pts; p.misses++;
+  popups.push({ text: (gap < 0.35 ? 'НА ВОЛОСКЕ' : 'ВПРИТИРКУ') + `  +${pts}` + (p.combo > 1 ? `  ×${p.combo}` : ''), color: '#ffd84a', life: 1.1, max: 1.1 });
+}
+
+function finishRound() {
+  finished = true;
+  keys.clear(); touches.clear();
+  if (solo || opEnd) { setTimeout(showResult, 900); return; }
+  setTimeout(() => { if (finished && mode === 'race') showResult(); }, 4000);
+}
+
+function showResult() {
+  if (mode !== 'race') return;
+  mode = 'result';
+  $('btn-again').style.display = '';
+  status('res-status', '');
+  const mine = `<div class="me"><div class="who">Ты</div><div class="pts">${me.score}</div><div class="det">впритирку: ${me.misses} · аварий: ${me.crashes}</div></div>`;
+  if (solo) {
+    let best = 0;
+    try { best = +localStorage.getItem('shashki-best') || 0; if (me.score > best) localStorage.setItem('shashki-best', me.score); } catch (_) {}
+    $('res-title').textContent = me.score > best ? 'Новый рекорд!' : 'Финиш';
+    $('res-grid').innerHTML = mine + `<div class="op"><div class="who">Рекорд</div><div class="pts">${Math.max(best, me.score)}</div><div class="det">на этом устройстве</div></div>`;
+  } else {
+    const o = opEnd || { score: op ? op.score : 0, crashes: '?', misses: '?' };
+    $('res-title').textContent = me.score > o.score ? 'Победа!' : me.score < o.score ? 'Друг быстрее' : 'Ничья';
+    $('res-grid').innerHTML = mine + `<div class="op"><div class="who">Друг</div><div class="pts">${o.score}</div><div class="det">впритирку: ${o.misses} · аварий: ${o.crashes}</div></div>`;
+  }
+  show('result');
+}
+
+// ---------- drawing ----------
+function rr(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+// car centred at (cx, cy) in screen px, nose up
+function drawCar(cx, cy, w, l, color, o = {}) {
+  ctx.save();
+  ctx.globalAlpha = o.alpha ?? 1;
+  ctx.translate(cx, cy);
+  const x = -w / 2, y = -l / 2;
+  ctx.fillStyle = 'rgba(0,0,0,.35)';
+  rr(x + 2, y + 3, w, l, w * 0.25); ctx.fill();
+  if (o.truck) {
+    const cab = l * 0.24;
+    ctx.fillStyle = color; rr(x, y, w, cab, w * 0.2); ctx.fill();
+    ctx.fillStyle = '#9fc6e0'; ctx.fillRect(x + w * 0.12, y + cab * 0.18, w * 0.76, cab * 0.3);
+    ctx.fillStyle = '#d7d9de'; rr(x - w * 0.02, y + cab + 2, w * 1.04, l - cab - 2, 3); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
+    for (let i = 1; i < 4; i++) { const yy = y + cab + 2 + (l - cab - 2) * i / 4; ctx.beginPath(); ctx.moveTo(x, yy); ctx.lineTo(x + w, yy); ctx.stroke(); }
+  } else {
+    ctx.fillStyle = color; rr(x, y, w, l, w * 0.3); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,.28)'; rr(x + w * 0.14, y + l * 0.3, w * 0.72, l * 0.42, w * 0.15); ctx.fill();
+    ctx.fillStyle = '#8fb4cc'; rr(x + w * 0.14, y + l * 0.22, w * 0.72, l * 0.13, 3); ctx.fill();
+    ctx.fillStyle = '#6f8ea3'; rr(x + w * 0.18, y + l * 0.74, w * 0.64, l * 0.08, 2); ctx.fill();
+  }
+  ctx.fillStyle = '#fff6c8';
+  ctx.fillRect(x + w * 0.08, y, w * 0.2, Math.max(2, l * 0.03)); ctx.fillRect(x + w * 0.72, y, w * 0.2, Math.max(2, l * 0.03));
+  ctx.fillStyle = o.brake ? '#ff2a2a' : '#a3131a';
+  ctx.fillRect(x + w * 0.06, y + l - 3, w * 0.22, 3); ctx.fillRect(x + w * 0.72, y + l - 3, w * 0.22, 3);
+  if (o.stripe) { ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(-w * 0.07, y + 2, w * 0.14, l * 0.2); ctx.fillRect(-w * 0.07, y + l * 0.82, w * 0.14, l * 0.16); }
+  ctx.restore();
+}
+
+function draw(now) {
+  // menu background: the flow drives past on its own
+  const t = me ? raceTime(now) : now / 1000;
+  const p = me || { x: laneX(1), y: t * 26, invulnUntil: 0 };
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const sx = shake > 0 ? (Math.random() - 0.5) * 10 * shake : 0, sy = shake > 0 ? (Math.random() - 0.5) * 10 * shake : 0;
+  ctx.translate(sx, sy);
+
+  const camY = p.y, baseY = H * 0.76, cx = W / 2;
+  const toY = (y) => baseY - (y - camY) * S;
+  const toX = (x) => cx + x * S;
+  const ahead = baseY / S + 10, behind = (H - baseY) / S + 10;
+
+  // grass + scenery
+  ctx.fillStyle = '#2d5a36'; ctx.fillRect(-20, -20, W + 40, H + 40);
+  const roadL = toX(-ROAD_W / 2), roadR = toX(ROAD_W / 2);
+  ctx.fillStyle = '#8b8f97'; ctx.fillRect(roadL - S * 1.6, -20, ROAD_W * S + S * 3.2, H + 40);
+  ctx.fillStyle = '#3a3d44'; ctx.fillRect(roadL - S * 0.6, -20, ROAD_W * S + S * 1.2, H + 40);
+
+  const sideM = (W / 2) / S - ROAD_W / 2;
+  const seg = 9;
+  for (let j = Math.floor((camY - behind) / seg); j <= Math.floor((camY + ahead) / seg); j++) {
+    for (let side = -1; side <= 1; side += 2) {
+      const r = rngOf(hash(77, j, side));
+      const n = Math.max(1, Math.ceil(sideM / 10));
+      for (let k = 0; k < n; k++) {
+        const off = ROAD_W / 2 + 3 + r() * Math.max(3, sideM - 3);
+        const yy = j * seg + r() * seg;
+        const kind = r();
+        const X = toX(side * off), Y = toY(yy);
+        if (kind < 0.62) {
+          const rad = (1.2 + r() * 1.3) * S;
+          ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.arc(X + 3, Y + 4, rad, 0, 7); ctx.fill();
+          ctx.fillStyle = kind < 0.3 ? '#1f4a2a' : '#2f6b37'; ctx.beginPath(); ctx.arc(X, Y, rad, 0, 7); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.beginPath(); ctx.arc(X - rad * 0.3, Y - rad * 0.3, rad * 0.5, 0, 7); ctx.fill();
+        } else if (kind < 0.7) {
+          ctx.fillStyle = '#4b3b2e'; ctx.fillRect(X - S * 2.2, Y - S * 2.2, S * 4.4, S * 4.4);
+          ctx.fillStyle = '#7a3f30'; ctx.fillRect(X - S * 2, Y - S * 2, S * 4, S * 4);
+        } else {
+          ctx.fillStyle = '#3c7a3f'; ctx.beginPath(); ctx.arc(X, Y, S * 0.6, 0, 7); ctx.fill();
+        }
+      }
+    }
+  }
+
+  // lane markings
+  ctx.fillStyle = '#e9e9ea';
+  ctx.fillRect(roadL - 2, -20, 3, H + 40); ctx.fillRect(roadR - 1, -20, 3, H + 40);
+  const dashL = 3, dashGap = 9;
+  const first = Math.floor((camY - behind) / dashGap) * dashGap;
+  for (let i = 1; i < LANES; i++) {
+    const X = toX(-ROAD_W / 2 + i * LANE_W);
+    for (let y = first; y < camY + ahead; y += dashGap) {
+      const Y = toY(y + dashL);
+      ctx.fillRect(X - 1, Y, 2.5, dashL * S);
+    }
+  }
+
+  // traffic
+  for (const c of traffic.near(t, camY - behind, camY + ahead, near)) {
+    drawCar(toX(c.x), toY(c.y), c.w * S, c.len * S, c.color, { truck: c.truck });
+  }
+
+  // opponent ghost
+  if (op && op.net) {
+    const Y = toY(op.y);
+    if (Y > -S * 3 && Y < H + S * 3) {
+      drawCar(toX(op.x), Y, CAR_W * S, CAR_L * S, '#2ed3ff', { alpha: op.crashed ? 0.3 : 0.6, stripe: true });
+      ctx.font = `700 ${Math.max(11, S * 1.1)}px -apple-system, sans-serif`;
+      ctx.textAlign = 'center'; ctx.fillStyle = '#2ed3ff';
+      ctx.fillText('ДРУГ', toX(op.x), Y - CAR_L * S / 2 - 6);
+    } else {
+      const up = Y < 0, d = Math.round(Math.abs(op.y - p.y));
+      const X = Math.max(40, Math.min(W - 40, toX(op.x)));
+      const YY = up ? 76 : H - 96;
+      ctx.fillStyle = 'rgba(20,22,27,.75)'; rr(X - 40, YY - 16, 80, 32, 16); ctx.fill();
+      ctx.fillStyle = '#2ed3ff'; ctx.font = '700 14px -apple-system, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText((up ? '▲ ' : '▼ ') + d + ' м', X, YY + 5);
+    }
+  }
+
+  // player
+  const blink = now < p.invulnUntil && Math.floor(now / 110) % 2 === 0;
+  if (me) drawCar(toX(p.x), baseY, CAR_W * S, CAR_L * S, (!net || net.host) ? '#ff5a36' : '#ffb020', { alpha: blink ? 0.35 : 1, brake: input.brake, stripe: true });
+
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (mode === 'race') drawHud(now, t);
+}
+
+function drawHud(now, t) {
+  const p = me;
+  const top = 14 + SAT;
+  ctx.textBaseline = 'middle';
+
+  // timer
+  const left = Math.max(0, ROUND - t);
+  ctx.fillStyle = 'rgba(20,22,27,.78)'; rr(W / 2 - 46, top, 92, 38, 19); ctx.fill();
+  ctx.fillStyle = left < 10 ? '#ff7a5a' : '#fff'; ctx.font = '800 20px -apple-system, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(`${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`, W / 2, top + 19);
+
+  // scores
+  const boxW = Math.min(150, (W - 120) / 2 - 12);
+  ctx.fillStyle = 'rgba(20,22,27,.78)'; rr(10, top, boxW, 38, 12); ctx.fill();
+  ctx.textAlign = 'left'; ctx.fillStyle = '#9aa0ab'; ctx.font = '600 11px -apple-system, sans-serif';
+  ctx.fillText('ТЫ', 20, top + 11);
+  ctx.fillStyle = (!net || net.host) ? '#ff5a36' : '#ffb020'; ctx.font = '800 17px -apple-system, sans-serif';
+  ctx.fillText(p.score + (p.combo > 1 ? `  ×${p.combo}` : ''), 20, top + 27);
+  if (op) {
+    ctx.fillStyle = 'rgba(20,22,27,.78)'; rr(W - 10 - boxW, top, boxW, 38, 12); ctx.fill();
+    ctx.textAlign = 'right'; ctx.fillStyle = '#9aa0ab'; ctx.font = '600 11px -apple-system, sans-serif';
+    ctx.fillText(op.net ? 'ДРУГ' : 'ДРУГ · нет связи', W - 20, top + 11);
+    ctx.fillStyle = '#2ed3ff'; ctx.font = '800 17px -apple-system, sans-serif';
+    ctx.fillText(String(op.score), W - 20, top + 27);
+  }
+
+  // speed
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(20,22,27,.7)'; rr(W / 2 - 52, H - 58, 104, 40, 20); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '800 20px -apple-system, sans-serif';
+  ctx.fillText(Math.round(p.v * 3.6), W / 2 - 12, H - 38);
+  ctx.fillStyle = '#9aa0ab'; ctx.font = '600 11px -apple-system, sans-serif';
+  ctx.fillText('км/ч', W / 2 + 28, H - 37);
+
+  // touch zones hint
+  if (isTouch) {
+    const a = t < 5 ? 0.5 : 0.18;
+    ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.font = '700 30px -apple-system, sans-serif';
+    ctx.fillText('◀', W * 0.12, H - 38); ctx.fillText('▶', W * 0.88, H - 38);
+    if (t < 5) {
+      ctx.fillStyle = 'rgba(255,255,255,.06)'; ctx.fillRect(0, 0, W * 0.38, H); ctx.fillRect(W * 0.62, 0, W * 0.38, H);
+      ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '700 13px -apple-system, sans-serif';
+      ctx.fillText('ТОРМОЗ', W / 2, H - 76);
+    }
+  }
+
+  // popups
+  popups.forEach((pp, i) => {
+    const k = pp.life / pp.max;
+    ctx.globalAlpha = Math.min(1, k * 2);
+    ctx.fillStyle = pp.color; ctx.font = `900 ${pp.big ? 26 : 20}px -apple-system, sans-serif`;
+    ctx.fillText(pp.text, W / 2, H * 0.45 - (popups.length - 1 - i) * 34 - (1 - k) * 50);
+  });
+  ctx.globalAlpha = 1;
+
+  // countdown
+  if (now < startAt + 700) {
+    const c = (startAt - now) / 1000;
+    const txt = c > 0 ? String(Math.ceil(c)) : 'ПОЕХАЛИ!';
+    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(0, H * 0.3, W, 90);
+    ctx.fillStyle = c > 0 ? '#fff' : '#ffd84a'; ctx.font = `900 ${c > 0 ? 64 : 44}px -apple-system, sans-serif`;
+    ctx.fillText(txt, W / 2, H * 0.3 + 46);
+  }
+  ctx.textBaseline = 'alphabetic';
+}
+
+// ---------- main loop ----------
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (mode === 'race') update(dt, now);
+  draw(now);
+  requestAnimationFrame(frame);
+}
+traffic.reset(12345);
+requestAnimationFrame(frame);
+
+// ---------- buttons ----------
+$('btn-host').onclick = () => { solo = false; status('menu-status', ''); hostGame(); };
+$('btn-join').onclick = () => { solo = false; joinGame($('code-in').value.trim()); };
+$('code-in').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('btn-join').click(); });
+$('code-in').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); });
+$('btn-solo').onclick = () => { closeNet(); solo = true; startRound({ seed: Math.floor(Math.random() * 2 ** 31) }); };
+$('btn-cancel').onclick = () => { closeNet(); mode = 'menu'; show('menu'); };
+$('btn-copy').onclick = async () => {
+  const url = location.origin + location.pathname + '?c=' + (net && net.code);
+  try { await navigator.clipboard.writeText(url); $('btn-copy').textContent = 'Ссылка скопирована'; }
+  catch (_) { prompt('Ссылка на заезд:', url); }
+  setTimeout(() => { $('btn-copy').textContent = 'Скопировать ссылку'; }, 2000);
+};
+$('btn-again').onclick = () => {
+  if (solo) { startRound({ seed: Math.floor(Math.random() * 2 ** 31) }); return; }
+  wantAgain.me = true;
+  status('res-status', wantAgain.op ? 'Поехали!' : 'Ждём ответа друга…');
+  maybeRestart();
+};
+$('btn-menu').onclick = () => { closeNet(); solo = false; me = null; op = null; mode = 'menu'; show('menu'); status('menu-status', ''); };
+
+// join link: ?c=1234
+const linkCode = new URLSearchParams(location.search).get('c');
+if (linkCode && /^\d{4}$/.test(linkCode)) {
+  $('code-in').value = linkCode;
+  history.replaceState(null, '', location.pathname);
+  addEventListener('load', () => joinGame(linkCode));
+}
+</script>
+</body>
+</html>
