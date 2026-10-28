@@ -29,17 +29,17 @@
   canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
   .screen {
     position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-    padding: 16px; background: rgba(10, 11, 14, .55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    padding: 16px; overflow-y: auto; touch-action: pan-y; background: rgba(10, 11, 14, .55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
   }
   .screen.on { display: flex; }
   .card {
-    width: 100%; max-width: 380px; background: var(--panel); border: 1px solid var(--line);
+    width: 100%; max-width: 380px; margin: auto; background: var(--panel); border: 1px solid var(--line);
     border-radius: 20px; padding: 26px 22px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
   }
-  h1 { font-size: 40px; line-height: 1; letter-spacing: .04em; font-weight: 900; font-style: italic; }
+  h1 { font-size: 36px; line-height: 1; letter-spacing: .04em; font-weight: 900; font-style: italic; }
   h1 span { color: var(--accent); }
   h2 { font-size: 28px; font-weight: 900; font-style: italic; margin-bottom: 6px; }
-  .sub { color: var(--muted); margin: 8px 0 22px; font-size: 15px; }
+  .sub { color: var(--muted); margin: 8px 0 18px; font-size: 15px; }
   button, input { font: inherit; }
   .btn {
     display: block; width: 100%; padding: 14px 16px; border-radius: 12px; border: 0; cursor: pointer;
@@ -67,6 +67,11 @@
   .res .det { font-size: 12px; color: var(--muted); }
   .res .me .pts { color: var(--accent); }
   .res .op .pts { color: var(--accent2); }
+  .flow { text-align: left; margin-bottom: 12px; }
+  .flow span { font-size: 13px; color: var(--muted); }
+  .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px; padding: 4px; border-radius: 12px; background: rgba(255, 255, 255, .06); }
+  .seg button { border: 0; background: transparent; color: var(--muted); padding: 8px 2px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .seg button.on { background: var(--accent); color: #fff; }
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
   .dot.live { background: #3ddc84; animation: pulse 1.2s infinite; }
   @keyframes pulse { 50% { opacity: .35; } }
@@ -79,6 +84,7 @@
   <div class="card">
     <h1>ШАШКИ<br><span>В ПОТОКЕ</span></h1>
     <p class="sub">Гонка в плотном потоке на двоих — с ноутбука и с телефона</p>
+    <div class="flow"><span>Плотность потока</span><div class="seg"></div></div>
     <button class="btn" id="btn-host">Создать заезд</button>
     <div class="row">
       <input class="code" id="code-in" inputmode="numeric" maxlength="4" placeholder="код" autocomplete="off">
@@ -90,7 +96,7 @@
     <div class="help">
       <b>Ноутбук:</b> ← → или A D — руль, ↓ / пробел — тормоз.<br>
       <b>Телефон:</b> держи вертикально; касание слева / справа — руль, по центру — тормоз.<br>
-      Заезд 2 минуты. Очки — за дистанцию и обгоны впритирку, авария — минус очки.
+      Заезд 2 минуты. Очки — за дистанцию и обгоны впритирку, авария — минус очки. Вдвоём поток выбирает тот, кто создал заезд.
     </div>
   </div>
 </div>
@@ -110,6 +116,7 @@
   <div class="card">
     <h2 id="res-title">Финиш</h2>
     <div class="res" id="res-grid"></div>
+    <div class="flow" id="res-flow"><span>Плотность потока</span><div class="seg"></div></div>
     <p class="status" id="res-status"></p>
     <button class="btn" id="btn-again">Ещё заезд</button>
     <button class="btn ghost" id="btn-menu">В меню</button>
@@ -124,6 +131,9 @@ const LANES = 4, LANE_W = 3.6, ROAD_W = LANES * LANE_W;
 const CAR_W = 1.9, CAR_L = 4.4;
 const ROUND = +new URLSearchParams(location.search).get('round') || 120, COUNTDOWN = 3;  // ?round=N for quick tests
 const CHUNK = 200;
+const VMAX = 38;  // ~137 km/h, the same all round long
+// traffic density: k scales the gaps between cars
+const FLOWS = [{ name: 'Свободный', k: 2.4 }, { name: 'Средний', k: 1.5 }, { name: 'Плотный', k: 1 }, { name: 'Пробка', k: 0.55 }];
 const ID_PREFIX = 'molodoi-shashki-v1-';
 const COLORS = ['#e8e8ea', '#c9ccd2', '#3d4450', '#1f2329', '#8a1f24', '#2c4f7c', '#5c6b3a', '#d9b44a', '#7a7f87', '#a34d2a', '#efe7d6', '#3a6b6b'];
 
@@ -147,9 +157,11 @@ const laneX = (i) => (i + 0.5) * LANE_W - ROAD_W / 2;
 // ---------- traffic: deterministic from the seed, same on both devices ----------
 // Every lane moves at its own constant speed, so cars in one lane never overlap.
 const traffic = {
-  seed: 1, laneV: [], cache: new Map(),
-  reset(seed) {
-    this.seed = seed; this.cache.clear();
+  seed: 1, k: 1, laneV: [], cache: new Map(),
+  lag: new Map(), maxLag: 0,  // metres a bot fell back because it braked behind the player (local only)
+  reset(seed, flow) {
+    this.seed = seed; this.k = FLOWS[flow] ? FLOWS[flow].k : 1;
+    this.cache.clear(); this.lag.clear(); this.maxLag = 0;
     const r = rngOf(hash(seed, 999, 7));
     this.laneV = [23, 19, 15.5, 12].map((v) => v + (r() - 0.5) * 2);
   },
@@ -170,7 +182,7 @@ const traffic = {
         list.push({ id: key * 100 + i, lane, y0: pos, len, w: truck ? 2.3 : CAR_W, truck, color: COLORS[(r() * COLORS.length) | 0] });
       }
       i++;
-      pos += len + 4 + r() * r() * 36;
+      pos += len + Math.max(3, (4 + r() * r() * 36) * this.k);
     }
     this.cache.set(key, list);
     return list;
@@ -180,10 +192,10 @@ const traffic = {
     out.length = 0;
     for (let lane = 0; lane < LANES; lane++) {
       const shift = this.laneV[lane] * t;
-      const k0 = Math.floor((yMin - shift - 10) / CHUNK), k1 = Math.floor((yMax - shift) / CHUNK);
+      const k0 = Math.floor((yMin - shift - 10) / CHUNK), k1 = Math.floor((yMax - shift + this.maxLag) / CHUNK);
       for (let k = k0; k <= k1; k++) {
         for (const c of this.chunk(lane, k)) {
-          const y = c.y0 + shift + c.len / 2;
+          const y = c.y0 + shift + c.len / 2 - (this.lag.get(c.id) || 0);
           if (y > yMin - c.len && y < yMax + c.len) { c.y = y; c.x = laneX(lane); out.push(c); }
         }
       }
@@ -193,7 +205,30 @@ const traffic = {
     }
     return out;
   },
+  holdBack(c, d) {
+    const l = (this.lag.get(c.id) || 0) + d;
+    this.lag.set(c.id, l);
+    this.maxLag = Math.max(this.maxLag, l);
+    c.y -= d;
+  },
 };
+
+// Bots never rear-end the player: a car closing in from behind brakes and follows,
+// and the cars behind it in the lane queue up too.
+const around = [];
+function yieldTraffic(t, p) {
+  traffic.near(t, p.y - 120, p.y + 3, around);
+  for (let lane = 0; lane < LANES; lane++) {
+    const cars = around.filter((c) => c.lane === lane).sort((a, b) => b.y - a.y);
+    let rear = Infinity;  // rear bumper of the car ahead in this lane
+    for (const c of cars) {
+      let maxY = rear - 2 - c.len / 2;
+      if (c.y < p.y && Math.abs(c.x - p.x) < (c.w + CAR_W) / 2 + 0.2) maxY = Math.min(maxY, p.y - (c.len + CAR_L) / 2 - 1.2);
+      if (c.y > maxY) traffic.holdBack(c, c.y - maxY);
+      rear = c.y - c.len / 2;
+    }
+  }
+}
 
 // ---------- state ----------
 const cv = document.getElementById('cv');
@@ -204,6 +239,8 @@ const isTouch = matchMedia('(pointer: coarse)').matches;
 let mode = 'menu';         // menu | lobby | race | result
 let net = null;            // { code, role, host, offset, ... } while playing with a friend
 let solo = false;
+let flow = 1;
+try { const f = localStorage.getItem('shashki-flow'); if (f !== null && FLOWS[+f]) flow = +f; } catch (_) {}
 let startAt = 0;           // performance.now() when the race clock hits 0
 let me = null, op = null;
 let popups = [];
@@ -381,7 +418,7 @@ function onSync(n, j) {
 }
 
 function hostStartRound() {
-  net.round = { n: roundN + 1, seed: Math.floor(Math.random() * 2 ** 31), at: Math.round(serverNow() + 1200 + COUNTDOWN * 1000) };
+  net.round = { n: roundN + 1, seed: Math.floor(Math.random() * 2 ** 31), flow, at: Math.round(serverNow() + 1200 + COUNTDOWN * 1000) };
   startRound(net.round);
 }
 
@@ -398,6 +435,7 @@ function onPeerLost(msg) {
     $('res-grid').innerHTML = '';
     status('res-status', '');
     $('btn-again').style.display = 'none';
+    $('res-flow').style.display = 'none';
     show('result');
   } else {
     show('menu'); mode = 'menu';
@@ -408,7 +446,7 @@ function onPeerLost(msg) {
 // ---------- round ----------
 // round = { n, seed, at } — `at` is in server time so both devices start together
 function startRound(round) {
-  traffic.reset(round.seed);
+  traffic.reset(round.seed, round.flow ?? flow);
   roundN = round.n || 0;
   me = newPlayer();
   op = solo ? null : { x: laneX(2), y: 0, v: 0, score: 0, crashed: false, net: null };
@@ -434,10 +472,9 @@ function update(dt, now) {
   readInput();
   if (running) {
     const crashed = now < p.crashedUntil;
-    const vMax = 30 + 20 * Math.min(1, t / ROUND);    // 108 → 180 km/h by the end
     if (crashed) p.v = 0;
     else if (input.brake) p.v = Math.max(9, p.v - 22 * dt);
-    else p.v = Math.min(vMax, p.v + (p.v < 20 ? 14 : 7) * dt);
+    else p.v = Math.min(VMAX, p.v + (p.v < 20 ? 14 : 7) * dt);
     if (!crashed) {
       const steer = (input.right ? 1 : 0) - (input.left ? 1 : 0);
       p.x += steer * (6 + p.v * 0.12) * dt;
@@ -445,6 +482,7 @@ function update(dt, now) {
       p.x = Math.max(-lim, Math.min(lim, p.x));
     }
     p.y += p.v * dt;
+    yieldTraffic(t, p);
 
     // collisions and near misses
     traffic.near(t, p.y - 12, p.y + 12, near);
@@ -491,8 +529,6 @@ function crash(now) {
   shake = 1;
   popups.push({ text: 'АВАРИЯ  −300', color: '#ff5a5a', life: 1.4, max: 1.4, big: true });
   if (navigator.vibrate) navigator.vibrate(120);
-  // after the stun the car restarts at a sane speed
-  setTimeout(() => { if (me === p) p.v = 18; }, 1500);
 }
 
 function nearMiss(now, gap) {
@@ -515,6 +551,7 @@ function showResult() {
   if (mode !== 'race') return;
   mode = 'result';
   $('btn-again').style.display = '';
+  $('res-flow').style.display = solo || (net && net.host) ? '' : 'none';
   status('res-status', '');
   const mine = `<div class="me"><div class="who">Ты</div><div class="pts">${me.score}</div><div class="det">впритирку: ${me.misses} · аварий: ${me.crashes}</div></div>`;
   if (solo) {
@@ -694,11 +731,9 @@ function drawHud(now, t) {
     const a = t < 5 ? 0.5 : 0.18;
     ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.font = '700 30px -apple-system, sans-serif';
     ctx.fillText('◀', W * 0.12, H - 38); ctx.fillText('▶', W * 0.88, H - 38);
-    if (t < 5) {
-      ctx.fillStyle = 'rgba(255,255,255,.06)'; ctx.fillRect(0, 0, W * 0.38, H); ctx.fillRect(W * 0.62, 0, W * 0.38, H);
-      ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '700 13px -apple-system, sans-serif';
-      ctx.fillText('ТОРМОЗ', W / 2, H - 76);
-    }
+    if (t < 5) { ctx.fillStyle = 'rgba(255,255,255,.06)'; ctx.fillRect(0, 0, W * 0.38, H); ctx.fillRect(W * 0.62, 0, W * 0.38, H); }
+    ctx.fillStyle = `rgba(255,255,255,${input.brake ? 0.8 : t < 5 ? 0.55 : 0.25})`; ctx.font = '700 13px -apple-system, sans-serif';
+    ctx.fillText('ТОРМОЗ', W / 2, H - 76);
   }
 
   // popups
@@ -734,11 +769,25 @@ traffic.reset(12345);
 requestAnimationFrame(frame);
 
 // ---------- buttons ----------
+function renderFlow() {
+  for (const seg of document.querySelectorAll('.seg')) {
+    seg.innerHTML = FLOWS.map((f, i) => `<button type="button" data-flow="${i}" class="${i === flow ? 'on' : ''}">${f.name}</button>`).join('');
+  }
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-flow]');
+  if (!b) return;
+  flow = +b.dataset.flow;
+  try { localStorage.setItem('shashki-flow', flow); } catch (_) {}
+  renderFlow();
+});
+renderFlow();
+
 $('btn-host').onclick = () => { solo = false; status('menu-status', ''); hostGame(); };
 $('btn-join').onclick = () => { solo = false; joinGame($('code-in').value.trim()); };
 $('code-in').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('btn-join').click(); });
 $('code-in').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); });
-$('btn-solo').onclick = () => { closeNet(); solo = true; startRound({ seed: Math.floor(Math.random() * 2 ** 31) }); };
+$('btn-solo').onclick = () => { closeNet(); solo = true; startRound({ seed: Math.floor(Math.random() * 2 ** 31), flow }); };
 $('btn-cancel').onclick = () => { closeNet(); mode = 'menu'; show('menu'); };
 $('btn-copy').onclick = async () => {
   const url = location.origin + location.pathname + '?c=' + (net && net.code);
@@ -747,7 +796,7 @@ $('btn-copy').onclick = async () => {
   setTimeout(() => { $('btn-copy').textContent = 'Скопировать ссылку'; }, 2000);
 };
 $('btn-again').onclick = () => {
-  if (solo) { startRound({ seed: Math.floor(Math.random() * 2 ** 31) }); return; }
+  if (solo) { startRound({ seed: Math.floor(Math.random() * 2 ** 31), flow }); return; }
   wantAgain.me = true;
   status('res-status', wantAgain.op ? 'Поехали!' : 'Ждём ответа друга…');
   maybeRestart();
