@@ -4,10 +4,15 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
-$dir = __DIR__ . '/rooms';
-if (!is_dir($dir)) @mkdir($dir, 0755);
-
 function out($a) { echo json_encode($a); exit; }
+
+// first writable place for room files; shared hosting may forbid writing next to the script
+$dir = null;
+foreach (array(__DIR__ . '/rooms', sys_get_temp_dir() . '/molodoi-shashki', __DIR__) as $d) {
+  if (!is_dir($d)) @mkdir($d, 0755, true);
+  if (is_dir($d) && is_writable($d)) { $dir = $d; break; }
+}
+if (!$dir) out(array('ok' => false, 'err' => 'fs'));
 function now_ms() { return (int) round(microtime(true) * 1000); }
 
 $act = isset($_GET['a']) ? $_GET['a'] : '';
