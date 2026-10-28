@@ -8,7 +8,7 @@ function out($a) { echo json_encode($a); exit; }
 
 // first writable place for room files; shared hosting may forbid writing next to the script
 $dir = null;
-foreach (array(__DIR__ . '/rooms', sys_get_temp_dir() . '/molodoi-shashki', __DIR__) as $d) {
+foreach (array(dirname(__FILE__) . '/rooms', sys_get_temp_dir() . '/molodoi-shashki', dirname(__FILE__)) as $d) {
   if (!is_dir($d)) @mkdir($d, 0755, true);
   if (is_dir($d) && is_writable($d)) { $dir = $d; break; }
 }
