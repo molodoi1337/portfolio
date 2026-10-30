@@ -130,6 +130,7 @@
 const LANES = 4, LANE_W = 3.6, ROAD_W = LANES * LANE_W;
 const CAR_W = 1.9, CAR_L = 4.4;
 const ROUND = +new URLSearchParams(location.search).get('round') || 120, COUNTDOWN = 3;  // ?round=N for quick tests
+const REAR_TOUCH = 1;  // metres of bumper overlap still treated as a bot's fault
 const VMAX = 38;  // ~137 km/h, the same all round long
 // traffic density: average distance between cars in a lane, metres
 const FLOWS = [{ name: 'Свободный', gap: 45 }, { name: 'Средний', gap: 31 }, { name: 'Плотный', gap: 22 }];
@@ -264,6 +265,8 @@ const traffic = {
       for (const o of vs) {
         if (o === c || o.y < c.y || Math.abs(o.x - c.x) >= (o.w + c.w) / 2) continue;
         const minDy = (o.len + c.len) / 2 + (o.ego ? 1 : 0.3);
+        // the player is only shielded from a bumper touch from behind; cutting into a bot's side is a crash
+        if (o.ego && o.y - c.y < (o.len + c.len) / 2 - REAR_TOUCH) continue;
         if (o.y - c.y < minDy) { c.y = o.y - minDy; c.v = Math.min(c.v, o.v); }
       }
     }
@@ -542,7 +545,8 @@ function update(dt, now) {
     for (const c of traffic.cars) {
       const dx = Math.abs(c.x - p.x), dy = Math.abs(c.y - p.y);
       if (dy > 12) continue;
-      const hit = dx < (c.w + CAR_W) / 2 - 0.15 && dy < (c.len + CAR_L) / 2 - 0.2 && c.y > p.y - 1;
+      const rearTouch = c.y < p.y && dy > (c.len + CAR_L) / 2 - REAR_TOUCH;  // a bot nudging us from behind
+      const hit = dx < (c.w + CAR_W) / 2 - 0.15 && dy < (c.len + CAR_L) / 2 - 0.2 && !rearTouch;
       if (hit && !invuln) { crash(now); break; }
       const rel = c.y - p.y, prev = p.prevRel.get(c.id);
       if (prev !== undefined && prev > 0 && rel <= 0 && !invuln && !crashed) {
